@@ -3,10 +3,16 @@ import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const LoginPage = () => {
   const { t } = useTranslation();
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -20,16 +26,38 @@ const LoginPage = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login attempt with:', formData);
-    // 实际应用中这里会调用登录API
+    setIsLoading(true);
+
+    try {
+      await login(formData.email, formData.password);
+      
+      // 显示成功消息
+      toast.success(t('auth.login.success') || 'Login successful!');
+      
+      // 立即导航到主页或其他受保护的页面
+      navigate('/');
+    } catch (error: any) {
+      console.error('Login error:', error);
+      let errorMessage = t('auth.login.generalError') || 'An error occurred during login';
+      
+      if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="min-h-screen flex items-center justify-center pt-16">
-        <div className="w-full max-w-md p-8 space-y-8 bg-card rounded-xl border shadow-sm">
+    <div className="bg-background">
+      <div className="pt-14 pb-14">
+        <div className="w-full max-w-md mx-auto p-6 space-y-6 bg-card rounded-xl border shadow-sm">
           <div className="text-center">
             <div className="mx-auto h-12 w-12 bg-primary rounded-full flex items-center justify-center mb-4">
               <User className="h-6 w-6 text-primary-foreground" />
@@ -40,7 +68,7 @@ const LoginPage = () => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium mb-2">
                 {t('auth.login.email')}
@@ -103,8 +131,8 @@ const LoginPage = () => {
               </label>
             </div>
 
-            <Button type="submit" className="w-full">
-              {t('auth.login.signIn')}
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? t('auth.login.loading') : t('auth.login.signIn')}
             </Button>
           </form>
 

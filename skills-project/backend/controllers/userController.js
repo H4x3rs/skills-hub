@@ -15,17 +15,24 @@ const getAllUsers = async (req, res) => {
     const total = await User.countDocuments();
     
     res.json({
-      users,
-      pagination: {
-        currentPage: page,
-        totalPages: Math.ceil(total / limit),
-        totalUsers: total,
-        hasNext: page < Math.ceil(total / limit),
-        hasPrev: page > 1
+      success: true,
+      data: {
+        users,
+        pagination: {
+          currentPage: page,
+          totalPages: Math.ceil(total / limit),
+          totalUsers: total,
+          hasNext: page < Math.ceil(total / limit),
+          hasPrev: page > 1
+        }
       }
     });
   } catch (error) {
-    res.status(500).json({ error: 'Server error while fetching users' });
+    res.status(500).json({
+      success: false,
+      error: 'Server error while fetching users',
+      message: error.message
+    });
   }
 };
 
@@ -33,12 +40,22 @@ const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('-password');
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
+      });
     }
     
-    res.json({ user });
+    res.json({
+      success: true,
+      data: { user }
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Server error while fetching user' });
+    res.status(500).json({
+      success: false,
+      error: 'Server error while fetching user',
+      message: error.message
+    });
   }
 };
 
@@ -53,20 +70,32 @@ const updateUser = async (req, res) => {
     ).select('-password');
     
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
+      });
     }
     
     res.json({
+      success: true,
       message: 'User updated successfully',
-      user
+      data: { user }
     });
   } catch (error) {
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message);
-      return res.status(400).json({ error: 'Validation failed', details: errors });
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: errors
+      });
     }
     
-    res.status(500).json({ error: 'Server error while updating user' });
+    res.status(500).json({
+      success: false,
+      error: 'Server error while updating user',
+      message: error.message
+    });
   }
 };
 
@@ -74,12 +103,22 @@ const deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
+      });
     }
     
-    res.json({ message: 'User deleted successfully' });
+    res.json({
+      success: true,
+      message: 'User deleted successfully'
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Server error while deleting user' });
+    res.status(500).json({
+      success: false,
+      error: 'Server error while deleting user',
+      message: error.message
+    });
   }
 };
 
@@ -91,13 +130,20 @@ const getUserStats = async (req, res) => {
     const adminUsers = await User.countDocuments({ role: 'admin' });
     
     res.json({
-      totalUsers,
-      activeUsers,
-      publisherUsers,
-      adminUsers
+      success: true,
+      data: {
+        totalUsers,
+        activeUsers,
+        publisherUsers,
+        adminUsers
+      }
     });
   } catch (error) {
-    res.status(500).json({ error: 'Server error while fetching user stats' });
+    res.status(500).json({
+      success: false,
+      error: 'Server error while fetching user stats',
+      message: error.message
+    });
   }
 };
 

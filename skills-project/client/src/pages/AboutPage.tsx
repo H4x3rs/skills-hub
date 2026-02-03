@@ -1,6 +1,5 @@
 import { BookOpen, Download, Upload, Users, Zap, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Header from '@/components/Header';
 import { useTranslation } from 'react-i18next';
 
 const AboutPage = () => {

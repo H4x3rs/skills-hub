@@ -32,25 +32,33 @@
       "download": "下载",
       "blog": "博客",
       "login": "登录",
-      "register": "注册"
+      "register": "注册",
+      "profile": "个人资料",
+      "mySkills": "我的技能",
+      "adminPanel": "管理面板",
+      "logout": "退出登录"
     },
     "auth": {
       "login": {
-        "title": "登录账户",
+        "title": "登录",
         "subtitle": "输入您的邮箱和密码来访问账户",
         "email": "邮箱地址",
         "password": "密码",
         "forgotPassword": "忘记密码？",
         "rememberMe": "记住我",
         "signIn": "登录",
+        "loading": "登录中...",
         "noAccount": "还没有账户？",
         "signUp": "注册新账户",
-        "orContinueWith": "或继续使用"
+        "orContinueWith": "或继续使用",
+        "continueWithGoogle": "使用 Google 登录",
+        "continueWithGithub": "使用 GitHub 登录"
       },
       "register": {
-        "title": "创建账户",
+        "title": "注册",
         "subtitle": "填写以下信息来创建您的账户",
         "username": "用户名",
+        "fullName": "全名",
         "email": "邮箱地址",
         "password": "密码",
         "confirmPassword": "确认密码",
@@ -110,6 +118,7 @@
     },
     "admin": {
       "dashboard": "仪表板",
+      "adminPanel": "管理面板",
       "users": "用户管理",
       "skills": "技能管理",
       "permissions": "权限管理",
@@ -124,11 +133,71 @@
       "reject": "拒绝",
       "enable": "启用",
       "disable": "禁用",
+      "searchUsers": "搜索用户...",
+      "addUser": "添加用户",
+      "userAddedSuccessfully": "用户添加成功！",
+      "userAddError": "添加用户时出错",
+      "userAddNotImplemented": "管理员面板暂不支持添加用户。请使用注册表单。",
+      "userStatusUpdated": "用户状态更新成功！",
+      "userStatusUpdateError": "更新用户状态时出错",
+      "fetchUsersError": "获取用户时出错",
+      "user": {
+        "username": "用户名",
+        "email": "邮箱",
+        "role": "角色",
+        "status": "状态",
+        "skillCount": "技能数",
+        "downloadCount": "下载量",
+        "joinDate": "加入日期",
+        "active": "活跃",
+        "inactive": "非活跃"
+      },
       "role": {
         "admin": "管理员",
+        "adminLabel": "管理员",
+        "adminDesc": "拥有系统所有功能的完全访问权限",
         "user": "普通用户",
-        "publisher": "发布者"
-      }
+        "userLabel": "用户",
+        "userDesc": "具有基本访问权限的标准用户",
+        "publisher": "发布者",
+        "publisherLabel": "发布者",
+        "publisherDesc": "可以发布和管理技能"
+      },
+      "editPermission": "编辑权限",
+      "rolePermissions": "角色权限",
+      "userRoleAssignment": "用户角色分配",
+      "currentRole": "当前角色",
+      "availableRoles": "可用角色",
+      "update": "更新",
+      "siteSettings": "站点设置",
+      "siteTitle": "站点标题",
+      "siteDescription": "站点描述",
+      "securitySettings": "安全设置",
+      "require2FA": "需要两步验证",
+      "require2FADesc": "强制所有用户启用两步验证",
+      "enableEmailVerification": "启用邮箱验证",
+      "enableEmailVerificationDesc": "要求用户验证他们的邮箱地址",
+      "toggle": "切换",
+      "uploadSettings": "上传设置",
+      "maxFileSize": "最大文件大小(MB)",
+      "allowedFileTypes": "允许的文件类型",
+      "maintenanceMode": "维护模式",
+      "siteMaintenance": "将站点置于维护模式",
+      "siteMaintenanceDesc": "临时禁用站点访问以进行维护",
+      "searchSkills": "搜索技能...",
+      "allStatus": "所有状态",
+      "published": "已发布",
+      "pending": "待审核",
+      "rejected": "已拒绝",
+      "downloads": "下载量",
+      "createdAt": "创建时间",
+      "view": "查看",
+      "skillStatus": {
+        "published": "已发布",
+        "pending": "待审核",
+        "rejected": "已拒绝"
+      },
+      "noUsersFound": "未找到用户"
     },
     "about": {
       "mission": {
@@ -191,7 +260,8 @@
       "ok": "确定",
       "deleteConfirm": "确定要删除吗？此操作不可撤销。",
       "save": "保存",
-      "download": "下载"
+      "download": "下载",
+      "actions": "操作"
     },
     "pagination": {
       "pageInfo": "第 {{currentPage}} 页，共 {{totalPages}} 页",

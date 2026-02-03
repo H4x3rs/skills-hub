@@ -1,6 +1,5 @@
 import React from 'react';
 import { BookOpen, Download, Terminal, Code, FileText, GitBranch } from 'lucide-react';
-import Header from '@/components/Header';
 
 const DocsPage = () => {
   const [activeSection, setActiveSection] = React.useState('getting-started');

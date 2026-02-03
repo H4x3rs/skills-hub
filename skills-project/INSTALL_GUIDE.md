@@ -58,8 +58,8 @@ JWT_EXPIRES_IN=7d
 npm run dev
 ```
 
-前端将在 `http://localhost:5173` 上运行
-后端API将在 `http://localhost:3000` 上运行
+前端将在 `http://localhost:3000` 上运行
+后端API将在 `http://localhost:3001` 上运行
 
 #### 单独启动
 
@@ -120,7 +120,7 @@ curl -X POST http://localhost:3000/api/auth/register \
 ### 登录
 
 ```bash
-curl -X POST http://localhost:3000/api/auth/login \
+curl -X POST http://localhost:3001/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "admin@example.com",

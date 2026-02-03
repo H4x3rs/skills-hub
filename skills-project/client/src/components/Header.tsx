@@ -1,14 +1,18 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { User, Menu, X, Globe, ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { User, Menu, X, Globe, ChevronDown, LogOut, User as UserProfileIcon, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from './ThemeToggle';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [isLangDropdownOpen, setIsLangDropdownOpen] = React.useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const { i18n, t } = useTranslation();
+  const navigate = useNavigate();
 
   const languages = [
     { code: 'zh-CN', name: 'Chinese', native: '简体中文' },
@@ -93,12 +97,82 @@ const Header = () => {
                 </div>
               )}
             </div>
-            <Link to="/login">
-              <Button variant="ghost" size="sm">
-                <User className="h-4 w-4 mr-1" />
-                {t('navigation.login')}
-              </Button>
-            </Link>
+            {isAuthenticated && user ? (
+              // 用户已登录 - 显示用户下拉菜单
+              <div className="relative">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="flex items-center gap-2 pl-2 pr-3"
+                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                >
+                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white text-xs">
+                    {user.avatar ? (
+                      <img src={user.avatar} alt={user.username} className="w-6 h-6 rounded-full" />
+                    ) : (
+                      <User className="h-4 w-4" />
+                    )}
+                  </div>
+                  <span className="hidden sm:inline-block">{user.username}</span>
+                  <ChevronDown className="h-4 w-4 hidden sm:block" />
+                </Button>
+                
+                {isUserDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-background border rounded-md shadow-lg z-50">
+                    <div className="py-1">
+                      <Link 
+                        to="/profile" 
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                      >
+                        <UserProfileIcon className="h-4 w-4" />
+                        {t('navigation.profile')}
+                      </Link>
+                      
+                      <Link 
+                        to="/profile" 
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                      >
+                        <Settings className="h-4 w-4" />
+                        {t('navigation.mySkills')}
+                      </Link>
+                      
+                      {user.role === 'admin' && (
+                        <Link 
+                          to="/admin" 
+                          className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
+                          onClick={() => setIsUserDropdownOpen(false)}
+                        >
+                          <Settings className="h-4 w-4" />
+                          {t('navigation.adminPanel')}
+                        </Link>
+                      )}
+                      
+                      <button
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent text-red-600"
+                        onClick={() => {
+                          logout();
+                          setIsUserDropdownOpen(false);
+                          navigate('/');
+                        }}
+                      >
+                        <LogOut className="h-4 w-4" />
+                        {t('navigation.logout')}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              // 用户未登录 - 显示登录按钮
+              <Link to="/login">
+                <Button variant="ghost" size="sm">
+                  <User className="h-4 w-4 mr-1" />
+                  {t('navigation.login')}
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
 
@@ -134,11 +208,78 @@ const Header = () => {
               </div>
             </div>
           )}
-          <Link to="/login">
-            <Button variant="ghost" size="sm">
-              <User className="h-5 w-5" />
-            </Button>
-          </Link>
+          {isAuthenticated && user ? (
+              // 移动端用户已登录 - 显示用户下拉菜单
+              <div className="relative">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                >
+                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white text-xs">
+                    {user.avatar ? (
+                      <img src={user.avatar} alt={user.username} className="w-6 h-6 rounded-full" />
+                    ) : (
+                      <User className="h-4 w-4" />
+                    )}
+                  </div>
+                </Button>
+                
+                {isUserDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-background border rounded-md shadow-lg z-50">
+                    <div className="py-1">
+                      <Link 
+                        to="/profile" 
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                      >
+                        <UserProfileIcon className="h-4 w-4" />
+                        {t('navigation.profile')}
+                      </Link>
+                      
+                      <Link 
+                        to="/profile" 
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                      >
+                        <Settings className="h-4 w-4" />
+                        {t('navigation.mySkills')}
+                      </Link>
+                      
+                      {user.role === 'admin' && (
+                        <Link 
+                          to="/admin" 
+                          className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
+                          onClick={() => setIsUserDropdownOpen(false)}
+                        >
+                          <Settings className="h-4 w-4" />
+                          {t('navigation.adminPanel')}
+                        </Link>
+                      )}
+                      
+                      <button
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent text-red-600"
+                        onClick={() => {
+                          logout();
+                          setIsUserDropdownOpen(false);
+                          navigate('/');
+                        }}
+                      >
+                        <LogOut className="h-4 w-4" />
+                        {t('navigation.logout')}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              // 移动端用户未登录 - 显示登录按钮
+              <Link to="/login">
+                <Button variant="ghost" size="sm">
+                  <User className="h-5 w-5" />
+                </Button>
+              </Link>
+            )}
           <button 
             className="p-2 rounded-md hover:bg-muted"
             onClick={() => setIsMenuOpen(!isMenuOpen)}

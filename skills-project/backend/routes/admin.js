@@ -1,13 +1,54 @@
 const express = require('express');
-const { getDashboardStats, getUsersForAdmin, getSkillsForAdmin, updateSkillStatus, manageUserRoles } = require('../controllers/adminController');
+const { 
+  getDashboardStats, 
+  getUsersForAdmin, 
+  getSkillsForAdmin, 
+  updateSkillStatus, 
+  manageUserRoles,
+  getRoles,
+  getRoleByName,
+  createRole,
+  updateRole,
+  deleteRole,
+  updateRolePermissions,
+  getPermissions,
+  createPermission,
+  updatePermission,
+  deletePermission,
+  assignRoleToUser,
+  getUsersWithRoles
+} = require('../controllers/adminController');
 const { authenticateToken, authorizeAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
+// 仪表板统计
 router.get('/dashboard', authenticateToken, authorizeAdmin, getDashboardStats);
+
+// 用户管理
 router.get('/users', authenticateToken, authorizeAdmin, getUsersForAdmin);
+router.get('/users-with-roles', authenticateToken, authorizeAdmin, getUsersWithRoles);
+router.put('/users/:id/role', authenticateToken, authorizeAdmin, manageUserRoles);
+
+// 技能管理
 router.get('/skills', authenticateToken, authorizeAdmin, getSkillsForAdmin);
 router.put('/skills/:id/status', authenticateToken, authorizeAdmin, updateSkillStatus);
-router.put('/users/:id/role', authenticateToken, authorizeAdmin, manageUserRoles);
+
+// 角色管理
+router.get('/roles', authenticateToken, authorizeAdmin, getRoles);
+router.get('/roles/:roleName', authenticateToken, authorizeAdmin, getRoleByName);
+router.post('/roles', authenticateToken, authorizeAdmin, createRole);
+router.put('/roles/:roleName', authenticateToken, authorizeAdmin, updateRole);
+router.delete('/roles/:roleName', authenticateToken, authorizeAdmin, deleteRole);
+router.put('/roles/:roleName/permissions', authenticateToken, authorizeAdmin, updateRolePermissions);
+
+// 权限管理
+router.get('/permissions', authenticateToken, authorizeAdmin, getPermissions);
+router.post('/permissions', authenticateToken, authorizeAdmin, createPermission);
+router.put('/permissions/:id', authenticateToken, authorizeAdmin, updatePermission);
+router.delete('/permissions/:id', authenticateToken, authorizeAdmin, deletePermission);
+
+// 用户角色分配
+router.post('/assign-role', authenticateToken, authorizeAdmin, assignRoleToUser);
 
 module.exports = router;

@@ -177,3 +177,16 @@ img, video {
   height: auto;
   max-width: 100%;
 }
+
+/* 确保sonner通知可见 */
+[data-sonner-toast] {
+  z-index: 9999 !important;
+  top: var(--mobile-top, 60px) !important; /* 为移动端设置适当的顶部边距 */
+  right: var(--right, 0) !important;
+}
+
+[data-sonner-toaster] {
+  z-index: 9999 !important;
+  top: 60px !important; /* 确保在header下方 */
+  margin-top: 0 !important;
+}

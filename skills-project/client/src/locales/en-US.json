@@ -32,25 +32,33 @@
       "download": "Download",
       "blog": "Blog",
       "login": "Sign In",
-      "register": "Sign Up"
+      "register": "Sign Up",
+      "profile": "Profile",
+      "mySkills": "My Skills",
+      "adminPanel": "Admin Panel",
+      "logout": "Logout"
     },
     "auth": {
       "login": {
-        "title": "Sign In to Your Account",
-        "subtitle": "Enter your email and password to access your account",
-        "email": "Email Address",
+        "title": "Sign In",
+        "subtitle": "Sign in to your account",
+        "email": "Email",
         "password": "Password",
         "forgotPassword": "Forgot password?",
         "rememberMe": "Remember me",
         "signIn": "Sign In",
+        "loading": "Signing in...",
         "noAccount": "Don't have an account?",
         "signUp": "Sign Up",
-        "orContinueWith": "Or continue with"
+        "orContinueWith": "Or continue with",
+        "continueWithGoogle": "Continue with Google",
+        "continueWithGithub": "Continue with GitHub"
       },
       "register": {
-        "title": "Create an Account",
+        "title": "Sign Up",
         "subtitle": "Fill in the following information to create your account",
         "username": "Username",
+        "fullName": "Full Name",
         "email": "Email Address",
         "password": "Password",
         "confirmPassword": "Confirm Password",
@@ -110,6 +118,7 @@
     },
     "admin": {
       "dashboard": "Dashboard",
+      "adminPanel": "Admin Panel",
       "users": "User Management",
       "skills": "Skill Management",
       "permissions": "Permission Management",
@@ -124,11 +133,71 @@
       "reject": "Reject",
       "enable": "Enable",
       "disable": "Disable",
+      "searchUsers": "Search users...",
+      "addUser": "Add User",
+      "userAddedSuccessfully": "User added successfully!",
+      "userAddError": "Error adding user",
+      "userAddNotImplemented": "User addition via admin panel is not implemented. Use the registration form instead.",
+      "userStatusUpdated": "User status updated successfully!",
+      "userStatusUpdateError": "Error updating user status",
+      "fetchUsersError": "Error fetching users",
+      "user": {
+        "username": "Username",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "skillCount": "Skills",
+        "downloadCount": "Downloads",
+        "joinDate": "Join Date",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
       "role": {
         "admin": "Administrator",
+        "adminLabel": "Admin",
+        "adminDesc": "Has full access to all system functions",
         "user": "Regular User",
-        "publisher": "Publisher"
-      }
+        "userLabel": "User",
+        "userDesc": "Standard user with basic access rights",
+        "publisher": "Publisher",
+        "publisherLabel": "Publisher",
+        "publisherDesc": "Can publish and manage skills"
+      },
+      "editPermission": "Edit Permission",
+      "rolePermissions": "Role Permissions",
+      "userRoleAssignment": "User Role Assignment",
+      "currentRole": "Current Role",
+      "availableRoles": "Available Roles",
+      "update": "Update",
+      "siteSettings": "Site Settings",
+      "siteTitle": "Site Title",
+      "siteDescription": "Site Description",
+      "securitySettings": "Security Settings",
+      "require2FA": "Require 2-Factor Authentication",
+      "require2FADesc": "Force all users to enable two-factor authentication",
+      "enableEmailVerification": "Enable Email Verification",
+      "enableEmailVerificationDesc": "Require users to verify their email addresses",
+      "toggle": "Toggle",
+      "uploadSettings": "Upload Settings",
+      "maxFileSize": "Maximum File Size (MB)",
+      "allowedFileTypes": "Allowed File Types",
+      "maintenanceMode": "Maintenance Mode",
+      "siteMaintenance": "Put Site in Maintenance Mode",
+      "siteMaintenanceDesc": "Temporarily disable site access for maintenance",
+      "searchSkills": "Search skills...",
+      "allStatus": "All Status",
+      "published": "Published",
+      "pending": "Pending",
+      "rejected": "Rejected",
+      "downloads": "Downloads",
+      "createdAt": "Created At",
+      "view": "View",
+      "skillStatus": {
+        "published": "Published",
+        "pending": "Pending Review",
+        "rejected": "Rejected"
+      },
+      "noUsersFound": "No users found"
     },
     "about": {
       "mission": {
@@ -191,7 +260,8 @@
       "ok": "OK",
       "deleteConfirm": "Are you sure you want to delete this? This action cannot be undone.",
       "save": "Save",
-      "download": "Download"
+      "download": "Download",
+      "actions": "Actions"
     },
     "pagination": {
       "pageInfo": "Page {{currentPage}} of {{totalPages}}",

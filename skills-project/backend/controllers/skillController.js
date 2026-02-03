@@ -239,6 +239,149 @@ const getLatestSkills = async (req, res) => {
   }
 };
 
+// 管理员专用的技能管理功能
+const getAllSkillsForAdmin = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    
+    // 管理员可以看到所有状态的技能
+    const statusFilter = req.query.status || null;
+    const authorFilter = req.query.author || null;
+    const categoryFilter = req.query.category || null;
+    
+    const query = {};
+    if (statusFilter) {
+      query.status = statusFilter;
+    }
+    if (authorFilter) {
+      query.author = authorFilter;
+    }
+    if (categoryFilter) {
+      query.category = categoryFilter;
+    }
+    
+    const skills = await Skill.find(query)
+      .populate('author', 'username fullName avatar email')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+    
+    const total = await Skill.countDocuments(query);
+    
+    res.json({
+      skills,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+        totalSkills: total,
+        hasNext: page < Math.ceil(total / limit),
+        hasPrev: page > 1
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error while fetching skills for admin' });
+  }
+};
+
+const createSkillForAdmin = async (req, res) => {
+  try {
+    const { name, description, version, category, tags, repositoryUrl, documentationUrl, demoUrl, license, status, authorId } = req.body;
+    
+    // 管理员可以直接发布技能而无需审核
+    const skill = new Skill({
+      name,
+      description,
+      version,
+      category,
+      tags,
+      repositoryUrl,
+      documentationUrl,
+      demoUrl,
+      license,
+      author: authorId || req.user.userId, // 管理员可以为其他用户创建技能
+      status: status || 'published' // 管理员默认直接发布
+    });
+    
+    await skill.save();
+    
+    await skill.populate('author', 'username fullName avatar email');
+    
+    res.status(201).json({
+      message: 'Skill created successfully by admin',
+      skill
+    });
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({ error: 'Validation failed', details: errors });
+    }
+    
+    res.status(500).json({ error: 'Server error while creating skill for admin' });
+  }
+};
+
+const updateSkillForAdmin = async (req, res) => {
+  try {
+    const { name, description, version, category, tags, repositoryUrl, documentationUrl, demoUrl, license, status, authorId } = req.body;
+    
+    const skill = await Skill.findById(req.params.id);
+    if (!skill) {
+      return res.status(404).json({ error: 'Skill not found' });
+    }
+    
+    // 管理员可以更新任何技能的任何属性
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (description) updateData.description = description;
+    if (version) updateData.version = version;
+    if (category) updateData.category = category;
+    if (tags) updateData.tags = tags;
+    if (repositoryUrl) updateData.repositoryUrl = repositoryUrl;
+    if (documentationUrl) updateData.documentationUrl = documentationUrl;
+    if (demoUrl) updateData.demoUrl = demoUrl;
+    if (license) updateData.license = license;
+    if (status) updateData.status = status;
+    if (authorId) updateData.author = authorId; // 管理员可以更改作者
+    updateData.lastUpdated = Date.now();
+    
+    const updatedSkill = await Skill.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true, runValidators: true }
+    ).populate('author', 'username fullName avatar email');
+    
+    res.json({
+      message: 'Skill updated successfully by admin',
+      skill: updatedSkill
+    });
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({ error: 'Validation failed', details: errors });
+    }
+    
+    res.status(500).json({ error: 'Server error while updating skill for admin' });
+  }
+};
+
+const deleteSkillForAdmin = async (req, res) => {
+  try {
+    const skill = await Skill.findById(req.params.id);
+    if (!skill) {
+      return res.status(404).json({ error: 'Skill not found' });
+    }
+    
+    // 管理员可以删除任何技能
+    await Skill.findByIdAndDelete(req.params.id);
+    
+    res.json({ message: 'Skill deleted successfully by admin' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error while deleting skill for admin' });
+  }
+};
+
 module.exports = {
   getAllSkills,
   getSkillById,
@@ -247,5 +390,10 @@ module.exports = {
   deleteSkill,
   searchSkills,
   getPopularSkills,
-  getLatestSkills
+  getLatestSkills,
+  // 管理员专用功能
+  getAllSkillsForAdmin,
+  createSkillForAdmin,
+  updateSkillForAdmin,
+  deleteSkillForAdmin
 };

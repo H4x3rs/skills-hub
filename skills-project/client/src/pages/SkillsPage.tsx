@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Search, Download, Star, Filter, Grid, List } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import Header from '@/components/Header';
 import { useTranslation } from 'react-i18next';
 
 const SkillsPage = () => {

@@ -3,16 +3,23 @@ import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const RegisterPage = () => {
   const { t } = useTranslation();
+  const { register } = useAuth();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    fullName: ''  // 添加全名字段（可选）
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,16 +30,48 @@ const RegisterPage = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Registration attempt with:', formData);
-    // 实际应用中这里会调用注册API
+    setIsLoading(true);
+
+    // 验证密码匹配
+    if (formData.password !== formData.confirmPassword) {
+      toast.error(t('auth.register.passwordMismatch') || 'Passwords do not match');
+      setIsLoading(false);
+      return;
+    }
+
+    // 准备发送到API的数据
+    const { confirmPassword, ...registrationData } = formData;
+
+    try {
+      await register(registrationData);
+      
+      // 显示成功消息
+      toast.success(t('auth.register.success') || 'Registration successful!');
+      
+      // 立即导航到主页或其他页面
+      navigate('/');
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      let errorMessage = t('auth.register.generalError') || 'An error occurred during registration';
+      
+      if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="min-h-screen flex items-center justify-center pt-16">
-        <div className="w-full max-w-md p-8 space-y-8 bg-card rounded-xl border shadow-sm">
+    <div className="bg-background">
+      <div className="pt-14 pb-14">
+        <div className="w-full max-w-md mx-auto p-6 space-y-6 bg-card rounded-xl border shadow-sm">
           <div className="text-center">
             <div className="mx-auto h-12 w-12 bg-primary rounded-full flex items-center justify-center mb-4">
               <User className="h-6 w-6 text-primary-foreground" />
@@ -64,6 +103,24 @@ const RegisterPage = () => {
             </div>
 
             <div>
+              <label htmlFor="fullName" className="block text-sm font-medium mb-2">
+                {t('auth.register.fullName')}
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="fullName"
+                  name="fullName"
+                  type="text"
+                  placeholder="John Doe"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+
+            <div>
               <label htmlFor="email" className="block text-sm font-medium mb-2">
                 {t('auth.register.email')}
               </label>
@@ -82,7 +139,7 @@ const RegisterPage = () => {
               </div>
             </div>
 
-            <div>
+            <div className="space-y-2">
               <label htmlFor="password" className="block text-sm font-medium mb-2">
                 {t('auth.register.password')}
               </label>
@@ -150,8 +207,8 @@ const RegisterPage = () => {
               </label>
             </div>
 
-            <Button type="submit" className="w-full">
-              {t('auth.register.signUp')}
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? t('auth.register.loading') : t('auth.register.signUp')}
             </Button>
           </form>
 
@@ -175,10 +232,10 @@ const RegisterPage = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <Button variant="outline" className="w-full">
-              Google
+              {t('auth.login.continueWithGoogle')}
             </Button>
             <Button variant="outline" className="w-full">
-              GitHub
+              {t('auth.login.continueWithGithub')}
             </Button>
           </div>
         </div>
