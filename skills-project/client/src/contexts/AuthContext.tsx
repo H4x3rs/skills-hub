@@ -48,12 +48,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (storedToken) {
         setToken(storedToken);
         try {
+          setIsLoading(true); // 开始加载
           await fetchCurrentUser();
         } catch (error) {
           console.error('Failed to fetch current user during initialization:', error);
+        } finally {
+          setIsLoading(false); // 结束加载
         }
+      } else {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
     initializeAuth();
@@ -63,7 +67,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!token) return;
 
     try {
-      setIsLoading(true);
       const response = await authAPI.getCurrentUser();
       
       // 适配新旧两种响应格式
@@ -83,8 +86,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.removeItem('token');
       setToken(null);
       setUser(null);
-    } finally {
-      setIsLoading(false);
+      throw error; // 抛出错误以便调用方处理
     }
   };
 
