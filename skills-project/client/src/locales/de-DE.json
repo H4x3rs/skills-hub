@@ -1,0 +1,220 @@
+{
+  "translation": {
+    "home": {
+      "title": "Entdecken und Teilen Sie intelligente Fähigkeiten",
+      "subtitle": "Ein offener Marktplatz, auf dem Entwickler verschiedene intelligente Fähigkeiten einfach entdecken, teilen und in ihre Anwendungen integrieren können",
+      "browseSkills": "Fähigkeiten durchsuchen",
+      "publishSkill": "Fähigkeit veröffentlichen",
+      "features": {
+        "title": "Plattformfunktionen",
+        "search": {
+          "title": "Intelligente Suche",
+          "desc": "Finden Sie schnell die benötigten Fähigkeiten mit Stichwortsuche und Kategoriefilterung"
+        },
+        "quality": {
+          "title": "Qualitätssicherung",
+          "desc": "Community-getriebenes Qualitätssystem zur Sicherstellung der Verifizierung jeder Fähigkeit"
+        },
+        "docs": {
+          "title": "Ausführliche Dokumentation",
+          "desc": "Jede Fähigkeit wird mit detaillierter Bedienungsanleitung und Beispielcode geliefert"
+        }
+      },
+      "latestSkills": "Neueste Fähigkeiten",
+      "popularSkills": "Beliebte Fähigkeiten",
+      "viewMore": "Mehr anzeigen →"
+    },
+    "navigation": {
+      "home": "Startseite",
+      "skills": "Fähigkeiten",
+      "about": "Über uns",
+      "docs": "Dokumentation",
+      "download": "Herunterladen",
+      "blog": "Blog",
+      "login": "Anmelden",
+      "register": "Registrieren"
+    },
+    "about": {
+      "mission": {
+        "title": "Unsere Mission",
+        "description": "SkillHub ist bestrebt, ein offenes und gemeinschaftliches Fähigkeiten-Ökosystem zu schaffen. Wir glauben, dass durch die Standardisierung und Modularisierung verschiedener intelligenter Fähigkeiten die Hürden für die Technologieintegration erheblich gesenkt werden können, sodass sich Entwickler stärker auf die Kerngeschäftslogik konzentrieren und Innovationen beschleunigen können."
+      },
+      "features": {
+        "title": "Plattformfunktionen",
+        "plugAndPlay": {
+          "title": "Steck einfach ein",
+          "desc": "Standardisierte APIs, die in wenigen Schritten in Ihre Anwendung integriert werden können"
+        },
+        "quality": {
+          "desc": "Strenge Prüfmechanismen und Community-Bewertungssysteme zur Sicherstellung der Fähigkeitsqualität"
+        },
+        "community": {
+          "title": "Community-gesteuert",
+          "desc": "Von der Entwickler-Community gewartet mit kontinuierlicher Optimierung und Aktualisierung von Fähigkeiten"
+        },
+        "oneClickDeploy": {
+          "title": "Ein-Klick-Bereitstellung",
+          "desc": "Unterstützt mehrere Bereitstellungsverfahren, um verschiedenen Umgebungsanforderungen gerecht zu werden"
+        },
+        "easyPublish": {
+          "title": "Einfache Veröffentlichung",
+          "desc": "Einfacher Veröffentlichungsworkflow, der Entwicklern das einfache Teilen von Fähigkeiten ermöglicht"
+        },
+        "documentation": {
+          "desc": "Ausführliche Bedienungsanleitung und Beispiele, um den Lernaufwand zu reduzieren"
+        }
+      },
+      "team": {
+        "title": "Teamvorstellung",
+        "description": "SkillHub wurde von einer Gruppe von Ingenieuren gegründet, die Technologie lieben und sich für die Förderung der Entwickler-Ökosystementwicklung einsetzen. Wir haben reiche technische Expertise und Produkterfahrung und konzentrieren uns auf die Schaffung der höchsten Qualität Plattform zum Teilen von Fähigkeiten.",
+        "member1": {
+          "name": "Zhang San",
+          "position": "Gründer & CEO"
+        },
+        "member2": {
+          "name": "Li Si",
+          "position": "CTO"
+        },
+        "member3": {
+          "name": "Wang Wu",
+          "position": "Chefarchitekt"
+        }
+      },
+      "joinUs": {
+        "title": "Treten Sie dem SkillHub-Ökosystem bei",
+        "description": "Ob Sie als Nutzer nach Fähigkeiten suchen oder als Entwickler Fähigkeiten teilen möchten - SkillHub heißt Ihre Teilnahme willkommen"
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "Melden Sie sich bei Ihrem Konto an",
+        "subtitle": "Geben Sie Ihre E-Mail-Adresse und Ihr Passwort ein, um auf Ihr Konto zuzugreifen",
+        "email": "E-Mail-Adresse",
+        "password": "Passwort",
+        "forgotPassword": "Passwort vergessen?",
+        "rememberMe": "Angemeldet bleiben",
+        "signIn": "Anmelden",
+        "noAccount": "Sie haben noch kein Konto?",
+        "signUp": "Registrieren",
+        "orContinueWith": "Oder fahren Sie fort mit"
+      },
+      "register": {
+        "title": "Erstellen Sie ein Konto",
+        "subtitle": "Füllen Sie folgende Informationen aus, um Ihr Konto zu erstellen",
+        "username": "Benutzername",
+        "email": "E-Mail-Adresse",
+        "password": "Passwort",
+        "confirmPassword": "Passwort bestätigen",
+        "passwordRequirement": "Das Passwort muss mindestens 8 Zeichen lang sein und Groß- und Kleinbuchstaben sowie Zahlen enthalten",
+        "acceptTerms": "Ich stimme den",
+        "terms": "Nutzungsbedingungen",
+        "and": "und",
+        "privacy": "Datenschutzrichtlinien",
+        "signUp": "Registrieren",
+        "hasAccount": "Sie haben bereits ein Konto?",
+        "signIn": "Anmelden"
+      }
+    },
+    "skills": {
+      "title": "Fähigkeiten-Marktplatz",
+      "searchPlaceholder": "Suchen Sie nach Fähigkeitsnamen, Beschreibungen oder Tags...",
+      "filter": "Filtern",
+      "grid": "Raster",
+      "list": "Liste",
+      "foundSkills": "{{count}} Fähigkeiten gefunden",
+      "downloads": "Downloads",
+      "rating": "Bewertung",
+      "author": "Autor",
+      "discover": "Entdecken Sie über {{count}} hochwertige Fähigkeiten, um Ihre Entwicklungseffizienz zu steigern",
+      "category": {
+        "all": "Alle",
+        "ai": "KI/ML",
+        "data": "Datenverarbeitung",
+        "web": "Webentwicklung",
+        "devops": "DevOps",
+        "security": "Sicherheit",
+        "tools": "Entwicklungstools"
+      }
+    },
+    "profile": {
+      "title": "Profil",
+      "mySkills": "Meine Fähigkeiten",
+      "analytics": "Analytik",
+      "settings": "Einstellungen",
+      "username": "Benutzername",
+      "fullName": "Vollständiger Name",
+      "email": "E-Mail",
+      "joinDate": "Beitrittsdatum",
+      "bio": "Biografie",
+      "saveChanges": "Änderungen speichern",
+      "changeAvatar": "Avatar ändern",
+      "skillName": "Fähigkeitsname",
+      "version": "Version",
+      "downloads": "Downloads",
+      "status": "Status",
+      "lastUpdated": "Zuletzt aktualisiert",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "totalDownloads": "Gesamtzahl der Downloads",
+      "skillCount": "Anzahl der Fähigkeiten",
+      "trend": "Download-Trend"
+    },
+    "admin": {
+      "dashboard": "Dashboard",
+      "users": "Benutzerverwaltung",
+      "skills": "Fähigkeitsverwaltung",
+      "permissions": "Berechtigungsverwaltung",
+      "settings": "Systemeinstellungen",
+      "totalUsers": "Gesamtzahl der Benutzer",
+      "totalSkills": "Gesamtzahl der Fähigkeiten",
+      "totalDownloads": "Gesamtzahl der Downloads",
+      "activeToday": "Heute aktiv",
+      "recentUsers": "Kürzlich registrierte Benutzer",
+      "pendingSkills": "Ausstehende Fähigkeiten",
+      "approve": "Genehmigen",
+      "reject": "Ablehnen",
+      "enable": "Aktivieren",
+      "disable": "Deaktivieren",
+      "role": {
+        "admin": "Administrator",
+        "user": "Regelmäßiger Benutzer",
+        "publisher": "Veröffentlicher"
+      }
+    },
+    "common": {
+      "previous": "Vorherige",
+      "next": "Nächste",
+      "loading": "Wird geladen...",
+      "error": "Fehler",
+      "success": "Erfolg",
+      "cancel": "Abbrechen",
+      "ok": "OK",
+      "deleteConfirm": "Sind Sie sicher, dass Sie dies löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "save": "Speichern",
+      "download": "Herunterladen"
+    },
+    "pagination": {
+      "pageInfo": "Seite {{currentPage}} von {{totalPages}}",
+      "prev": "Vorherige",
+      "next": "Nächste"
+    },
+    "footer": {
+      "description": "Wir verbinden Entwickler und intelligente Fähigkeiten, um Technologie zugänglicher zu machen.",
+      "product": {
+        "title": "Produkt",
+        "cli": "CLI-Tool"
+      },
+      "company": {
+        "title": "Unternehmen",
+        "contact": "Kontaktieren Sie uns"
+      },
+      "legal": {
+        "title": "Rechtliches",
+        "privacy": "Datenschutzbestimmungen",
+        "terms": "Nutzungsbedingungen",
+        "license": "Lizenz"
+      },
+      "copyright": "Alle Rechte vorbehalten."
+    }
+  }
+}

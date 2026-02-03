@@ -1,0 +1,220 @@
+{
+  "translation": {
+    "home": {
+      "title": "Explorer et partager des compétences intelligentes",
+      "subtitle": "Un marché ouvert où les développeurs peuvent facilement découvrir, partager et intégrer différentes compétences intelligentes dans leurs applications",
+      "browseSkills": "Parcourir les compétences",
+      "publishSkill": "Publier une compétence",
+      "features": {
+        "title": "Fonctionnalités de la plateforme",
+        "search": {
+          "title": "Recherche intelligente",
+          "desc": "Trouvez rapidement les compétences dont vous avez besoin avec la recherche par mots clés et le filtrage par catégorie"
+        },
+        "quality": {
+          "title": "Garantie de qualité",
+          "desc": "Système d'évaluation de la qualité communautaire pour s'assurer que chaque compétence est vérifiée"
+        },
+        "docs": {
+          "title": "Documentation détaillée",
+          "desc": "Chaque compétence est fournie avec une documentation d'utilisation détaillée et des exemples de code"
+        }
+      },
+      "latestSkills": "Compétences récentes",
+      "popularSkills": "Compétences populaires",
+      "viewMore": "Voir plus →"
+    },
+    "navigation": {
+      "home": "Accueil",
+      "skills": "Compétences",
+      "about": "À propos",
+      "docs": "Documentation",
+      "download": "Télécharger",
+      "blog": "Blog",
+      "login": "Connexion",
+      "register": "Inscription"
+    },
+    "about": {
+      "mission": {
+        "title": "Notre mission",
+        "description": "SkillHub s'engage à créer un écosystème de compétences ouvert et partagé. Nous croyons qu'en standardisant et en modulant diverses compétences intelligentes, nous pouvons grandement réduire le seuil d'intégration technologique, permettant aux développeurs de se concentrer davantage sur la logique métier principale et d'accélérer l'innovation."
+      },
+      "features": {
+        "title": "Fonctionnalités de la plateforme",
+        "plugAndPlay": {
+          "title": "Plug and Play",
+          "desc": "Des API standardisées qui peuvent être intégrées à votre application en quelques étapes simples"
+        },
+        "quality": {
+          "desc": "Mécanismes d'examen stricts et systèmes d'évaluation communautaire pour garantir la qualité des compétences"
+        },
+        "community": {
+          "title": "Géré par la communauté",
+          "desc": "Maintenu par la communauté des développeurs avec une optimisation et des mises à jour continues des compétences"
+        },
+        "oneClickDeploy": {
+          "title": "Déploiement en un clic",
+          "desc": "Prend en charge plusieurs méthodes de déploiement pour répondre aux différents besoins environnementaux"
+        },
+        "easyPublish": {
+          "title": "Publication facile",
+          "desc": "Flux de travail de publication simple qui permet aux développeurs de partager facilement les compétences"
+        },
+        "documentation": {
+          "desc": "Documentation d'utilisation détaillée et exemples pour réduire les coûts d'apprentissage"
+        }
+      },
+      "team": {
+        "title": "Présentation de l'équipe",
+        "description": "SkillHub a été fondé par un groupe d'ingénieurs passionnés de technologie et dédiés au développement de l'écosystème des développeurs. Nous avons une riche expertise technique et une expérience produit, nous nous concentrons sur la création de la plateforme de partage de compétences de la plus haute qualité.",
+        "member1": {
+          "name": "Zhang San",
+          "position": "Fondateur & PDG"
+        },
+        "member2": {
+          "name": "Li Si",
+          "position": "Directeur technique"
+        },
+        "member3": {
+          "name": "Wang Wu",
+          "position": "Architecte principal"
+        }
+      },
+      "joinUs": {
+        "title": "Rejoignez l'écosystème SkillHub",
+        "description": "Que vous soyez un utilisateur à la recherche de compétences ou un développeur souhaitant partager des compétences, SkillHub accueille votre participation"
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "Connectez-vous à votre compte",
+        "subtitle": "Entrez votre adresse e-mail et votre mot de passe pour accéder à votre compte",
+        "email": "Adresse e-mail",
+        "password": "Mot de passe",
+        "forgotPassword": "Mot de passe oublié ?",
+        "rememberMe": "Se souvenir de moi",
+        "signIn": "Connexion",
+        "noAccount": "Vous n'avez pas de compte ?",
+        "signUp": "S'inscrire",
+        "orContinueWith": "Ou continuer avec"
+      },
+      "register": {
+        "title": "Créez un compte",
+        "subtitle": "Remplissez les informations suivantes pour créer votre compte",
+        "username": "Nom d'utilisateur",
+        "email": "Adresse e-mail",
+        "password": "Mot de passe",
+        "confirmPassword": "Confirmer le mot de passe",
+        "passwordRequirement": "Le mot de passe doit contenir au moins 8 caractères avec des majuscules, des minuscules et des chiffres",
+        "acceptTerms": "J'accepte les",
+        "terms": "Conditions d'utilisation",
+        "and": "et",
+        "privacy": "Politique de confidentialité",
+        "signUp": "S'inscrire",
+        "hasAccount": "Vous avez déjà un compte ?",
+        "signIn": "Connexion"
+      }
+    },
+    "skills": {
+      "title": "Marché des compétences",
+      "searchPlaceholder": "Rechercher des noms de compétences, descriptions ou balises...",
+      "filter": "Filtrer",
+      "grid": "Grille",
+      "list": "Liste",
+      "foundSkills": "{{count}} compétences trouvées",
+      "downloads": "Téléchargements",
+      "rating": "Évaluation",
+      "author": "Auteur",
+      "discover": "Découvrez plus de {{count}} compétences de haute qualité pour améliorer votre efficacité de développement",
+      "category": {
+        "all": "Tous",
+        "ai": "IA/ML",
+        "data": "Traitement des données",
+        "web": "Développement Web",
+        "devops": "DevOps",
+        "security": "Sécurité",
+        "tools": "Outils de développement"
+      }
+    },
+    "profile": {
+      "title": "Profil",
+      "mySkills": "Mes compétences",
+      "analytics": "Analyses",
+      "settings": "Paramètres",
+      "username": "Nom d'utilisateur",
+      "fullName": "Nom complet",
+      "email": "E-mail",
+      "joinDate": "Date d'inscription",
+      "bio": "Biographie",
+      "saveChanges": "Enregistrer les modifications",
+      "changeAvatar": "Changer d'avatar",
+      "skillName": "Nom de la compétence",
+      "version": "Version",
+      "downloads": "Téléchargements",
+      "status": "Statut",
+      "lastUpdated": "Dernière mise à jour",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "totalDownloads": "Téléchargements totaux",
+      "skillCount": "Nombre de compétences",
+      "trend": "Tendance des téléchargements"
+    },
+    "admin": {
+      "dashboard": "Tableau de bord",
+      "users": "Gestion des utilisateurs",
+      "skills": "Gestion des compétences",
+      "permissions": "Gestion des autorisations",
+      "settings": "Paramètres système",
+      "totalUsers": "Utilisateurs totaux",
+      "totalSkills": "Compétences totales",
+      "totalDownloads": "Téléchargements totaux",
+      "activeToday": "Actifs aujourd'hui",
+      "recentUsers": "Utilisateurs récents",
+      "pendingSkills": "Compétences en attente",
+      "approve": "Approuver",
+      "reject": "Rejeter",
+      "enable": "Activer",
+      "disable": "Désactiver",
+      "role": {
+        "admin": "Administrateur",
+        "user": "Utilisateur ordinaire",
+        "publisher": "Éditeur"
+      }
+    },
+    "common": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "loading": "Chargement...",
+      "error": "Erreur",
+      "success": "Succès",
+      "cancel": "Annuler",
+      "ok": "OK",
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cela ? Cette action ne peut pas être annulée.",
+      "save": "Enregistrer",
+      "download": "Télécharger"
+    },
+    "pagination": {
+      "pageInfo": "Page {{currentPage}} sur {{totalPages}}",
+      "prev": "Précédent",
+      "next": "Suivant"
+    },
+    "footer": {
+      "description": "Relier les développeurs et les compétences intelligentes, rendant la technologie plus accessible.",
+      "product": {
+        "title": "Produit",
+        "cli": "Outil CLI"
+      },
+      "company": {
+        "title": "Entreprise",
+        "contact": "Contactez-nous"
+      },
+      "legal": {
+        "title": "Juridique",
+        "privacy": "Politique de confidentialité",
+        "terms": "Conditions d'utilisation",
+        "license": "Licence"
+      },
+      "copyright": "Tous droits réservés."
+    }
+  }
+}

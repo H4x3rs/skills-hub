@@ -1,0 +1,39 @@
+{
+  "name": "@skillshub/cli",
+  "version": "1.0.0",
+  "description": "CLI tool for managing SkillsHub - a platform for AI agent skills",
+  "main": "src/index.js",
+  "bin": {
+    "skm": "./src/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cli",
+    "ai",
+    "skills",
+    "agents",
+    "management",
+    "tool"
+  ],
+  "author": "SkillsHub Team",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "inquirer": "^9.2.0",
+    "axios": "^1.6.0",
+    "fs-extra": "^11.1.1",
+    "tar": "^6.2.0",
+    "configstore": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

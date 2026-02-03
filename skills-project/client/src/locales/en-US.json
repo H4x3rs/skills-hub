@@ -1,0 +1,220 @@
+{
+  "translation": {
+    "home": {
+      "title": "Explore and Share Smart Skills",
+      "subtitle": "An open marketplace where developers can easily discover, share, and integrate various smart skills into their applications",
+      "browseSkills": "Browse Skills",
+      "publishSkill": "Publish Skill",
+      "features": {
+        "title": "Platform Features",
+        "search": {
+          "title": "Smart Search",
+          "desc": "Quickly find the skills you need, with keyword search and category filtering"
+        },
+        "quality": {
+          "title": "Quality Assurance",
+          "desc": "Community-driven quality evaluation system to ensure every skill is verified"
+        },
+        "docs": {
+          "title": "Detailed Documentation",
+          "desc": "Each skill comes with detailed usage documentation and sample code"
+        }
+      },
+      "latestSkills": "Latest Skills",
+      "popularSkills": "Popular Skills",
+      "viewMore": "View More →"
+    },
+    "navigation": {
+      "home": "Home",
+      "skills": "Skills",
+      "about": "About",
+      "docs": "Documentation",
+      "download": "Download",
+      "blog": "Blog",
+      "login": "Sign In",
+      "register": "Sign Up"
+    },
+    "auth": {
+      "login": {
+        "title": "Sign In to Your Account",
+        "subtitle": "Enter your email and password to access your account",
+        "email": "Email Address",
+        "password": "Password",
+        "forgotPassword": "Forgot password?",
+        "rememberMe": "Remember me",
+        "signIn": "Sign In",
+        "noAccount": "Don't have an account?",
+        "signUp": "Sign Up",
+        "orContinueWith": "Or continue with"
+      },
+      "register": {
+        "title": "Create an Account",
+        "subtitle": "Fill in the following information to create your account",
+        "username": "Username",
+        "email": "Email Address",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "passwordRequirement": "Password must be at least 8 characters with uppercase, lowercase letters and numbers",
+        "acceptTerms": "I agree to the",
+        "terms": "Terms of Service",
+        "and": "and",
+        "privacy": "Privacy Policy",
+        "signUp": "Sign Up",
+        "hasAccount": "Already have an account?",
+        "signIn": "Sign In"
+      }
+    },
+    "skills": {
+      "title": "Skills Marketplace",
+      "searchPlaceholder": "Search skill names, descriptions, or tags...",
+      "filter": "Filter",
+      "grid": "Grid",
+      "list": "List",
+      "foundSkills": "Found {{count}} skills",
+      "downloads": "Downloads",
+      "rating": "Rating",
+      "author": "Author",
+      "discover": "Discover over {{count}} high-quality skills to boost your development efficiency",
+      "category": {
+        "all": "All",
+        "ai": "AI/ML",
+        "data": "Data Processing",
+        "web": "Web Development",
+        "devops": "DevOps",
+        "security": "Security",
+        "tools": "Development Tools"
+      }
+    },
+    "profile": {
+      "title": "Profile",
+      "mySkills": "My Skills",
+      "analytics": "Analytics",
+      "settings": "Settings",
+      "username": "Username",
+      "fullName": "Full Name",
+      "email": "Email",
+      "joinDate": "Join Date",
+      "bio": "Bio",
+      "saveChanges": "Save Changes",
+      "changeAvatar": "Change Avatar",
+      "skillName": "Skill Name",
+      "version": "Version",
+      "downloads": "Downloads",
+      "status": "Status",
+      "lastUpdated": "Last Updated",
+      "edit": "Edit",
+      "delete": "Delete",
+      "totalDownloads": "Total Downloads",
+      "skillCount": "Skill Count",
+      "trend": "Download Trend"
+    },
+    "admin": {
+      "dashboard": "Dashboard",
+      "users": "User Management",
+      "skills": "Skill Management",
+      "permissions": "Permission Management",
+      "settings": "System Settings",
+      "totalUsers": "Total Users",
+      "totalSkills": "Total Skills",
+      "totalDownloads": "Total Downloads",
+      "activeToday": "Active Today",
+      "recentUsers": "Recent Users",
+      "pendingSkills": "Pending Skills",
+      "approve": "Approve",
+      "reject": "Reject",
+      "enable": "Enable",
+      "disable": "Disable",
+      "role": {
+        "admin": "Administrator",
+        "user": "Regular User",
+        "publisher": "Publisher"
+      }
+    },
+    "about": {
+      "mission": {
+        "title": "Our Mission",
+        "description": "SkillHub is committed to building an open and shared skills ecosystem. We believe that by standardizing and modularizing various smart skills, we can greatly lower the threshold for technology integration, allowing developers to focus more on core business logic and accelerate innovation."
+      },
+      "features": {
+        "title": "Platform Features",
+        "plugAndPlay": {
+          "title": "Plug and Play",
+          "desc": "Standardized APIs that can be integrated into your application in just a few simple steps"
+        },
+        "quality": {
+          "desc": "Strict review mechanisms and community evaluation systems to ensure skill quality"
+        },
+        "community": {
+          "title": "Community Driven",
+          "desc": "Maintained by the developer community with continuous optimization and skill updates"
+        },
+        "oneClickDeploy": {
+          "title": "One-Click Deployment",
+          "desc": "Supports multiple deployment methods to meet different environment requirements"
+        },
+        "easyPublish": {
+          "title": "Easy Publishing",
+          "desc": "Simple publishing workflow that allows developers to easily share skills"
+        },
+        "documentation": {
+          "desc": "Detailed usage documentation and examples to reduce learning costs"
+        }
+      },
+      "team": {
+        "title": "Team Introduction",
+        "description": "SkillHub was founded by a group of engineers who love technology and are dedicated to promoting developer ecosystem development. We have rich technical expertise and product experience, focusing on creating the highest quality skill sharing platform.",
+        "member1": {
+          "name": "Zhang San",
+          "position": "Founder & CEO"
+        },
+        "member2": {
+          "name": "Li Si",
+          "position": "CTO"
+        },
+        "member3": {
+          "name": "Wang Wu",
+          "position": "Chief Architect"
+        }
+      },
+      "joinUs": {
+        "title": "Join the SkillHub Ecosystem",
+        "description": "Whether you are a user looking for skills or a developer willing to share skills, SkillHub welcomes your participation"
+      }
+    },
+    "common": {
+      "previous": "Previous",
+      "next": "Next",
+      "loading": "Loading...",
+      "error": "Error",
+      "success": "Success",
+      "cancel": "Cancel",
+      "ok": "OK",
+      "deleteConfirm": "Are you sure you want to delete this? This action cannot be undone.",
+      "save": "Save",
+      "download": "Download"
+    },
+    "pagination": {
+      "pageInfo": "Page {{currentPage}} of {{totalPages}}",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "footer": {
+      "description": "Bridging developers and smart skills, making technology more accessible.",
+      "product": {
+        "title": "Product",
+        "cli": "CLI Tool"
+      },
+      "company": {
+        "title": "Company",
+        "contact": "Contact Us"
+      },
+      "legal": {
+        "title": "Legal",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "license": "License"
+      },
+      "copyright": "All rights reserved."
+    }
+  }
+}

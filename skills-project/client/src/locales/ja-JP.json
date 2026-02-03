@@ -1,0 +1,220 @@
+{
+  "translation": {
+    "home": {
+      "title": "スマートスキルの探索と共有",
+      "subtitle": "開発者がさまざまなスマートスキルを簡単に発見し、共有し、アプリケーションに統合できるオープンなマーケットプレイス",
+      "browseSkills": "スキルを閲覧",
+      "publishSkill": "スキルを公開",
+      "features": {
+        "title": "プラットフォーム機能",
+        "search": {
+          "title": "スマート検索",
+          "desc": "キーワード検索やカテゴリフィルターで必要なスキルを素早く見つけます"
+        },
+        "quality": {
+          "title": "品質保証",
+          "desc": "コミュニティ主導の品質評価システムにより、すべてのスキルが検証されることを保証します"
+        },
+        "docs": {
+          "title": "詳細ドキュメント",
+          "desc": "各スキルには詳細な利用方法ドキュメントとサンプルコードが付属します"
+        }
+      },
+      "latestSkills": "最新スキル",
+      "popularSkills": "人気スキル",
+      "viewMore": "さらに表示 →"
+    },
+    "navigation": {
+      "home": "ホーム",
+      "skills": "スキル",
+      "about": "当社について",
+      "docs": "ドキュメント",
+      "download": "ダウンロード",
+      "blog": "ブログ",
+      "login": "ログイン",
+      "register": "登録"
+    },
+    "about": {
+      "mission": {
+        "title": "私たちの使命",
+        "description": "SkillHubは、オープンで共有されたスキルエコシステムの構築を目指しています。さまざまなスマートスキルを標準化・モジュール化することで、技術統合の敷居を大幅に下げ、開発者がコアビジネスロジックに集中し、イノベーションを加速できることを信じています。"
+      },
+      "features": {
+        "title": "プラットフォーム機能",
+        "plugAndPlay": {
+          "title": "プラグアンドプレイ",
+          "desc": "標準化されたAPIを数ステップでアプリケーションに統合できます"
+        },
+        "quality": {
+          "desc": "厳格な審査メカニズムとコミュニティ評価システムでスキル品質を確保します"
+        },
+        "community": {
+          "title": "コミュニティ主導",
+          "desc": "開発者コミュニティによって維持され、継続的な最適化とスキル更新が行われます"
+        },
+        "oneClickDeploy": {
+          "title": "ワンクリックデプロイ",
+          "desc": "複数のデプロイ方法をサポートし、異なる環境要件に対応します"
+        },
+        "easyPublish": {
+          "title": "簡単公開",
+          "desc": "シンプルな公開ワークフローにより、開発者が簡単にスキルを共有できます"
+        },
+        "documentation": {
+          "desc": "詳細な利用方法ドキュメントと例で学習コストを削減します"
+        }
+      },
+      "team": {
+        "title": "チーム紹介",
+        "description": "SkillHubは、技術を愛し、開発者エコシステムの発展に尽力するエンジニアたちによって設立されました。私たちは豊富な技術的専門知識と製品経験を持ち、最高品質のスキル共有プラットフォームの創出に注力しています。",
+        "member1": {
+          "name": "張三",
+          "position": "創業者 & CEO"
+        },
+        "member2": {
+          "name": "李四",
+          "position": "CTO"
+        },
+        "member3": {
+          "name": "王五",
+          "position": "チーフアーキテクト"
+        }
+      },
+      "joinUs": {
+        "title": "SkillHubエコシステムに参加",
+        "description": "スキルを探すユーザーでも、スキルを共有したい開発者でも、SkillHubはあなたの参加を歓迎します"
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "アカウントにログイン",
+        "subtitle": "メールアドレスとパスワードを入力してアカウントにアクセスしてください",
+        "email": "メールアドレス",
+        "password": "パスワード",
+        "forgotPassword": "パスワードをお忘れですか？",
+        "rememberMe": "ログイン状態を保持",
+        "signIn": "ログイン",
+        "noAccount": "アカウントをお持ちではありませんか？",
+        "signUp": "登録",
+        "orContinueWith": "または以下で続行"
+      },
+      "register": {
+        "title": "アカウントを作成",
+        "subtitle": "以下の情報を入力してアカウントを作成してください",
+        "username": "ユーザー名",
+        "email": "メールアドレス",
+        "password": "パスワード",
+        "confirmPassword": "パスワード確認",
+        "passwordRequirement": "パスワードは8文字以上で、大文字・小文字・数字を含む必要があります",
+        "acceptTerms": "私は",
+        "terms": "利用規約",
+        "and": "および",
+        "privacy": "プライバシーポolicies",
+        "signUp": "登録",
+        "hasAccount": "すでにアカウントをお持ちですか？",
+        "signIn": "ログイン"
+      }
+    },
+    "skills": {
+      "title": "スキルマーケットプレイス",
+      "searchPlaceholder": "スキル名、説明、タグを検索...",
+      "filter": "フィルター",
+      "grid": "グリッド",
+      "list": "リスト",
+      "foundSkills": "{{count}}個のスキルが見つかりました",
+      "downloads": "ダウンロード",
+      "rating": "評価",
+      "author": "作成者",
+      "discover": "開発効率を高める{{count}}以上の高品質スキルを発見",
+      "category": {
+        "all": "すべて",
+        "ai": "AI/ML",
+        "data": "データ処理",
+        "web": "Web開発",
+        "devops": "DevOps",
+        "security": "セキュリティ",
+        "tools": "開発ツール"
+      }
+    },
+    "profile": {
+      "title": "プロファイル",
+      "mySkills": "マイスキル",
+      "analytics": "分析",
+      "settings": "設定",
+      "username": "ユーザー名",
+      "fullName": "氏名",
+      "email": "メール",
+      "joinDate": "参加日",
+      "bio": "自己紹介",
+      "saveChanges": "変更を保存",
+      "changeAvatar": "アバターを変更",
+      "skillName": "スキル名",
+      "version": "バージョン",
+      "downloads": "ダウンロード",
+      "status": "ステータス",
+      "lastUpdated": "最終更新",
+      "edit": "編集",
+      "delete": "削除",
+      "totalDownloads": "総ダウンロード数",
+      "skillCount": "スキル数",
+      "trend": "ダウンロード傾向"
+    },
+    "admin": {
+      "dashboard": "ダッシュボード",
+      "users": "ユーザー管理",
+      "skills": "スキル管理",
+      "permissions": "権限管理",
+      "settings": "システム設定",
+      "totalUsers": "総ユーザー数",
+      "totalSkills": "総スキル数",
+      "totalDownloads": "総ダウンロード数",
+      "activeToday": "本日アクティブ",
+      "recentUsers": "最近の登録ユーザー",
+      "pendingSkills": "承認待ちスキル",
+      "approve": "承認",
+      "reject": "却下",
+      "enable": "有効化",
+      "disable": "無効化",
+      "role": {
+        "admin": "管理者",
+        "user": "一般ユーザー",
+        "publisher": "公開者"
+      }
+    },
+    "common": {
+      "previous": "前へ",
+      "next": "次へ",
+      "loading": "読み込み中...",
+      "error": "エラー",
+      "success": "成功",
+      "cancel": "キャンセル",
+      "ok": "OK",
+      "deleteConfirm": "本当に削除しますか？この操作は元に戻せません。",
+      "save": "保存",
+      "download": "ダウンロード"
+    },
+    "pagination": {
+      "pageInfo": "{{currentPage}} / {{totalPages}} ペ",
+      "prev": "前へ",
+      "next": "次へ"
+    },
+    "footer": {
+      "description": "開発者とスマートスキルをつなぐ橋渡しを行い、技術をより使いやすくします。",
+      "product": {
+        "title": "プロダクト",
+        "cli": "CLIツール"
+      },
+      "company": {
+        "title": "会社",
+        "contact": "お問い合わせ"
+      },
+      "legal": {
+        "title": "法律",
+        "privacy": "プライバシーポリシー",
+        "terms": "利用規約",
+        "license": "ライセンス"
+      },
+      "copyright": "著作権所有。"
+    }
+  }
+}
