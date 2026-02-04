@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { User, Menu, X, Globe, ChevronDown, LogOut, User as UserProfileIcon, Settings } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { User, Menu, X, Globe, ChevronDown, LogOut, User as UserProfileIcon, Settings, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from './ThemeToggle';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,8 @@ import { useSiteSettings } from '@/contexts/SiteSettingsContext';
 const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const { siteTitle } = useSiteSettings();
+  const { pathname } = useLocation();
+  const isAdminPage = pathname.startsWith('/admin');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
@@ -47,6 +49,12 @@ const Header = () => {
             </div>
             <span className="text-primary">{siteTitle?.split(' - ')[0] || 'skillshub'}</span>
           </Link>
+          {isAdminPage && (
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-primary/10 text-primary">
+              <Shield className="h-3.5 w-3.5" />
+              {t('admin.adminPanel', '管理后台')}
+            </span>
+          )}
         </div>
 
         {/* Desktop: Right-aligned nav and operation buttons */}

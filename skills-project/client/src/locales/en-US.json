@@ -137,6 +137,7 @@
     "admin": {
       "dashboard": "Dashboard",
       "adminPanel": "Admin Panel",
+      "backToSite": "Back to Site",
       "users": "Users",
       "skills": "Skills",
       "roles": "Roles",

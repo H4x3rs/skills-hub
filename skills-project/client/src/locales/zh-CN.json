@@ -137,6 +137,7 @@
     "admin": {
       "dashboard": "仪表板",
       "adminPanel": "管理面板",
+      "backToSite": "返回站点",
       "users": "用户管理",
       "skills": "技能管理",
       "roles": "角色管理",

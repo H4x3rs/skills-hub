@@ -5,6 +5,7 @@ import Footer from './Footer';
 const Layout = () => {
   const { pathname } = useLocation();
   const isAdminPage = pathname.startsWith('/admin');
+  const isProfilePage = pathname.startsWith('/profile');
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -12,7 +13,7 @@ const Layout = () => {
       <main className="flex-grow">
         <Outlet />
       </main>
-      {!isAdminPage && <Footer />}
+      {!isAdminPage && !isProfilePage && <Footer />}
     </div>
   );
 };

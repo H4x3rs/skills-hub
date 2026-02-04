@@ -136,21 +136,21 @@ export const AdminPermissions = () => {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px]">
+            <table className="w-full min-w-[720px]">
               <colgroup>
-                <col style={{ width: 180 }} />
-                <col style={{ width: 320 }} />
-                <col style={{ width: 120 }} />
+                <col style={{ width: 160 }} />
                 <col style={{ width: 100 }} />
-                <col style={{ width: 180 }} />
+                <col style={{ width: 90 }} />
+                <col style={{ width: 240 }} />
+                <col style={{ width: 130 }} />
               </colgroup>
               <thead className="bg-muted">
                 <tr>
                   <th className="text-left py-3 px-4">{t('admin.permissionName')}</th>
-                  <th className="text-left py-3 px-4">{t('admin.permissionDesc')}</th>
                   <th className="text-left py-3 px-4">{t('admin.resource')}</th>
                   <th className="text-left py-3 px-4">{t('admin.action')}</th>
-                  <th className="text-right py-3 px-4">{t('common.actions')}</th>
+                  <th className="text-left py-3 px-4">{t('admin.permissionDesc')}</th>
+                  <th className="text-center py-3 px-4">{t('common.actions')}</th>
                 </tr>
               </thead>
             <tbody>
@@ -159,18 +159,20 @@ export const AdminPermissions = () => {
                   <td className="py-3 px-4 font-medium overflow-hidden min-w-0">
                     <TruncateWithTooltip content={p.name}>{p.name}</TruncateWithTooltip>
                   </td>
+                  <td className="py-3 px-4">{p.resource}</td>
+                  <td className="py-3 px-4">{p.action}</td>
                   <td className="py-3 px-4 overflow-hidden min-w-0">
                     <TruncateWithTooltip content={p.description}>{p.description}</TruncateWithTooltip>
                   </td>
-                  <td className="py-3 px-4">{p.resource}</td>
-                  <td className="py-3 px-4">{p.action}</td>
-                  <td className="py-3 px-4 text-right">
-                    <Button variant="ghost" size="sm" onClick={() => { setEditing(p); setForm({ name: p.name, description: p.description, resource: p.resource, action: p.action }); }}>
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" className="text-destructive" onClick={() => handleDelete(p._id)}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                  <td className="py-3 px-4">
+                    <div className="flex justify-center gap-1">
+                      <Button variant="ghost" size="sm" onClick={() => { setEditing(p); setForm({ name: p.name, description: p.description, resource: p.resource, action: p.action }); }}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm" className="text-destructive" onClick={() => handleDelete(p._id)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               ))}
