@@ -297,15 +297,15 @@ export const AdminSkills = () => {
         ) : (
           <>
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[1120px]">
+              <table className="w-full min-w-[1000px]">
                 <colgroup>
-                  <col style={{ width: 220 }} />
-                  <col style={{ width: 160 }} />
-                  <col style={{ width: 110 }} />
-                  <col style={{ width: 100 }} />
+                  <col style={{ width: 200 }} />
                   <col style={{ width: 120 }} />
-                  <col style={{ width: 130 }} />
-                  <col style={{ width: 280 }} />
+                  <col style={{ width: 100 }} />
+                  <col style={{ width: 90 }} />
+                  <col style={{ width: 110 }} />
+                  <col style={{ width: 110 }} />
+                  <col style={{ width: 270 }} />
                 </colgroup>
                 <thead className="bg-muted">
                   <tr>
