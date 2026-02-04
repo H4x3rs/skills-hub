@@ -27,7 +27,6 @@ export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
           </div>
           <div className="min-w-0">
             <h3 className="font-semibold text-sm truncate">{t('admin.adminPanel', '管理后台')}</h3>
-            <p className="text-xs text-muted-foreground mt-0.5">{t('admin.dashboard')}</p>
           </div>
         </div>
         <nav className="space-y-0.5">
