@@ -97,7 +97,9 @@
         "loading": "로그인 중...",
         "noAccount": "계정이 없으신가요?",
         "signUp": "회원가입",
-        "orContinueWith": "또는 계속 진행"
+        "orContinueWith": "또는 계속 진행",
+        "success": "로그인 성공!",
+        "generalError": "로그인 중 오류가 발생했습니다"
       },
       "register": {
         "title": "계정 생성",
@@ -114,7 +116,10 @@
         "privacy": "개인정보 보호정책",
         "signUp": "회원가입",
         "hasAccount": "이미 계정이 있으신가요?",
-        "signIn": "로그인"
+        "signIn": "로그인",
+        "success": "회원가입 성공!",
+        "passwordMismatch": "비밀번호가 일치하지 않습니다",
+        "generalError": "회원가입 중 오류가 발생했습니다"
       }
     },
     "skills": {
@@ -164,9 +169,10 @@
     "admin": {
       "dashboard": "대시보드",
       "adminPanel": "관리 패널",
-      "users": "사용자 관리",
-      "skills": "스킬 관리",
-      "permissions": "권한 관리",
+      "users": "사용자",
+      "skills": "스킬",
+      "roles": "역할",
+      "permissions": "권한",
       "settings": "시스템 설정",
       "totalUsers": "총 사용자 수",
       "totalSkills": "총 스킬 수",

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const authenticateToken = (req, res, next) => {
+const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
@@ -10,7 +10,7 @@ const authenticateToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret_key');
-    req.user = decoded;
+    req.user = { userId: decoded.userId, role: decoded.role || 'user' };
     next();
   } catch (error) {
     return res.status(401).json({ error: 'Invalid token.' });

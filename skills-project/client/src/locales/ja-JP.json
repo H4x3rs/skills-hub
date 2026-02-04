@@ -97,7 +97,9 @@
         "loading": "ログイン中...",
         "noAccount": "アカウントをお持ちではありませんか？",
         "signUp": "登録",
-        "orContinueWith": "または以下で続行"
+        "orContinueWith": "または以下で続行",
+        "success": "ログインに成功しました！",
+        "generalError": "ログイン中にエラーが発生しました"
       },
       "register": {
         "title": "アカウントを作成",
@@ -114,7 +116,10 @@
         "privacy": "プライバシーポolicies",
         "signUp": "登録",
         "hasAccount": "すでにアカウントをお持ちですか？",
-        "signIn": "ログイン"
+        "signIn": "ログイン",
+        "success": "登録に成功しました！",
+        "passwordMismatch": "パスワードが一致しません",
+        "generalError": "登録中にエラーが発生しました"
       }
     },
     "skills": {
@@ -164,9 +169,10 @@
     "admin": {
       "dashboard": "ダッシュボード",
       "adminPanel": "管理パネル",
-      "users": "ユーザー管理",
-      "skills": "スキル管理",
-      "permissions": "権限管理",
+      "users": "ユーザー",
+      "skills": "スキル",
+      "roles": "ロール",
+      "permissions": "権限",
       "settings": "システム設定",
       "totalUsers": "総ユーザー数",
       "totalSkills": "総スキル数",

@@ -1,10 +1,31 @@
 const User = require('../models/User');
+const RefreshToken = require('../models/RefreshToken');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
-const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET || 'fallback_secret_key', {
-    expiresIn: process.env.JWT_EXPIRES_IN || '7d'
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key';
+const ACCESS_TOKEN_EXPIRES = process.env.ACCESS_TOKEN_EXPIRES || '15m';
+const REFRESH_TOKEN_EXPIRES_DAYS = parseInt(process.env.REFRESH_TOKEN_EXPIRES_DAYS || '7', 10);
+
+const generateAccessToken = (userId, role = 'user') => {
+  return jwt.sign({ userId, role }, JWT_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRES });
+};
+
+const generateRefreshToken = () => {
+  return crypto.randomBytes(40).toString('hex');
+};
+
+const hashToken = (token) => {
+  return crypto.createHash('sha256').update(token).digest('hex');
+};
+
+const createRefreshTokenRecord = async (userId, token) => {
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + REFRESH_TOKEN_EXPIRES_DAYS);
+  await RefreshToken.create({
+    tokenHash: hashToken(token),
+    userId,
+    expiresAt
   });
 };
 
@@ -31,14 +52,18 @@ const register = async (req, res) => {
 
     await user.save();
 
-    // Generate token
-    const token = generateToken(user._id);
+    const accessToken = generateAccessToken(user._id, user.role);
+    const refreshToken = generateRefreshToken();
+    await createRefreshTokenRecord(user._id, refreshToken);
 
     res.status(201).json({
       success: true,
       message: 'User registered successfully',
       data: {
-        token,
+        token: accessToken,
+        accessToken,
+        refreshToken,
+        expiresIn: ACCESS_TOKEN_EXPIRES,
         user: {
           id: user._id,
           username: user.username,
@@ -69,9 +94,12 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    const loginInput = email?.trim();
 
-    // Find user by email
-    const user = await User.findOne({ email });
+    // 支持邮箱或用户名登录：判断是否包含 @
+    const user = await User.findOne(
+      loginInput?.includes('@') ? { email: loginInput } : { username: loginInput }
+    );
     if (!user) {
       return res.status(401).json({ 
         success: false,
@@ -96,14 +124,21 @@ const login = async (req, res) => {
       });
     }
 
-    // Generate token
-    const token = generateToken(user._id);
+    // Update lastLoginAt
+    await User.findByIdAndUpdate(user._id, { lastLoginAt: new Date() });
+
+    const accessToken = generateAccessToken(user._id, user.role);
+    const refreshToken = generateRefreshToken();
+    await createRefreshTokenRecord(user._id, refreshToken);
 
     res.json({
       success: true,
       message: 'Login successful',
       data: {
-        token,
+        token: accessToken,
+        accessToken,
+        refreshToken,
+        expiresIn: ACCESS_TOKEN_EXPIRES,
         user: {
           id: user._id,
           username: user.username,
@@ -123,12 +158,63 @@ const login = async (req, res) => {
   }
 };
 
-const logout = (req, res) => {
-  // In a real application, you might blacklist the token
+const logout = async (req, res) => {
+  const { refreshToken } = req.body;
+  if (refreshToken) {
+    await RefreshToken.deleteOne({ tokenHash: hashToken(refreshToken) });
+  }
   res.json({
     success: true,
     message: 'Logged out successfully'
   });
+};
+
+const refresh = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+    if (!refreshToken) {
+      return res.status(400).json({ success: false, error: 'Refresh token required' });
+    }
+
+    const tokenHash = hashToken(refreshToken);
+    const record = await RefreshToken.findOne({ tokenHash });
+    if (!record) {
+      return res.status(401).json({ success: false, error: 'Invalid or expired refresh token' });
+    }
+    if (record.expiresAt < new Date()) {
+      await RefreshToken.deleteOne({ tokenHash });
+      return res.status(401).json({ success: false, error: 'Refresh token expired' });
+    }
+
+    const user = await User.findById(record.userId);
+    if (!user || !user.isActive) {
+      await RefreshToken.deleteOne({ tokenHash });
+      return res.status(401).json({ success: false, error: 'User not found or inactive' });
+    }
+
+    // Token rotation: delete old, create new
+    await RefreshToken.deleteOne({ tokenHash });
+    const newRefreshToken = generateRefreshToken();
+    await createRefreshTokenRecord(user._id, newRefreshToken);
+
+    const accessToken = generateAccessToken(user._id, user.role);
+
+    res.json({
+      success: true,
+      data: {
+        token: accessToken,
+        accessToken,
+        refreshToken: newRefreshToken,
+        expiresIn: ACCESS_TOKEN_EXPIRES
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Server error during token refresh',
+      message: error.message
+    });
+  }
 };
 
 const getCurrentUser = async (req, res) => {
@@ -158,5 +244,6 @@ module.exports = {
   register,
   login,
   logout,
+  refresh,
   getCurrentUser
 };

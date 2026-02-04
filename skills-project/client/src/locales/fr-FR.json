@@ -97,7 +97,9 @@
         "loading": "Connexion en cours...",
         "noAccount": "Vous n'avez pas de compte ?",
         "signUp": "S'inscrire",
-        "orContinueWith": "Ou continuer avec"
+        "orContinueWith": "Ou continuer avec",
+        "success": "Connexion réussie !",
+        "generalError": "Une erreur s'est produite lors de la connexion"
       },
       "register": {
         "title": "Créez un compte",
@@ -114,7 +116,10 @@
         "privacy": "Politique de confidentialité",
         "signUp": "S'inscrire",
         "hasAccount": "Vous avez déjà un compte ?",
-        "signIn": "Connexion"
+        "signIn": "Connexion",
+        "success": "Inscription réussie !",
+        "passwordMismatch": "Les mots de passe ne correspondent pas",
+        "generalError": "Une erreur s'est produite lors de l'inscription"
       }
     },
     "skills": {
@@ -164,9 +169,10 @@
     "admin": {
       "dashboard": "Tableau de bord",
       "adminPanel": "Panneau d'administration",
-      "users": "Gestion des utilisateurs",
-      "skills": "Gestion des compétences",
-      "permissions": "Gestion des autorisations",
+      "users": "Utilisateurs",
+      "skills": "Compétences",
+      "roles": "Rôles",
+      "permissions": "Autorisations",
       "settings": "Paramètres système",
       "totalUsers": "Utilisateurs totaux",
       "totalSkills": "Compétences totales",

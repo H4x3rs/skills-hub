@@ -1,48 +1,84 @@
 import { Command } from 'commander';
+import { createApiClient } from '../lib/auth.js';
+import { isLoggedIn } from '../lib/auth.js';
+
+function formatSkillDisplay(skill) {
+  const name = skill.name || '?';
+  const version = skill.version || (skill.versions?.[0]?.version) || '—';
+  const downloads = skill.downloads ?? 0;
+  const category = skill.category || '—';
+  const status = skill.status || '—';
+  return { name, version, downloads, category, status };
+}
 
 const listCommand = new Command('list');
 listCommand
   .alias('ls')
   .description('List skills from SkillsHub')
-  .option('-a, --all', 'Show all skills including private ones')
-  .option('-p, --public', 'Show only public skills')
-  .option('-m, --mine', 'Show only skills owned by current user')
-  .option('-c, --category <category>', 'Filter by category')
-  .option('-t, --tag <tag>', 'Filter by tag')
+  .option('-c, --category <category>', 'Filter by category (ai, data, web, devops, security, tools)')
   .option('-s, --search <query>', 'Search skills by name or description')
-  .option('--limit <number>', 'Maximum number of results (default: 20)')
-  .option('--offset <number>', 'Offset for pagination (default: 0)')
+  .option('-m, --mine', 'Show only your skills (requires login)')
+  .option('-l, --limit <number>', 'Maximum number of results (default: 20)', '20')
+  .option('-p, --page <number>', 'Page number for pagination (default: 1)', '1')
   .action(async (options) => {
-    console.log('Fetching skills list...');
-    
-    console.log('Filters:');
-    if (options.all) console.log('- Showing all skills');
-    if (options.public) console.log('- Showing only public skills');
-    if (options.mine) console.log('- Showing only your skills');
-    if (options.category) console.log(`- Category: ${options.category}`);
-    if (options.tag) console.log(`- Tag: ${options.tag}`);
-    if (options.search) console.log(`- Search: ${options.search}`);
-    
-    // 在实际实现中，这里会从API获取技能列表
-    console.log('\nFetching from SkillsHub API...');
-    
-    // 示例数据
-    const sampleSkills = [
-      { id: 'gpt-translator', name: 'GPT Translator', version: '1.2.0', downloads: 1250, category: 'ai' },
-      { id: 'data-analyzer', name: 'Data Analyzer', version: '2.1.1', downloads: 890, category: 'data' },
-      { id: 'web-scraper', name: 'Web Scraper', version: '0.9.5', downloads: 632, category: 'web' },
-      { id: 'security-checker', name: 'Security Checker', version: '1.0.3', downloads: 421, category: 'security' }
-    ];
-    
-    console.log(`\nFound ${sampleSkills.length} skills:`);
-    console.log('----------------------------------------');
-    sampleSkills.forEach(skill => {
-      console.log(`${skill.name} (${skill.id})`);
-      console.log(`  Version: ${skill.version} | Downloads: ${skill.downloads} | Category: ${skill.category}`);
-      console.log('');
-    });
-    
-    console.log('Use "skm get <skill-id>" to download a specific skill');
+    const api = createApiClient();
+    const limit = parseInt(options.limit, 10) || 20;
+    const page = parseInt(options.page, 10) || 1;
+
+    try {
+      let res;
+      if (options.mine) {
+        if (!isLoggedIn()) {
+          console.error('Error: --mine requires login. Run "skm login" first.');
+          process.exit(1);
+        }
+        const params = { page, limit };
+        if (options.category) params.category = options.category;
+        if (options.search) params.q = options.search;
+        res = await api.get('/skills/my', { params });
+      } else {
+        const params = { page, limit };
+        if (options.category) params.category = options.category;
+        if (options.search) params.q = options.search;
+        if (params.q || params.category) {
+          res = await api.get('/skills/search', { params });
+        } else {
+          res = await api.get('/skills', { params });
+        }
+      }
+
+      const skills = res.data?.skills ?? res.data ?? [];
+      const pagination = res.data?.pagination ?? {};
+
+      if (skills.length === 0) {
+        console.log('No skills found.');
+        return;
+      }
+
+      console.log(`\nFound ${pagination.totalSkills ?? skills.length} skill(s):`);
+      console.log('─'.repeat(60));
+      skills.forEach((skill) => {
+        const { name, version, downloads, category, status } = formatSkillDisplay(skill);
+        const statusStr = options.mine ? ` | ${status}` : '';
+        console.log(`  ${name}`);
+        console.log(`    Version: ${version} | Downloads: ${downloads} | Category: ${category}${statusStr}`);
+      });
+      if (pagination.totalPages > 1) {
+        console.log(`\nPage ${pagination.currentPage}/${pagination.totalPages}`);
+      }
+      console.log('\nUse "skm get name" or "skm get name@version" to download.');
+    } catch (err) {
+      let msg = err.message;
+      if (err.response?.data) {
+        const d = err.response.data;
+        msg = d.error || d.message || msg;
+      }
+      if (err.response?.status === 401 && options.mine) {
+        msg = 'Login required. Run "skm login" first.';
+      }
+      console.error('Error:', msg);
+      process.exit(1);
+    }
   });
 
 export { listCommand };

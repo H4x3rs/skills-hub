@@ -97,7 +97,9 @@
         "loading": "Anmeldung läuft...",
         "noAccount": "Sie haben noch kein Konto?",
         "signUp": "Registrieren",
-        "orContinueWith": "Oder fahren Sie fort mit"
+        "orContinueWith": "Oder fahren Sie fort mit",
+        "success": "Anmeldung erfolgreich!",
+        "generalError": "Bei der Anmeldung ist ein Fehler aufgetreten"
       },
       "register": {
         "title": "Erstellen Sie ein Konto",
@@ -114,7 +116,10 @@
         "privacy": "Datenschutzrichtlinien",
         "signUp": "Registrieren",
         "hasAccount": "Sie haben bereits ein Konto?",
-        "signIn": "Anmelden"
+        "signIn": "Anmelden",
+        "success": "Registrierung erfolgreich!",
+        "passwordMismatch": "Die Passwörter stimmen nicht überein",
+        "generalError": "Bei der Registrierung ist ein Fehler aufgetreten"
       }
     },
     "skills": {
@@ -164,9 +169,10 @@
     "admin": {
       "dashboard": "Dashboard",
       "adminPanel": "Admin-Bereich",
-      "users": "Benutzerverwaltung",
-      "skills": "Fähigkeitsverwaltung",
-      "permissions": "Berechtigungsverwaltung",
+      "users": "Benutzer",
+      "skills": "Fähigkeiten",
+      "roles": "Rollen",
+      "permissions": "Berechtigungen",
       "settings": "Systemeinstellungen",
       "totalUsers": "Gesamtzahl der Benutzer",
       "totalSkills": "Gesamtzahl der Fähigkeiten",

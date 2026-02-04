@@ -15,10 +15,7 @@ async function testAPIFeatures() {
   
   try {
     // 连接到数据库
-    await mongoose.connect('mongodb://localhost:27017/skills_hub_test', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await mongoose.connect('mongodb://localhost:27017/skills_hub_test');
     console.log('✓ 数据库连接成功\n');
     
     // 1. 测试权限创建

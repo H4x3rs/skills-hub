@@ -1,6 +1,54 @@
+/* highlight.js 代码高亮 - 需在 @tailwind 之前 */
+@import 'highlight.js/styles/github.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 深色模式代码高亮 - GitHub Dark 风格 */
+.dark .prose pre code.hljs {
+  background: transparent !important;
+  color: #c9d1d9;
+}
+.dark .prose pre code.hljs .hljs-doctag,
+.dark .prose pre code.hljs .hljs-keyword,
+.dark .prose pre code.hljs .hljs-meta .hljs-keyword { color: #ff7b72; }
+.dark .prose pre code.hljs .hljs-title,
+.dark .prose pre code.hljs .hljs-title.class_,
+.dark .prose pre code.hljs .hljs-title.function_ { color: #d2a8ff; }
+.dark .prose pre code.hljs .hljs-attr,
+.dark .prose pre code.hljs .hljs-attribute,
+.dark .prose pre code.hljs .hljs-literal,
+.dark .prose pre code.hljs .hljs-number,
+.dark .prose pre code.hljs .hljs-operator,
+.dark .prose pre code.hljs .hljs-variable { color: #79c0ff; }
+.dark .prose pre code.hljs .hljs-string,
+.dark .prose pre code.hljs .hljs-regexp { color: #a5d6ff; }
+.dark .prose pre code.hljs .hljs-built_in,
+.dark .prose pre code.hljs .hljs-symbol { color: #ffa657; }
+.dark .prose pre code.hljs .hljs-comment,
+.dark .prose pre code.hljs .hljs-formula { color: #8b949e; }
+.dark .prose pre code.hljs .hljs-name,
+.dark .prose pre code.hljs .hljs-quote,
+.dark .prose pre code.hljs .hljs-selector-tag { color: #7ee787; }
+
+/* Markdown 代码块样式优化 */
+.prose pre {
+  @apply my-4 rounded-lg overflow-x-auto border border-border/50;
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.prose pre code {
+  padding: 0;
+  background: transparent !important;
+  font-size: inherit;
+}
+/* 行内代码 */
+.prose :not(pre) > code {
+  @apply px-1.5 py-0.5 rounded bg-muted/80 text-foreground;
+  font-size: 0.875em;
+}
 
 @layer base {
   :root {
@@ -121,20 +169,43 @@
 
 /* 自定义滚动条 */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-muted;
+  background: hsl(var(--muted) / 0.5);
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-muted-foreground/30 rounded-full;
+  background: hsl(var(--muted-foreground) / 0.25);
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-muted-foreground/50;
+  background: hsl(var(--muted-foreground) / 0.4);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: hsl(var(--primary-500) / 0.5);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-corner {
+  background: hsl(var(--muted) / 0.5);
+  border-radius: 0 0 4px 0;
+}
+
+/* Firefox 滚动条 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground) / 0.3) hsl(var(--muted) / 0.5);
 }
 
 /* 动画效果 */
@@ -178,15 +249,104 @@ img, video {
   max-width: 100%;
 }
 
-/* 确保sonner通知可见 */
-[data-sonner-toast] {
-  z-index: 9999 !important;
-  top: var(--mobile-top, 60px) !important; /* 为移动端设置适当的顶部边距 */
-  right: var(--right, 0) !important;
+/* Sonner Toast - 与整体设计风格统一 */
+[data-sonner-toaster] {
+  z-index: 2147483647 !important;
+  top: 80px !important;
+  right: 24px !important;
+  left: auto !important;
 }
 
-[data-sonner-toaster] {
-  z-index: 9999 !important;
-  top: 60px !important; /* 确保在header下方 */
-  margin-top: 0 !important;
+@media (max-width: 600px) {
+  [data-sonner-toaster] {
+    top: 80px !important;
+    right: 16px !important;
+    left: 16px !important;
+    width: auto !important;
+  }
+}
+
+[data-sonner-toast] {
+  z-index: 2147483647 !important;
+}
+
+[data-sonner-toaster][data-expanded='true'] [data-sonner-toast] {
+  margin-bottom: 10px;
+}
+
+/* Toast 基础 - 卡片风格 */
+[data-sonner-toast].skillshub-toast,
+[data-sonner-toast][data-styled='true'] {
+  position: relative !important;
+  min-width: 320px !important;
+  max-width: 420px !important;
+  padding: 14px 44px 14px 16px !important;
+  background: hsl(var(--card)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  color: hsl(var(--card-foreground)) !important;
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.02) !important;
+  border-radius: 12px !important;
+  font-family: inherit !important;
+  overflow: hidden !important;
+}
+
+[data-sonner-toast][data-styled='true'] [data-title] {
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+[data-sonner-toast][data-styled='true'] [data-description] {
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+[data-sonner-toast][data-styled='true'] [data-icon] {
+  margin-right: 10px !important;
+}
+
+/* 关闭按钮 - 右侧，极简风格 */
+[data-sonner-toast] .skillshub-toast-close,
+[data-sonner-toast][data-styled='true'] [data-close-button] {
+  left: unset !important;
+  right: 10px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 28px !important;
+  height: 28px !important;
+  background: transparent !important;
+  border: none !important;
+  color: hsl(var(--muted-foreground)) !important;
+  border-radius: 6px !important;
+  opacity: 0.7 !important;
+  transition: opacity 0.15s, background 0.15s !important;
+}
+
+[data-sonner-toast] .skillshub-toast-close:hover,
+[data-sonner-toast][data-styled='true'] [data-close-button]:hover {
+  background: hsl(var(--accent)) !important;
+  color: hsl(var(--accent-foreground)) !important;
+  opacity: 1 !important;
+}
+
+/* 成功/错误/信息/警告 - 图标颜色 */
+[data-rich-colors='true'][data-sonner-toast][data-type='success'] [data-icon] {
+  color: hsl(142 71% 45%) !important; /* 成功绿 */
+}
+
+.dark [data-rich-colors='true'][data-sonner-toast][data-type='success'] [data-icon] {
+  color: hsl(142 65% 55%) !important; /* 暗色模式下稍亮 */
+}
+
+[data-rich-colors='true'][data-sonner-toast][data-type='error'] [data-icon] {
+  color: hsl(var(--destructive)) !important;
+}
+
+[data-rich-colors='true'][data-sonner-toast][data-type='info'] [data-icon] {
+  color: hsl(var(--primary-500)) !important;
+}
+
+[data-rich-colors='true'][data-sonner-toast][data-type='warning'] [data-icon] {
+  color: hsl(38 92% 50%) !important;
 }

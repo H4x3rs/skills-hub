@@ -71,15 +71,15 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium mb-2">
-                {t('auth.login.email')}
+                {t('auth.login.emailOrUsername') || t('auth.login.email')}
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="email"
                   name="email"
-                  type="email"
-                  placeholder="your@email.com"
+                  type="text"
+                  placeholder={t('auth.login.emailPlaceholder') || 'your@email.com or username'}
                   value={formData.email}
                   onChange={handleChange}
                   required

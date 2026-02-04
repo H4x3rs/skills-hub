@@ -4,6 +4,10 @@ const {
   getUsersForAdmin, 
   getSkillsForAdmin, 
   updateSkillStatus, 
+  updateUserStatus,
+  updateUserForAdmin,
+  resetUserPassword,
+  deleteUserForAdmin,
   manageUserRoles,
   getRoles,
   getRoleByName,
@@ -16,7 +20,9 @@ const {
   updatePermission,
   deletePermission,
   assignRoleToUser,
-  getUsersWithRoles
+  getUsersWithRoles,
+  getSettings,
+  updateSettings
 } = require('../controllers/adminController');
 const { authenticateToken, authorizeAdmin } = require('../middleware/auth');
 
@@ -28,7 +34,11 @@ router.get('/dashboard', authenticateToken, authorizeAdmin, getDashboardStats);
 // 用户管理
 router.get('/users', authenticateToken, authorizeAdmin, getUsersForAdmin);
 router.get('/users-with-roles', authenticateToken, authorizeAdmin, getUsersWithRoles);
+router.put('/users/:id', authenticateToken, authorizeAdmin, updateUserForAdmin);
 router.put('/users/:id/role', authenticateToken, authorizeAdmin, manageUserRoles);
+router.put('/users/:id/status', authenticateToken, authorizeAdmin, updateUserStatus);
+router.post('/users/:id/reset-password', authenticateToken, authorizeAdmin, resetUserPassword);
+router.delete('/users/:id', authenticateToken, authorizeAdmin, deleteUserForAdmin);
 
 // 技能管理
 router.get('/skills', authenticateToken, authorizeAdmin, getSkillsForAdmin);
@@ -50,5 +60,9 @@ router.delete('/permissions/:id', authenticateToken, authorizeAdmin, deletePermi
 
 // 用户角色分配
 router.post('/assign-role', authenticateToken, authorizeAdmin, assignRoleToUser);
+
+// 系统设置
+router.get('/settings', authenticateToken, authorizeAdmin, getSettings);
+router.put('/settings', authenticateToken, authorizeAdmin, updateSettings);
 
 module.exports = router;

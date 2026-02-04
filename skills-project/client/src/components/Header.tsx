@@ -5,9 +5,11 @@ import { Button } from '@/components/ui/button';
 import ThemeToggle from './ThemeToggle';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSiteSettings } from '@/contexts/SiteSettingsContext';
 
 const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
+  const { siteTitle } = useSiteSettings();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
@@ -43,7 +45,7 @@ const Header = () => {
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
               </svg>
             </div>
-            <span className="text-primary">skillshub</span>
+            <span className="text-primary">{siteTitle?.split(' - ')[0] || 'skillshub'}</span>
           </Link>
         </div>
 

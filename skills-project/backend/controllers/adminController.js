@@ -2,25 +2,57 @@ const User = require('../models/User');
 const Skill = require('../models/Skill');
 const Role = require('../models/Role');
 const Permission = require('../models/Permission');
+const Settings = require('../models/Settings');
+
+const CACHE_TTL_MS = 60 * 1000; // 60 秒
+let statsCache = { data: null, expiresAt: 0 };
+
+const getStartOfTodayUTC = () => {
+  const d = new Date();
+  d.setUTCHours(0, 0, 0, 0);
+  return d;
+};
 
 const getDashboardStats = async (req, res) => {
   try {
-    const totalUsers = await User.countDocuments();
-    const totalSkills = await Skill.countDocuments();
-    const publishedSkills = await Skill.countDocuments({ status: 'published' });
-    const pendingSkills = await Skill.countDocuments({ status: 'pending_review' });
-    const totalDownloads = await Skill.aggregate([
-      { $group: { _id: null, total: { $sum: '$downloads' } } }
+    const forceRefresh = req.query.refresh === '1';
+
+    if (!forceRefresh && statsCache.data && Date.now() < statsCache.expiresAt) {
+      return res.json({
+        success: true,
+        data: { stats: statsCache.data }
+      });
+    }
+
+    const startOfToday = getStartOfTodayUTC();
+
+    const [
+      totalUsers,
+      totalSkills,
+      publishedSkills,
+      pendingSkills,
+      totalDownloadsResult,
+      activeToday
+    ] = await Promise.all([
+      User.countDocuments(),
+      Skill.countDocuments(),
+      Skill.countDocuments({ status: 'published' }),
+      Skill.countDocuments({ status: 'pending_review' }),
+      Skill.aggregate([{ $group: { _id: null, total: { $sum: '$downloads' } } }]),
+      User.countDocuments({ lastLoginAt: { $gte: startOfToday } })
     ]);
-    
+
     const stats = {
       totalUsers,
       totalSkills,
       publishedSkills,
       pendingSkills,
-      totalDownloads: totalDownloads.length > 0 ? totalDownloads[0].total : 0
+      totalDownloads: totalDownloadsResult.length > 0 ? totalDownloadsResult[0].total : 0,
+      activeToday
     };
-    
+
+    statsCache = { data: stats, expiresAt: Date.now() + CACHE_TTL_MS };
+
     res.json({
       success: true,
       data: { stats }
@@ -159,6 +191,173 @@ const updateSkillStatus = async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Server error while updating skill status',
+      message: error.message
+    });
+  }
+};
+
+const updateUserStatus = async (req, res) => {
+  try {
+    const { isActive } = req.body;
+    if (typeof isActive !== 'boolean') {
+      return res.status(400).json({ success: false, error: 'isActive must be a boolean' });
+    }
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { isActive },
+      { new: true, runValidators: true }
+    ).select('-password');
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    res.json({
+      success: true,
+      message: 'User status updated successfully',
+      data: { user }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Server error while updating user status',
+      message: error.message
+    });
+  }
+};
+
+// 管理员更新用户信息（可修改 username, email, fullName, bio）
+const updateUserForAdmin = async (req, res) => {
+  try {
+    const { username, email, fullName, bio } = req.body;
+    const userId = req.params.id;
+
+    // 不能修改自己的部分敏感信息（可选限制，这里允许管理员修改自己）
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
+      });
+    }
+
+    const updateData = {};
+    if (username !== undefined) {
+      const existing = await User.findOne({ username, _id: { $ne: userId } });
+      if (existing) {
+        return res.status(400).json({ success: false, error: 'Username already taken' });
+      }
+      updateData.username = username;
+    }
+    if (email !== undefined) {
+      const existing = await User.findOne({ email: email.toLowerCase(), _id: { $ne: userId } });
+      if (existing) {
+        return res.status(400).json({ success: false, error: 'Email already taken' });
+      }
+      updateData.email = email.toLowerCase();
+    }
+    if (fullName !== undefined) updateData.fullName = fullName;
+    if (bio !== undefined) updateData.bio = bio;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      updateData,
+      { new: true, runValidators: true }
+    ).select('-password');
+
+    res.json({
+      success: true,
+      message: 'User updated successfully',
+      data: { user: updatedUser }
+    });
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: errors
+      });
+    }
+    res.status(500).json({
+      success: false,
+      error: 'Server error while updating user',
+      message: error.message
+    });
+  }
+};
+
+// 管理员重置用户密码
+const resetUserPassword = async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    const userId = req.params.id;
+
+    if (!newPassword || newPassword.length < 8) {
+      return res.status(400).json({
+        success: false,
+        error: 'Password must be at least 8 characters'
+      });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
+      });
+    }
+
+    user.password = newPassword;
+    await user.save(); // pre-save hook will hash the password
+
+    res.json({
+      success: true,
+      message: 'Password reset successfully'
+    });
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: errors
+      });
+    }
+    res.status(500).json({
+      success: false,
+      error: 'Server error while resetting password',
+      message: error.message
+    });
+  }
+};
+
+// 管理员删除用户
+const deleteUserForAdmin = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    if (userId === req.user.userId) {
+      return res.status(400).json({
+        success: false,
+        error: 'Cannot delete your own account'
+      });
+    }
+
+    const user = await User.findByIdAndDelete(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'User deleted successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Server error while deleting user',
       message: error.message
     });
   }
@@ -720,11 +919,84 @@ const getUsersWithRoles = async (req, res) => {
   }
 };
 
+const getPublicSiteSettings = async (req, res) => {
+  try {
+    const settings = await Settings.get();
+    res.json({
+      success: true,
+      data: {
+        siteTitle: settings.siteTitle,
+        siteDescription: settings.siteDescription,
+        maintenanceMode: settings.maintenanceMode
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch site settings',
+      message: error.message
+    });
+  }
+};
+
+const getSettings = async (req, res) => {
+  try {
+    const settings = await Settings.get();
+    res.json({
+      success: true,
+      data: {
+        siteTitle: settings.siteTitle,
+        siteDescription: settings.siteDescription,
+        require2FA: settings.require2FA,
+        enableEmailVerification: settings.enableEmailVerification,
+        maxFileSize: settings.maxFileSize,
+        allowedFileTypes: settings.allowedFileTypes,
+        maintenanceMode: settings.maintenanceMode
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch settings',
+      message: error.message
+    });
+  }
+};
+
+const updateSettings = async (req, res) => {
+  try {
+    const updates = req.body;
+    const settings = await Settings.updateSettings(updates);
+    res.json({
+      success: true,
+      data: {
+        siteTitle: settings.siteTitle,
+        siteDescription: settings.siteDescription,
+        require2FA: settings.require2FA,
+        enableEmailVerification: settings.enableEmailVerification,
+        maxFileSize: settings.maxFileSize,
+        allowedFileTypes: settings.allowedFileTypes,
+        maintenanceMode: settings.maintenanceMode
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to update settings',
+      message: error.message
+    });
+  }
+};
+
 module.exports = {
   getDashboardStats,
   getUsersForAdmin,
   getSkillsForAdmin,
   updateSkillStatus,
+  updateUserStatus,
+  updateUserForAdmin,
+  resetUserPassword,
+  deleteUserForAdmin,
   manageUserRoles,
   getRoles,
   getRoleByName,
@@ -737,5 +1009,8 @@ module.exports = {
   updatePermission,
   deletePermission,
   assignRoleToUser,
-  getUsersWithRoles
+  getUsersWithRoles,
+  getSettings,
+  updateSettings,
+  getPublicSiteSettings
 };

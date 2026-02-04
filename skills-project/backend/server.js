@@ -12,6 +12,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const skillRoutes = require('./routes/skills');
 const adminRoutes = require('./routes/admin');
+const { getPublicSiteSettings } = require('./controllers/adminController');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,10 +24,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Database connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/skillshub', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/skillshub')
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB connection error:', err));
 
@@ -40,6 +38,9 @@ app.use('/api/admin', adminRoutes);
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
+
+// 公开站点设置（无需认证，用于 Header/Footer/页面标题）
+app.get('/api/site-settings', getPublicSiteSettings);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

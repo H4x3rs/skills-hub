@@ -1,27 +1,75 @@
 import { Command } from 'commander';
+import inquirer from 'inquirer';
+import axios from 'axios';
+import { getApiUrl, setAuth, setApiUrl } from '../lib/auth.js';
 
 const loginCommand = new Command('login');
 loginCommand
   .description('Login to SkillsHub platform')
   .option('-u, --username <username>', 'Username')
   .option('-e, --email <email>', 'Email address')
-  .option('-t, --token <token>', 'Authentication token')
+  .option('-p, --password <password>', 'Password')
+  .option('-t, --token <token>', 'Use access token directly (from web)')
+  .option('--api-url <url>', 'API base URL')
   .action(async (options) => {
-    console.log('Logging in to SkillsHub...');
-    
-    if (options.token) {
-      console.log(`Using provided token: ${options.token.substring(0, 4)}...`);
-      // 在实际实现中，这里会验证并存储token
-    } else if (options.email || options.username) {
-      console.log(`Using credentials: ${options.email || options.username}`);
-      // 在实际实现中，这里会进行登录流程
-    } else {
-      console.log('Please provide your credentials');
-      // 在实际实现中，这里会提示用户输入凭据
+    const apiUrl = options.apiUrl || getApiUrl();
+    if (options.apiUrl) {
+      setApiUrl(options.apiUrl);
     }
-    
-    console.log('Login successful!');
-    console.log('Credentials saved to configuration.');
+
+    if (options.token) {
+      setAuth({ token: options.token });
+      console.log('Token saved. Logged in successfully.');
+      return;
+    }
+
+    let emailOrUsername = options.email || options.username;
+    let password = options.password;
+
+    if (!emailOrUsername || !password) {
+      const answers = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'emailOrUsername',
+          message: 'Email or Username:',
+          default: emailOrUsername,
+          validate: (v) => (v?.trim() ? true : 'Required'),
+        },
+        {
+          type: 'password',
+          name: 'password',
+          message: 'Password:',
+          mask: '*',
+          validate: (v) => (v ? true : 'Required'),
+        },
+      ]);
+      emailOrUsername = answers.emailOrUsername?.trim();
+      password = answers.password;
+    }
+
+    console.log('Logging in to SkillsHub...');
+    try {
+      const res = await axios.post(`${apiUrl}/auth/login`, {
+        email: emailOrUsername,
+        password,
+      });
+      const data = res.data?.data || res.data;
+      const accessToken = data.accessToken || data.token;
+      const refreshToken = data.refreshToken;
+      const user = data.user;
+
+      if (!accessToken) {
+        console.error('Login failed: No token received');
+        process.exit(1);
+      }
+
+      setAuth({ token: accessToken, refreshToken, user });
+      console.log(`Logged in as ${user?.username || user?.email || 'user'}`);
+    } catch (err) {
+      const msg = err.response?.data?.error || err.message || 'Login failed';
+      console.error('Login failed:', msg);
+      process.exit(1);
+    }
   });
 
 export { loginCommand };

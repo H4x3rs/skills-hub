@@ -309,6 +309,41 @@ Authorization: Bearer <jwt_token>
 }
 ```
 
+#### GET /api/admin/settings
+获取系统设置（需要管理员权限）
+
+**响应:**
+```json
+{
+  "success": true,
+  "data": {
+    "siteTitle": "string",
+    "siteDescription": "string",
+    "require2FA": false,
+    "enableEmailVerification": false,
+    "maxFileSize": 50,
+    "allowedFileTypes": ".zip,.tar.gz,.js,.ts,.json",
+    "maintenanceMode": false
+  }
+}
+```
+
+#### PUT /api/admin/settings
+更新系统设置（需要管理员权限）
+
+**请求体:**
+```json
+{
+  "siteTitle": "string (optional)",
+  "siteDescription": "string (optional)",
+  "require2FA": "boolean (optional)",
+  "enableEmailVerification": "boolean (optional)",
+  "maxFileSize": "number (optional, MB)",
+  "allowedFileTypes": "string (optional)",
+  "maintenanceMode": "boolean (optional)"
+}
+```
+
 ## 错误响应
 
 所有错误响应都采用以下格式：

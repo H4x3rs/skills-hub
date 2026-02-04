@@ -47,10 +47,17 @@ const userSchema = new mongoose.Schema({
   joinDate: {
     type: Date,
     default: Date.now
+  },
+  lastLoginAt: {
+    type: Date,
+    default: null
   }
 }, {
   timestamps: true
 });
+
+userSchema.index({ lastLoginAt: -1 });
+userSchema.index({ createdAt: -1 });
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {

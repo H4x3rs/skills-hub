@@ -97,7 +97,9 @@
         "loading": "جاري تسجيل الدخول...",
         "noAccount": "ليس لديك حساب؟",
         "signUp": "التسجيل",
-        "orContinueWith": "أو متابعة مع"
+        "orContinueWith": "أو متابعة مع",
+        "success": "تم تسجيل الدخول بنجاح!",
+        "generalError": "حدث خطأ أثناء تسجيل الدخول"
       },
       "register": {
         "title": "أنشئ حسابًا",
@@ -114,7 +116,10 @@
         "privacy": "سياسة الخصوصية",
         "signUp": "التسجيل",
         "hasAccount": "هل لديك حساب بالفعل؟",
-        "signIn": "تسجيل الدخول"
+        "signIn": "تسجيل الدخول",
+        "success": "تم التسجيل بنجاح!",
+        "passwordMismatch": "كلمات المرور غير متطابقة",
+        "generalError": "حدث خطأ أثناء التسجيل"
       }
     },
     "skills": {
@@ -164,9 +169,10 @@
     "admin": {
       "dashboard": "لوحة التحكم",
       "adminPanel": "لوحة الإدارة",
-      "users": "إدارة المستخدمين",
-      "skills": "إدارة المهارات",
-      "permissions": "إدارة الأذونات",
+      "users": "المستخدمون",
+      "skills": "المهارات",
+      "roles": "الأدوار",
+      "permissions": "الأذونات",
       "settings": "إعدادات النظام",
       "totalUsers": "إجمالي المستخدمين",
       "totalSkills": "إجمالي المهارات",

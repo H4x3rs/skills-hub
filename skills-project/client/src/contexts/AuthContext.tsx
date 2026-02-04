@@ -41,30 +41,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // 检查本地存储中的token并获取用户信息
-    const initializeAuth = async () => {
-      const storedToken = localStorage.getItem('token');
-      if (storedToken) {
-        setToken(storedToken);
-        try {
-          setIsLoading(true); // 开始加载
-          await fetchCurrentUser();
-        } catch (error) {
-          console.error('Failed to fetch current user during initialization:', error);
-        } finally {
-          setIsLoading(false); // 结束加载
-        }
-      } else {
-        setIsLoading(false);
-      }
-    };
-
-    initializeAuth();
-  }, []);
-
-  const fetchCurrentUser = async () => {
-    if (!token) return;
+  const fetchCurrentUser = React.useCallback(async () => {
+    // 优先从 localStorage 读取，避免刷新时 token 状态尚未更新导致提前 return
+    const tokenToUse = token || localStorage.getItem('token');
+    if (!tokenToUse) return;
 
     try {
       const response = await authAPI.getCurrentUser();
@@ -82,32 +62,48 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(user);
     } catch (error) {
       console.error('Failed to fetch current user:', error);
-      // 如果获取用户信息失败，清除无效的token
       localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
       setToken(null);
       setUser(null);
       throw error; // 抛出错误以便调用方处理
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const initializeAuth = async () => {
+      const storedToken = localStorage.getItem('token');
+      if (storedToken) {
+        setToken(storedToken);
+        try {
+          setIsLoading(true);
+          await fetchCurrentUser();
+        } catch (error) {
+          console.error('Failed to fetch current user during initialization:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
+        setIsLoading(false);
+      }
+    };
+    initializeAuth();
+  }, [fetchCurrentUser]);
 
   const login = async (email: string, password: string) => {
     const response = await authAPI.login({ email, password });
     
-    // 适配新旧两种响应格式
-    let token, user;
-    if (response.data.success !== undefined) {
-      // 新格式: { success: true, data: { token, user } }
-      token = response.data.data?.token;
-      user = response.data.data?.user;
-    } else {
-      // 旧格式: { token, user }
-      token = response.data.token;
-      user = response.data.user;
-    }
+    const data = response.data.data || response.data;
+    const accessToken = data.accessToken || data.token;
+    const refreshToken = data.refreshToken;
+    const user = data.user;
     
-    if (token) {
-      localStorage.setItem('token', token);
-      setToken(token);
+    if (accessToken) {
+      localStorage.setItem('token', accessToken);
+      if (refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+      }
+      setToken(accessToken);
       setUser(user);
     }
   };
@@ -120,29 +116,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }) => {
     const response = await authAPI.register(userData);
     
-    // 适配新旧两种响应格式
-    let token, user;
-    if (response.data.success !== undefined) {
-      // 新格式: { success: true, data: { token, user } }
-      token = response.data.data?.token;
-      user = response.data.data?.user;
-    } else {
-      // 旧格式: { token, user }
-      token = response.data.token;
-      user = response.data.user;
-    }
+    const data = response.data.data || response.data;
+    const accessToken = data.accessToken || data.token;
+    const refreshToken = data.refreshToken;
+    const user = data.user;
     
-    if (token) {
-      localStorage.setItem('token', token);
-      setToken(token);
+    if (accessToken) {
+      localStorage.setItem('token', accessToken);
+      if (refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+      }
+      setToken(accessToken);
       setUser(user);
     }
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
-    setToken(null);
-    setUser(null);
+    authAPI.logout().catch(() => {}).finally(() => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      setToken(null);
+      setUser(null);
+    });
   };
 
   const value = {
@@ -159,6 +154,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   return (
     <AuthContext.Provider value={value}>
       {children}
+      {isLoading && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-background">
+          <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
     </AuthContext.Provider>
   );
 };

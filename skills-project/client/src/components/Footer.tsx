@@ -1,46 +1,48 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useSiteSettings } from '@/contexts/SiteSettingsContext';
 
 const Footer = () => {
   const { t } = useTranslation();
+  const { siteTitle, siteDescription } = useSiteSettings();
 
   return (
-    <footer className="border-t bg-background py-12">
+    <footer className="border-t bg-background py-8 md:py-12">
       <div className="container px-4 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-          <div className="text-center md:text-left">
-            <h3 className="font-heading font-bold text-lg mb-4">SkillHub</h3>
-            <p className="text-sm text-muted-foreground">
-              {t('footer.description')}
+        <div className="flex flex-col sm:flex-row flex-wrap gap-6 md:gap-8 max-w-6xl mx-auto">
+          <div className="flex-1 min-w-0 sm:min-w-[180px] text-center sm:text-left">
+            <h3 className="font-heading font-bold text-base md:text-lg mb-3 md:mb-4">{siteTitle || 'SkillHub'}</h3>
+            <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+              {siteDescription || t('footer.description')}
             </p>
           </div>
-          <div className="text-center md:text-left">
-            <h4 className="font-semibold mb-4">{t('footer.product.title')}</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/skills" className="hover:text-primary">{t('navigation.skills')}</Link></li>
-              <li><Link to="/docs" className="hover:text-primary">{t('navigation.docs')}</Link></li>
-              <li><Link to="/cli" className="hover:text-primary">{t('footer.product.cli')}</Link></li>
+          <div className="flex-1 min-w-0 sm:min-w-[120px] text-center sm:text-left">
+            <h4 className="font-semibold text-sm md:text-base mb-3 md:mb-4">{t('footer.product.title')}</h4>
+            <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm text-muted-foreground">
+              <li><Link to="/skills" className="hover:text-primary transition-colors">{t('navigation.skills')}</Link></li>
+              <li><Link to="/docs" className="hover:text-primary transition-colors">{t('navigation.docs')}</Link></li>
+              <li><Link to="/cli" className="hover:text-primary transition-colors">{t('footer.product.cli')}</Link></li>
             </ul>
           </div>
-          <div className="text-center md:text-left">
-            <h4 className="font-semibold mb-4">{t('footer.company.title')}</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/about" className="hover:text-primary">{t('navigation.about')}</Link></li>
-              <li><Link to="/blog" className="hover:text-primary">{t('navigation.blog')}</Link></li>
-              <li><Link to="/contact" className="hover:text-primary">{t('footer.company.contact')}</Link></li>
+          <div className="flex-1 min-w-0 sm:min-w-[120px] text-center sm:text-left">
+            <h4 className="font-semibold text-sm md:text-base mb-3 md:mb-4">{t('footer.company.title')}</h4>
+            <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm text-muted-foreground">
+              <li><Link to="/about" className="hover:text-primary transition-colors">{t('navigation.about')}</Link></li>
+              <li><Link to="/blog" className="hover:text-primary transition-colors">{t('navigation.blog')}</Link></li>
+              <li><Link to="/contact" className="hover:text-primary transition-colors">{t('footer.company.contact')}</Link></li>
             </ul>
           </div>
-          <div className="text-center md:text-left">
-            <h4 className="font-semibold mb-4">{t('footer.legal.title')}</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/privacy" className="hover:text-primary">{t('footer.legal.privacy')}</Link></li>
-              <li><Link to="/terms" className="hover:text-primary">{t('footer.legal.terms')}</Link></li>
-              <li><Link to="/license" className="hover:text-primary">{t('footer.legal.license')}</Link></li>
+          <div className="flex-1 min-w-0 sm:min-w-[120px] text-center sm:text-left">
+            <h4 className="font-semibold text-sm md:text-base mb-3 md:mb-4">{t('footer.legal.title')}</h4>
+            <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm text-muted-foreground">
+              <li><Link to="/privacy" className="hover:text-primary transition-colors">{t('footer.legal.privacy')}</Link></li>
+              <li><Link to="/terms" className="hover:text-primary transition-colors">{t('footer.legal.terms')}</Link></li>
+              <li><Link to="/license" className="hover:text-primary transition-colors">{t('footer.legal.license')}</Link></li>
             </ul>
           </div>
         </div>
-        <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground max-w-6xl mx-auto">
-          © 2026 SkillHub. {t('footer.copyright')}
+        <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t text-center text-xs md:text-sm text-muted-foreground max-w-6xl mx-auto px-2">
+          © 2026 {siteTitle?.split(' - ')[0] || 'SkillHub'}. {t('footer.copyright')}
         </div>
       </div>
     </footer>
