@@ -9,6 +9,10 @@ import SkillsPage from './pages/SkillsPage';
 import SkillDetailPage from './pages/SkillDetailPage';
 import AboutPage from './pages/AboutPage';
 import DocsPage from './pages/DocsPage';
+import ContactPage from './pages/ContactPage';
+import PrivacyPage from './pages/PrivacyPage';
+import TermsPage from './pages/TermsPage';
+import LicensePage from './pages/LicensePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
@@ -49,6 +53,18 @@ function App() {
           </Route>
           <Route path="/about" element={<Layout />}>
             <Route index element={<AboutPage />} />
+          </Route>
+          <Route path="/contact" element={<Layout />}>
+            <Route index element={<ContactPage />} />
+          </Route>
+          <Route path="/privacy" element={<Layout />}>
+            <Route index element={<PrivacyPage />} />
+          </Route>
+          <Route path="/terms" element={<Layout />}>
+            <Route index element={<TermsPage />} />
+          </Route>
+          <Route path="/license" element={<Layout />}>
+            <Route index element={<LicensePage />} />
           </Route>
           <Route path="/docs" element={<Layout />}>
             <Route index element={<DocsPage />} />

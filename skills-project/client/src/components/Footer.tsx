@@ -6,6 +6,11 @@ const Footer = () => {
   const { t } = useTranslation();
   const { siteTitle, siteDescription } = useSiteSettings();
 
+  const handleLinkClick = () => {
+    // 点击链接时滚动到顶部
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <footer className="border-t bg-background py-8 md:py-12">
       <div className="container px-4 md:px-6">
@@ -19,25 +24,25 @@ const Footer = () => {
           <div className="flex-1 min-w-0 sm:min-w-[120px] text-center sm:text-left">
             <h4 className="font-semibold text-sm md:text-base mb-3 md:mb-4">{t('footer.product.title')}</h4>
             <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm text-muted-foreground">
-              <li><Link to="/skills" className="hover:text-primary transition-colors">{t('navigation.skills')}</Link></li>
-              <li><Link to="/docs" className="hover:text-primary transition-colors">{t('navigation.docs')}</Link></li>
-              <li><Link to="/cli" className="hover:text-primary transition-colors">{t('footer.product.cli')}</Link></li>
+              <li><Link to="/skills" onClick={handleLinkClick} className="hover:text-primary transition-colors">{t('navigation.skills')}</Link></li>
+              <li><Link to="/docs" onClick={handleLinkClick} className="hover:text-primary transition-colors">{t('navigation.docs')}</Link></li>
+              <li><Link to="/cli" onClick={handleLinkClick} className="hover:text-primary transition-colors">{t('footer.product.cli')}</Link></li>
             </ul>
           </div>
           <div className="flex-1 min-w-0 sm:min-w-[120px] text-center sm:text-left">
             <h4 className="font-semibold text-sm md:text-base mb-3 md:mb-4">{t('footer.company.title')}</h4>
             <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm text-muted-foreground">
-              <li><Link to="/about" className="hover:text-primary transition-colors">{t('navigation.about')}</Link></li>
-              <li><Link to="/blog" className="hover:text-primary transition-colors">{t('navigation.blog')}</Link></li>
-              <li><Link to="/contact" className="hover:text-primary transition-colors">{t('footer.company.contact')}</Link></li>
+              <li><Link to="/about" onClick={handleLinkClick} className="hover:text-primary transition-colors">{t('navigation.about')}</Link></li>
+              <li><Link to="/blog" onClick={handleLinkClick} className="hover:text-primary transition-colors">{t('navigation.blog')}</Link></li>
+              <li><Link to="/contact" onClick={handleLinkClick} className="hover:text-primary transition-colors">{t('footer.company.contact')}</Link></li>
             </ul>
           </div>
           <div className="flex-1 min-w-0 sm:min-w-[120px] text-center sm:text-left">
             <h4 className="font-semibold text-sm md:text-base mb-3 md:mb-4">{t('footer.legal.title')}</h4>
             <ul className="space-y-1.5 md:space-y-2 text-xs md:text-sm text-muted-foreground">
-              <li><Link to="/privacy" className="hover:text-primary transition-colors">{t('footer.legal.privacy')}</Link></li>
-              <li><Link to="/terms" className="hover:text-primary transition-colors">{t('footer.legal.terms')}</Link></li>
-              <li><Link to="/license" className="hover:text-primary transition-colors">{t('footer.legal.license')}</Link></li>
+              <li><Link to="/privacy" onClick={handleLinkClick} className="hover:text-primary transition-colors">{t('footer.legal.privacy')}</Link></li>
+              <li><Link to="/terms" onClick={handleLinkClick} className="hover:text-primary transition-colors">{t('footer.legal.terms')}</Link></li>
+              <li><Link to="/license" onClick={handleLinkClick} className="hover:text-primary transition-colors">{t('footer.legal.license')}</Link></li>
             </ul>
           </div>
         </div>

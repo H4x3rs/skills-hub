@@ -33,10 +33,15 @@ const LoginPage = () => {
     }
 
     if (token) {
+      const redirect = searchParams.get('redirect');
       loginWithOAuthToken(token, refreshToken || undefined)
         .then(() => {
           toast.success(t('auth.login.success') || 'Login successful!');
-          navigate('/');
+          if (redirect) {
+            navigate(redirect);
+          } else {
+            navigate('/');
+          }
         })
         .catch((err) => {
           console.error('OAuth login error:', err);
@@ -64,8 +69,14 @@ const LoginPage = () => {
       // 显示成功消息
       toast.success(t('auth.login.success') || 'Login successful!');
       
-      // 立即导航到主页或其他受保护的页面
-      navigate('/');
+      // 检查是否有 redirect 参数
+      const redirect = searchParams.get('redirect');
+      if (redirect) {
+        navigate(redirect);
+      } else {
+        // 立即导航到主页或其他受保护的页面
+        navigate('/');
+      }
     } catch (error: any) {
       console.error('Login error:', error);
       let errorMessage = t('auth.login.generalError') || 'An error occurred during login';

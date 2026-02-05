@@ -1,9 +1,31 @@
 import { BookOpen, Download, Upload, Users, Zap, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { useEffect } from 'react';
 
 const AboutPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
+
+  const handleBrowseClick = () => {
+    navigate('/skills');
+  };
+
+  const handlePublishClick = () => {
+    if (!isAuthenticated) {
+      navigate('/login?redirect=/profile');
+    } else {
+      navigate('/profile');
+    }
+  };
   return (
     <div className="min-h-screen bg-background">
       <main>
@@ -130,10 +152,10 @@ const AboutPage = () => {
               {t('about.joinUs.description')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="secondary" size="lg">
+              <Button variant="secondary" size="lg" onClick={handleBrowseClick}>
                 {t('home.browseSkills')}
               </Button>
-              <Button variant="outline" size="lg" className="bg-transparent text-white border-white hover:bg-white/10">
+              <Button variant="outline" size="lg" className="bg-transparent text-white border-white hover:bg-white/10" onClick={handlePublishClick}>
                 {t('home.publishSkill')}
               </Button>
             </div>

@@ -1,27 +1,82 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, Star, Download, Upload, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
+import { skillAPI } from '@/lib/api';
+import { useAuth } from '@/contexts/AuthContext';
+
+interface Skill {
+  _id: string;
+  name: string;
+  description: string;
+  downloads?: number;
+  rating?: { average?: number };
+  author?: { fullName?: string; username?: string };
+}
 
 const HomePage = () => {
   const { t } = useTranslation();
-  
-  // Mock data for skills
-  const latestSkills = [
-    { id: 1, name: 'PDF解析器', description: '高效解析PDF文档内容', downloads: 1245, rating: 4.8, author: '张三' },
-    { id: 2, name: 'Excel处理器', description: '处理Excel数据的专业工具', downloads: 987, rating: 4.7, author: '李四' },
-    { id: 3, name: '图像识别器', description: 'AI驱动的图像识别功能', downloads: 756, rating: 4.9, author: '王五' },
-    { id: 4, name: '文本翻译器', description: '多语言文本翻译服务', downloads: 632, rating: 4.6, author: '赵六' },
-  ];
-  
-  const popularSkills = [
-    { id: 1, name: '数据清洗器', description: '快速清理和预处理数据', downloads: 2456, rating: 4.9, author: '陈七' },
-    { id: 2, name: 'API客户端', description: '通用API调用客户端', downloads: 1890, rating: 4.8, author: '周八' },
-    { id: 3, name: '代码生成器', description: '自动化代码生成工具', downloads: 1543, rating: 4.7, author: '吴九' },
-    { id: 4, name: '图表生成器', description: '数据可视化图表工具', downloads: 1321, rating: 4.8, author: '郑十' },
-  ];
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const [latestSkills, setLatestSkills] = useState<Skill[]>([]);
+  const [popularSkills, setPopularSkills] = useState<Skill[]>([]);
+  const [loadingLatest, setLoadingLatest] = useState(true);
+  const [loadingPopular, setLoadingPopular] = useState(true);
+
+  // 获取最新技能
+  useEffect(() => {
+    skillAPI.getLatest(4)
+      .then((res) => {
+        setLatestSkills(res.data?.skills || []);
+      })
+      .catch((err) => {
+        console.error('Error fetching latest skills:', err);
+        setLatestSkills([]);
+      })
+      .finally(() => setLoadingLatest(false));
+  }, []);
+
+  // 获取热门技能
+  useEffect(() => {
+    skillAPI.getPopular(4)
+      .then((res) => {
+        setPopularSkills(res.data?.skills || []);
+      })
+      .catch((err) => {
+        console.error('Error fetching popular skills:', err);
+        setPopularSkills([]);
+      })
+      .finally(() => setLoadingPopular(false));
+  }, []);
+
+  // 处理查看更多点击，滚动到顶部
+  const handleViewMore = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigate('/skills');
+  };
+
+  // 处理发布技能点击
+  const handlePublishClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!isAuthenticated) {
+      navigate('/login?redirect=/profile');
+    } else {
+      navigate('/profile');
+    }
+  };
+
+  const getAuthorName = (author?: { fullName?: string; username?: string }) => {
+    if (!author) return '未知';
+    return author.fullName || author.username || '未知';
+  };
+
+  const getRating = (skill: Skill) => {
+    return skill.rating?.average ?? 0;
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -38,18 +93,14 @@ const HomePage = () => {
               {t('home.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/skills">
-                <Button size="lg">
-                  <Download className="h-4 w-4 mr-2" />
-                  {t('home.browseSkills')}
-                </Button>
-              </Link>
-              <Link to="/skills">
-                <Button variant="outline" size="lg">
-                  <Upload className="h-4 w-4 mr-2" />
-                  {t('home.publishSkill')}
-                </Button>
-              </Link>
+              <Button size="lg" onClick={() => navigate('/skills')}>
+                <Download className="h-4 w-4 mr-2" />
+                {t('home.browseSkills')}
+              </Button>
+              <Button variant="outline" size="lg" onClick={handlePublishClick}>
+                <Upload className="h-4 w-4 mr-2" />
+                {t('home.publishSkill')}
+              </Button>
             </div>
           </div>
         </section>
@@ -95,27 +146,33 @@ const HomePage = () => {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col md:flex-row justify-between items-center mb-8">
               <h2 className="text-3xl font-bold font-heading mb-4 md:mb-0">{t('home.latestSkills')}</h2>
-              <Link to="/skills" className="text-primary hover:underline">{t('home.viewMore')}</Link>
+              <button onClick={handleViewMore} className="text-primary hover:underline">{t('home.viewMore')}</button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {latestSkills.map((skill) => (
-                <div key={skill.id} className="bg-card rounded-lg border p-6 hover:shadow-md transition-shadow flex flex-col h-full">
-                  <h3 className="font-semibold text-lg mb-2">{skill.name}</h3>
-                  <p className="text-sm text-muted-foreground mb-4 flex-grow">{skill.description}</p>
-                  <div className="flex justify-between items-center text-xs text-muted-foreground mt-auto">
-                    <span className="inline-flex items-center gap-1.5">
-                      <Download className="h-3 w-3 shrink-0" />
-                      {skill.downloads.toLocaleString()} {t('skills.downloads')}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5">
-                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 shrink-0" />
-                      {skill.rating}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-2">{t('skills.author')}: {skill.author}</p>
-                </div>
-              ))}
-            </div>
+            {loadingLatest ? (
+              <div className="text-center py-8 text-muted-foreground">加载中...</div>
+            ) : latestSkills.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">暂无最新技能</div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {latestSkills.map((skill) => (
+                  <Link key={skill._id} to={`/skills/${skill._id}`} className="bg-card rounded-lg border p-6 hover:shadow-md transition-shadow flex flex-col h-full">
+                    <h3 className="font-semibold text-lg mb-2">{skill.name}</h3>
+                    <p className="text-sm text-muted-foreground mb-4 flex-grow">{skill.description || '—'}</p>
+                    <div className="flex justify-between items-center text-xs text-muted-foreground mt-auto">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Download className="h-3 w-3 shrink-0" />
+                        {(skill.downloads ?? 0).toLocaleString()} {t('skills.downloads')}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 shrink-0" />
+                        {getRating(skill).toFixed(1)}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">{t('skills.author')}: {getAuthorName(skill.author)}</p>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
@@ -124,27 +181,33 @@ const HomePage = () => {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col md:flex-row justify-between items-center mb-8">
               <h2 className="text-3xl font-bold font-heading mb-4 md:mb-0">{t('home.popularSkills')}</h2>
-              <Link to="/skills" className="text-primary hover:underline">{t('home.viewMore')}</Link>
+              <button onClick={handleViewMore} className="text-primary hover:underline">{t('home.viewMore')}</button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {popularSkills.map((skill) => (
-                <div key={skill.id} className="bg-card rounded-lg border p-6 hover:shadow-md transition-shadow flex flex-col h-full">
-                  <h3 className="font-semibold text-lg mb-2">{skill.name}</h3>
-                  <p className="text-sm text-muted-foreground mb-4 flex-grow">{skill.description}</p>
-                  <div className="flex justify-between items-center text-xs text-muted-foreground mt-auto">
-                    <span className="inline-flex items-center gap-1.5">
-                      <Download className="h-3 w-3 shrink-0" />
-                      {skill.downloads.toLocaleString()} {t('skills.downloads')}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5">
-                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 shrink-0" />
-                      {skill.rating}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-2">{t('skills.author')}: {skill.author}</p>
-                </div>
-              ))}
-            </div>
+            {loadingPopular ? (
+              <div className="text-center py-8 text-muted-foreground">加载中...</div>
+            ) : popularSkills.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">暂无热门技能</div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {popularSkills.map((skill) => (
+                  <Link key={skill._id} to={`/skills/${skill._id}`} className="bg-card rounded-lg border p-6 hover:shadow-md transition-shadow flex flex-col h-full">
+                    <h3 className="font-semibold text-lg mb-2">{skill.name}</h3>
+                    <p className="text-sm text-muted-foreground mb-4 flex-grow">{skill.description || '—'}</p>
+                    <div className="flex justify-between items-center text-xs text-muted-foreground mt-auto">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Download className="h-3 w-3 shrink-0" />
+                        {(skill.downloads ?? 0).toLocaleString()} {t('skills.downloads')}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 shrink-0" />
+                        {getRating(skill).toFixed(1)}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">{t('skills.author')}: {getAuthorName(skill.author)}</p>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </main>

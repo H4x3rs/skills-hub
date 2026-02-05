@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import PolicyModal from '@/components/PolicyModal';
 
 const RegisterPage = () => {
   const { t } = useTranslation();
@@ -15,6 +16,8 @@ const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -204,7 +207,28 @@ const RegisterPage = () => {
                 className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
               />
               <label htmlFor="terms" className="ml-2 block text-sm">
-                {t('auth.register.acceptTerms')} <a href="#" className="text-primary hover:underline">{t('auth.register.terms')}</a> {t('auth.register.and')} <a href="#" className="text-primary hover:underline">{t('auth.register.privacy')}</a>
+                {t('auth.register.acceptTerms')}{' '}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowTermsModal(true);
+                  }}
+                  className="text-primary hover:underline"
+                >
+                  {t('auth.register.terms')}
+                </button>
+                {' '}{t('auth.register.and')}{' '}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowPrivacyModal(true);
+                  }}
+                  className="text-primary hover:underline"
+                >
+                  {t('auth.register.privacy')}
+                </button>
               </label>
             </div>
 
@@ -245,6 +269,17 @@ const RegisterPage = () => {
           </div>
         </div>
       </div>
+
+      <PolicyModal
+        isOpen={showTermsModal}
+        onClose={() => setShowTermsModal(false)}
+        type="terms"
+      />
+      <PolicyModal
+        isOpen={showPrivacyModal}
+        onClose={() => setShowPrivacyModal(false)}
+        type="privacy"
+      />
     </div>
   );
 };
