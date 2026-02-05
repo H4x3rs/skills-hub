@@ -128,23 +128,24 @@ const Header = () => {
                         {t('navigation.profile')}
                       </Link>
                       
-                      <Link 
-                        to="/profile" 
-                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
-                        onClick={() => setIsUserDropdownOpen(false)}
-                      >
-                        <Settings className="h-4 w-4" />
-                        {t('navigation.mySkills')}
-                      </Link>
-                      
-                      {(user.role === 'admin' || user.role === 'publisher') && (
+                      {/* 普通用户和发布者显示"我的技能"，管理员显示"管理后台" */}
+                      {user.role === 'admin' ? (
                         <Link 
-                          to={user.role === 'admin' ? "/admin" : "/admin?tab=skills"}
+                          to="/admin"
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
                           onClick={() => setIsUserDropdownOpen(false)}
                         >
                           <Settings className="h-4 w-4" />
-                          {user.role === 'admin' ? t('navigation.adminPanel') : t('profile.mySkills')}
+                          {t('navigation.adminPanel')}
+                        </Link>
+                      ) : (
+                        <Link 
+                          to="/profile" 
+                          className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
+                          onClick={() => setIsUserDropdownOpen(false)}
+                        >
+                          <Settings className="h-4 w-4" />
+                          {t('navigation.mySkills')}
                         </Link>
                       )}
                       
@@ -236,23 +237,24 @@ const Header = () => {
                         {t('navigation.profile')}
                       </Link>
                       
-                      <Link 
-                        to="/profile" 
-                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
-                        onClick={() => setIsUserDropdownOpen(false)}
-                      >
-                        <Settings className="h-4 w-4" />
-                        {t('navigation.mySkills')}
-                      </Link>
-                      
-                      {(user.role === 'admin' || user.role === 'publisher') && (
+                      {/* 普通用户和发布者显示"我的技能"，管理员显示"管理后台" */}
+                      {user.role === 'admin' ? (
                         <Link 
-                          to={user.role === 'admin' ? "/admin" : "/admin?tab=skills"}
+                          to="/admin"
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
                           onClick={() => setIsUserDropdownOpen(false)}
                         >
                           <Settings className="h-4 w-4" />
-                          {user.role === 'admin' ? t('navigation.adminPanel') : t('profile.mySkills')}
+                          {t('navigation.adminPanel')}
+                        </Link>
+                      ) : (
+                        <Link 
+                          to="/profile" 
+                          className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
+                          onClick={() => setIsUserDropdownOpen(false)}
+                        >
+                          <Settings className="h-4 w-4" />
+                          {t('navigation.mySkills')}
                         </Link>
                       )}
                       
