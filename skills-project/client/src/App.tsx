@@ -14,7 +14,7 @@ import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import AdminPage from './pages/AdminPage';
 import Layout from './components/Layout';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedAdminLayout from './components/ProtectedAdminLayout';
 import { DocumentHead } from './components/DocumentHead';
 
 function App() {
@@ -62,13 +62,9 @@ function App() {
           <Route path="/profile" element={<Layout />}>
             <Route index element={<ProfilePage />} />
           </Route>
-          <Route path="/admin" element={
-            <ProtectedRoute requiredRole="admin" redirectTo="/profile">
-              <Layout>
-                <AdminPage />
-              </Layout>
-            </ProtectedRoute>
-          } />
+          <Route path="/admin" element={<ProtectedAdminLayout />}>
+            <Route index element={<AdminPage />} />
+          </Route>
           <Route path="/blog" element={<Layout />}>
             <Route index element={<div className="container py-8"><h1 className="text-2xl font-bold">Blog Page</h1><p>Coming soon...</p></div>} />
           </Route>

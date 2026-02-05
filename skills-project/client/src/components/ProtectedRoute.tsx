@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface ProtectedRouteProps {
@@ -55,7 +55,8 @@ const ProtectedRoute = ({
     return <Navigate to={redirectTo} replace />;
   }
 
-  return <>{children}</>;
+  // 如果有 children，渲染 children；否则渲染 Outlet（用于嵌套路由）
+  return children ? <>{children}</> : <Outlet />;
 };
 
 export default ProtectedRoute;
