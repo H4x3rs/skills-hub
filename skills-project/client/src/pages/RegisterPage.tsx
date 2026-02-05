@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
+import { getOAuthUrl } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
@@ -231,12 +232,16 @@ const RegisterPage = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" className="w-full">
-              {t('auth.login.continueWithGoogle')}
-            </Button>
-            <Button variant="outline" className="w-full">
-              {t('auth.login.continueWithGithub')}
-            </Button>
+            <a href={getOAuthUrl('google')} className="contents">
+              <Button variant="outline" type="button" className="w-full">
+                {t('auth.login.continueWithGoogle')}
+              </Button>
+            </a>
+            <a href={getOAuthUrl('github')} className="contents">
+              <Button variant="outline" type="button" className="w-full">
+                {t('auth.login.continueWithGithub')}
+              </Button>
+            </a>
           </div>
         </div>
       </div>

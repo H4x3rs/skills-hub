@@ -11,7 +11,7 @@ const Footer = () => {
       <div className="container px-4 md:px-6">
         <div className="flex flex-col sm:flex-row flex-wrap gap-6 md:gap-8 max-w-6xl mx-auto">
           <div className="flex-1 min-w-0 sm:min-w-[180px] text-center sm:text-left">
-            <h3 className="font-heading font-bold text-base md:text-lg mb-3 md:mb-4">{siteTitle || 'SkillHub'}</h3>
+            <h3 className="font-heading font-bold text-base md:text-lg mb-3 md:mb-4">{siteTitle || 'BotSkill'}</h3>
             <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
               {siteDescription || t('footer.description')}
             </p>
@@ -42,7 +42,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t text-center text-xs md:text-sm text-muted-foreground max-w-6xl mx-auto px-2">
-          © 2026 {siteTitle?.split(' - ')[0] || 'SkillHub'}. {t('footer.copyright')}
+          © 2026 {siteTitle?.split(' - ')[0] || 'BotSkill'}. {t('footer.copyright')}
         </div>
       </div>
     </footer>

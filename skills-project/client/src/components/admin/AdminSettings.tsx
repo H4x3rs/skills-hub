@@ -17,7 +17,7 @@ export interface SystemSettings {
 }
 
 const DEFAULT_SETTINGS: SystemSettings = {
-  siteTitle: 'SkillHub - 智能技能市场',
+  siteTitle: 'BotSkill - AI 技能市场',
   siteDescription: '连接开发者与智能技能的桥梁，让技术更易用',
   require2FA: false,
   enableEmailVerification: false,
@@ -105,7 +105,7 @@ export const AdminSettings = () => {
               <Input
                 value={settings.siteTitle}
                 onChange={e => updateField('siteTitle', e.target.value)}
-                placeholder="SkillHub - 智能技能市场"
+                placeholder="BotSkill - AI 技能市场"
               />
             </div>
             <div>

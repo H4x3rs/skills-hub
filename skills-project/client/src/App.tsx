@@ -33,8 +33,8 @@ function App() {
         gap={10}
         toastOptions={{
           classNames: {
-            toast: 'skillshub-toast',
-            closeButton: 'skillshub-toast-close',
+            toast: 'botskill-toast',
+            closeButton: 'botskill-toast-close',
           },
         }}
       />

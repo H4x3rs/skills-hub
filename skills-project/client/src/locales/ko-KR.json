@@ -37,7 +37,7 @@
     "about": {
       "mission": {
         "title": "우리의 미션",
-        "description": "SkillHub는 개방적이고 공유 가능한 스킬 생태계를 구축하는 것을 목표로 하고 있습니다. 다양한 스마트 스킬을 표준화하고 모듈화함으로써 기술 통합의 장벽을 크게 낮추고, 개발자들이 핵심 비즈니스 로직에 집중하며 혁신을 가속화할 수 있다고 믿습니다."
+        "description": "BotSkill는 개방적이고 공유 가능한 스킬 생태계를 구축하는 것을 목표로 하고 있습니다. 다양한 스마트 스킬을 표준화하고 모듈화함으로써 기술 통합의 장벽을 크게 낮추고, 개발자들이 핵심 비즈니스 로직에 집중하며 혁신을 가속화할 수 있다고 믿습니다."
       },
       "features": {
         "title": "플랫폼 기능",
@@ -66,7 +66,7 @@
       },
       "team": {
         "title": "팀 소개",
-        "description": "SkillHub는 기술을 사랑하고 개발자 생태계 발전에 헌신하는 엔지니어 그룹에 의해 설립되었습니다. 우리는 풍부한 기술 전문성과 제품 경험을 보유하고 있으며, 가장 고품질의 스킬 공유 플랫폼 창출에 집중하고 있습니다.",
+        "description": "BotSkill는 기술을 사랑하고 개발자 생태계 발전에 헌신하는 엔지니어 그룹에 의해 설립되었습니다. 우리는 풍부한 기술 전문성과 제품 경험을 보유하고 있으며, 가장 고품질의 스킬 공유 플랫폼 창출에 집중하고 있습니다.",
         "member1": {
           "name": "장산",
           "position": "창업자 & CEO"
@@ -81,8 +81,8 @@
         }
       },
       "joinUs": {
-        "title": "SkillHub 생태계 참여",
-        "description": "스킬을 찾는 사용자이든 스킬을 공유하고 싶은 개발자이든, SkillHub는 여러분의 참여를 환영합니다"
+        "title": "BotSkill 생태계 참여",
+        "description": "스킬을 찾는 사용자이든 스킬을 공유하고 싶은 개발자이든, BotSkill는 여러분의 참여를 환영합니다"
       }
     },
     "auth": {
@@ -164,7 +164,15 @@
       "delete": "삭제",
       "totalDownloads": "총 다운로드 수",
       "skillCount": "스킬 수",
-      "trend": "다운로드 추세"
+      "trend": "다운로드 추세",
+      "chartArea": "차트 영역 (개발 예정)",
+      "trendDesc": "스킬별 다운로드 수 (다운로드 수 기준 정렬)",
+      "noDownloadData": "다운로드 데이터가 없습니다",
+      "publishToSeeData": "스킬을 게시하고 다운로드를 받으면 데이터를 볼 수 있습니다",
+      "needPublisherRole": "스킬 게시를 위해 게시자 권한이 필요합니다. 관리자에게 문의하세요.",
+      "noSkillsMatch": "일치하는 스킬이 없습니다",
+      "manageSkill": "관리",
+      "viewDetails": "자세히 보기"
     },
     "admin": {
       "dashboard": "대시보드",
@@ -186,12 +194,17 @@
       "disable": "비활성화",
       "searchUsers": "사용자 검색...",
       "addUser": "사용자 추가",
+      "addSkill": "스킬 추가",
+      "addByUpload": "파일 업로드",
+      "addByUrl": "URL에서 가져오기",
       "userAddedSuccessfully": "사용자가 성공적으로 추가되었습니다!",
       "userAddError": "사용자 추가 중 오류 발생",
       "userAddNotImplemented": "관리자 패널을 통한 사용자 추가는 구현되지 않았습니다. 등록 양식을 사용하십시오.",
       "userStatusUpdated": "사용자 상태가 성공적으로 업데이트되었습니다!",
       "userStatusUpdateError": "사용자 상태 업데이트 오류",
       "fetchUsersError": "사용자 가져오기 오류",
+      "fetchSkillsError": "스킬 가져오기 오류",
+      "adminOnly": "관리자만",
       "user": {
         "username": "사용자 이름",
         "email": "이메일",
@@ -246,8 +259,11 @@
       "skillStatus": {
         "published": "게시됨",
         "pending": "검토 중",
-        "rejected": "거부됨"
+        "rejected": "거부됨",
+        "draft": "초안",
+        "archived": "보관됨"
       },
+      "noSkillsFound": "스킬을 찾을 수 없습니다",
       "noUsersFound": "사용자를 찾을 수 없습니다"
     },
     "common": {

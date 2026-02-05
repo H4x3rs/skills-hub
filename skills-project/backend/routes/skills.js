@@ -15,7 +15,9 @@ const {
   // 管理员专用功能
   getAllSkillsForAdmin,
   createSkillForAdmin,
+  createSkillFromForm,
   updateSkillForAdmin,
+  updateSkillFromForm,
   deleteSkillForAdmin
 } = require('../controllers/skillController');
 const { uploadSkill, uploadParseSkill, parseSkillFromUrl } = require('../controllers/uploadController');
@@ -30,6 +32,9 @@ router.get('/admin/all', authenticateToken, authorizeAdmin, getAllSkillsForAdmin
 router.get('/my', authenticateToken, authorizeRole(['admin', 'publisher']), getMySkills);
 router.post('/admin/create', authenticateToken, authorizeAdmin, createSkillForAdmin);
 router.put('/admin/:id', authenticateToken, authorizeAdmin, updateSkillForAdmin);
+// 发布者/管理员：创建和更新技能（Web 表单）
+router.post('/create-from-form', authenticateToken, authorizeRole(['admin', 'publisher']), createSkillFromForm);
+router.put('/update-from-form/:id', authenticateToken, authorizeRole(['admin', 'publisher']), updateSkillFromForm);
 router.delete('/admin/:id', authenticateToken, authorizeAdmin, deleteSkillForAdmin);
 
 // Public routes
@@ -51,6 +56,6 @@ router.post('/upload', authenticateToken, authorizeRole(['admin', 'publisher']),
 // Authenticated routes (for publishers and admins)
 router.post('/', authenticateToken, authorizeRole(['admin', 'publisher']), createSkill);
 router.put('/:id', authenticateToken, authorizeRole(['admin', 'publisher']), updateSkill);
-router.delete('/:id', authenticateToken, authorizeRole(['admin']), deleteSkill);
+router.delete('/:id', authenticateToken, authorizeRole(['admin', 'publisher']), deleteSkill);
 
 module.exports = router;

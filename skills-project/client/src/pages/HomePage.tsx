@@ -103,11 +103,14 @@ const HomePage = () => {
                   <h3 className="font-semibold text-lg mb-2">{skill.name}</h3>
                   <p className="text-sm text-muted-foreground mb-4 flex-grow">{skill.description}</p>
                   <div className="flex justify-between items-center text-xs text-muted-foreground mt-auto">
-                    <span>{skill.downloads.toLocaleString()} {t('skills.downloads')}</span>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                      <span>{skill.rating}</span>
-                    </div>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Download className="h-3 w-3 shrink-0" />
+                      {skill.downloads.toLocaleString()} {t('skills.downloads')}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 shrink-0" />
+                      {skill.rating}
+                    </span>
                   </div>
                   <p className="text-xs text-muted-foreground mt-2">{t('skills.author')}: {skill.author}</p>
                 </div>
@@ -129,11 +132,14 @@ const HomePage = () => {
                   <h3 className="font-semibold text-lg mb-2">{skill.name}</h3>
                   <p className="text-sm text-muted-foreground mb-4 flex-grow">{skill.description}</p>
                   <div className="flex justify-between items-center text-xs text-muted-foreground mt-auto">
-                    <span>{skill.downloads.toLocaleString()} {t('skills.downloads')}</span>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                      <span>{skill.rating}</span>
-                    </div>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Download className="h-3 w-3 shrink-0" />
+                      {skill.downloads.toLocaleString()} {t('skills.downloads')}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 shrink-0" />
+                      {skill.rating}
+                    </span>
                   </div>
                   <p className="text-xs text-muted-foreground mt-2">{t('skills.author')}: {skill.author}</p>
                 </div>

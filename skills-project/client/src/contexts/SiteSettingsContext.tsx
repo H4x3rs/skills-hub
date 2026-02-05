@@ -8,7 +8,7 @@ export interface SiteSettings {
 }
 
 const DEFAULT: SiteSettings = {
-  siteTitle: 'SkillHub - 智能技能市场',
+  siteTitle: 'BotSkill - AI 技能市场',
   siteDescription: '连接开发者与智能技能的桥梁，让技术更易用',
   maintenanceMode: false,
 };

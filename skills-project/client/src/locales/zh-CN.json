@@ -109,7 +109,10 @@
       "viewOnGitHub": "GitHub",
       "repository": "仓库",
       "repositoryUrl": "GitHub / 仓库链接",
-      "demo": "演示"
+      "demo": "演示",
+      "copyInstall": "复制安装命令",
+      "copySuccess": "已复制到剪贴板",
+      "copyFailed": "复制失败"
     },
     "profile": {
       "title": "个人资料",
@@ -132,7 +135,32 @@
       "delete": "删除",
       "totalDownloads": "总下载量",
       "skillCount": "技能数量",
-      "trend": "下载趋势"
+      "trend": "下载趋势",
+      "chartArea": "图表区域（开发中）",
+      "trendDesc": "各技能下载量分布（按下载量排序）",
+      "noDownloadData": "暂无下载数据",
+      "publishToSeeData": "发布技能并获得下载后即可查看",
+      "saveSuccess": "保存成功",
+      "saveFailed": "保存失败",
+      "needPublisherRole": "发布技能需要发布者权限，请联系管理员升级账户。",
+      "noSkillsMatch": "暂无匹配的技能",
+      "manageSkill": "管理",
+      "viewDetails": "查看详情",
+      "avatarUrl": "头像 URL",
+      "bioPlaceholder": "介绍一下自己...",
+      "settingsComingSoon": "设置功能开发中...",
+      "versionManagement": "版本管理",
+      "versionHistory": "版本历史",
+      "setDefault": "设为默认",
+      "viewDetails": "查看详情",
+      "favorites": "我的收藏",
+      "favoritesEmpty": "暂无收藏",
+      "removeFavorite": "取消收藏",
+      "removedFromFavorites": "已取消收藏",
+      "removeFailed": "取消收藏失败",
+      "addToFavorites": "收藏",
+      "addedToFavorites": "已添加收藏",
+      "favoriteFailed": "操作失败"
     },
     "admin": {
       "dashboard": "仪表板",
@@ -165,7 +193,7 @@
       "parseSuccess": "解析成功，请确认信息后保存",
       "reupload": "重新上传",
       "addByUpload": "上传文件",
-      "addByUrl": "从远程/GitHub 地址",
+      "addByUrl": "从URL导入",
       "urlSkillHint": "输入远程地址或 GitHub 仓库地址，下载并解析后即可保存。版本默认 latest。",
       "fetchAndParse": "获取并解析",
       "reenterUrl": "重新输入",
@@ -246,6 +274,7 @@
         "draft": "草稿",
         "archived": "已归档"
       },
+      "adminOnly": "仅管理员可操作",
       "noSkillsFound": "未找到技能",
       "noUsersFound": "未找到用户",
       "addPermission": "添加权限",
@@ -272,7 +301,7 @@
     "about": {
       "mission": {
         "title": "我们的使命",
-        "description": "SkillHub 致力于构建一个开放、共享的技能生态系统。我们相信，通过将各种智能技能标准化、模块化，可以极大地降低技术集成的门槛，让开发者能够更专注于核心业务逻辑，加速创新。"
+        "description": "BotSkill 致力于构建一个开放、共享的技能生态系统。我们相信，通过将各种智能技能标准化、模块化，可以极大地降低技术集成的门槛，让开发者能够更专注于核心业务逻辑，加速创新。"
       },
       "features": {
         "title": "平台特色",
@@ -301,7 +330,7 @@
       },
       "team": {
         "title": "团队介绍",
-        "description": "SkillHub 由一群热爱技术、致力于推动开发者生态发展的工程师创立。我们有着丰富的技术积累和产品经验，专注于打造最优质的技能分享平台。",
+        "description": "BotSkill 由一群热爱技术、致力于推动开发者生态发展的工程师创立。我们有着丰富的技术积累和产品经验，专注于打造最优质的技能分享平台。",
         "member1": {
           "name": "张三",
           "position": "创始人 & CEO"
@@ -316,8 +345,8 @@
         }
       },
       "joinUs": {
-        "title": "加入 SkillHub 生态",
-        "description": "无论您是寻找技能的使用者，还是愿意分享技能的开发者，SkillHub 都欢迎您的加入"
+        "title": "加入 BotSkill 生态",
+        "description": "无论您是寻找技能的使用者，还是愿意分享技能的开发者，BotSkill 都欢迎您的加入"
       }
     },
     "common": {
@@ -331,6 +360,7 @@
       "ok": "确定",
       "deleteConfirm": "确定要删除吗？此操作不可撤销。",
       "save": "保存",
+      "saving": "保存中...",
       "download": "下载",
       "actions": "操作"
     },

@@ -27,7 +27,7 @@ const DEFAULT_ROLES = [
 
 async function seed() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/skillshub');
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/botskill');
     console.log('Connected to MongoDB\n');
 
     // 1. 创建权限

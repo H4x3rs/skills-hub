@@ -19,7 +19,7 @@ function parseSpecifier(spec) {
 
 const getCommand = new Command('get');
 getCommand
-  .description('Download a skill from SkillsHub and extract to directory')
+  .description('Download a skill from BotSkill and extract to directory')
   .argument('<specifier>', 'Skill name or name@version (e.g. pdf-parser or pdf-parser@1.0.0)')
   .option('-o, --output <dir>', 'Output directory (default: current directory)')
   .option('--dry-run', 'Show what would be downloaded without actually downloading')

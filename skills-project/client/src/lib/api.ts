@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 // 创建axios实例
-const API_BASE_URL = 'http://localhost:3001/api'; // 后端运行在3001端口
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
+/** OAuth 登录跳转 URL */
+export const getOAuthUrl = (provider: 'google' | 'github') =>
+  `${API_BASE_URL.replace(/\/api$/, '')}/api/auth/${provider}`;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -205,6 +209,11 @@ export const userAPI = {
   updateUserStatus: (userId: string, isActive: boolean) => {
     return api.put(`/admin/users/${userId}/status`, { isActive });
   },
+
+  // 我的收藏
+  getFavorites: () => api.get('/users/me/favorites'),
+  addFavorite: (skillId: string) => api.post(`/users/me/favorites/${skillId}`),
+  removeFavorite: (skillId: string) => api.delete(`/users/me/favorites/${skillId}`),
 };
 
 // 权限管理 API（注意：实际路径为 /api/admin，baseURL 已包含 /api）
@@ -236,12 +245,17 @@ export const skillAPI = {
   getPopular: (limit?: number) => api.get('/skills/popular', { params: limit ? { limit } : {} }),
   // 最新技能
   getLatest: (limit?: number) => api.get('/skills/latest', { params: limit ? { limit } : {} }),
+  // 当前用户自己的技能（需登录，publisher/admin）
+  getMySkills: (params?: { page?: number; limit?: number; category?: string; status?: string; q?: string }) =>
+    api.get('/skills/my', { params: params || {} }),
   // 获取下载链接（zip 文件）
   getDownloadUrl: (id: string, version?: string) => {
     const base = api.defaults.baseURL;
     const v = version ? `?version=${encodeURIComponent(version)}` : '';
     return `${base}/skills/${id}/download${v}`;
   },
+  // 发布者删除自己的技能
+  delete: (id: string) => api.delete(`/skills/${id}`),
 };
 
 // 技能管理 API（管理员）
@@ -273,7 +287,7 @@ export const skillAdminAPI = {
     compatibility?: string;
     allowedTools?: string[];
     overwrite?: boolean;
-  }) => api.post('/skills/admin/create', data),
+  }) => api.post('/skills/create-from-form', data),
   update: (id: string, data: {
     name?: string;
     description?: string;
@@ -287,8 +301,9 @@ export const skillAdminAPI = {
     status?: string;
     authorId?: string;
     content?: string;
-  }) => api.put(`/skills/admin/${id}`, data),
+  }) => api.put(`/skills/update-from-form/${id}`, data),
   delete: (id: string) => api.delete(`/skills/admin/${id}`),
+  deleteOwn: (id: string) => api.delete(`/skills/${id}`),
 };
 
 // 角色管理 API

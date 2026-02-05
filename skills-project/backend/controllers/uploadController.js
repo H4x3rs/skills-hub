@@ -24,7 +24,7 @@ function toFetchableUrl(url) {
 }
 
 async function ensureUploadDir() {
-  const dir = path.join(os.tmpdir(), 'skillshub-uploads');
+  const dir = path.join(os.tmpdir(), 'botskill-uploads');
   await fs.mkdir(dir, { recursive: true });
   return dir;
 }
@@ -285,7 +285,7 @@ const parseSkillFromUrl = async (req, res) => {
     const fetchUrl = toFetchableUrl(url);
     const response = await fetch(fetchUrl, {
       redirect: 'follow',
-      headers: { 'User-Agent': 'SkillsHub/1.0' },
+      headers: { 'User-Agent': 'BotSkill/1.0' },
     });
     if (!response.ok) {
       return res.status(400).json({ error: `Failed to fetch: ${response.status} ${response.statusText}` });

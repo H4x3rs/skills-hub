@@ -41,8 +41,8 @@ const SkillsPage = () => {
   };
 
   const getAuthorName = (author?: { fullName?: string; username?: string }) => {
-    if (!author) return '-';
-    return author.fullName || author.username || '-';
+    if (!author) return '未知';
+    return author.fullName || author.username || '未知';
   };
 
   const getRating = (skill: { rating?: { average?: number } }) => {
@@ -156,49 +156,55 @@ const SkillsPage = () => {
             {/* Skills Display */}
             {currentSkills.length > 0 &&
               (viewMode === 'grid' ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
                   {currentSkills.map((skill) => (
                     <div
                       key={skill._id}
-                      className="bg-card rounded-lg border p-6 hover:shadow-md transition-shadow"
+                      className="bg-card rounded-xl border overflow-hidden flex flex-col hover:shadow-md hover:border-primary/20 transition-all duration-200"
                     >
-                      <Link to={`/skills/${skill._id}`} className="hover:underline">
-                        <h3 className="font-semibold text-lg mb-2">{skill.name}</h3>
-                      </Link>
-                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                        {skill.description}
-                      </p>
-
-                      <div className="flex flex-wrap gap-1 mb-4">
-                        {(skill.tags || []).slice(0, 3).map((tag: string, idx: number) => (
-                          <span
-                            key={idx}
-                            className="text-xs bg-primary/10 text-primary px-2 py-1 rounded"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-
-                      <div className="flex justify-between items-center text-xs text-muted-foreground">
-                        <span>
-                          {(skill.downloads ?? 0).toLocaleString()} {t('skills.downloads')}
-                        </span>
-                        <div className="flex items-center gap-1">
-                          <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                          <span>{getRating(skill).toFixed(1)}</span>
+                      <div className="p-4 md:p-5 flex flex-col flex-1 min-h-0">
+                        <div className="mb-3">
+                          <Link to={`/skills/${skill._id}`} className="group block mb-2">
+                            <span className="font-semibold text-base group-hover:text-primary transition-colors line-clamp-1">
+                              {skill.name}
+                            </span>
+                          </Link>
+                          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-foreground/70">
+                            <span>{getAuthorName(skill.author)}</span>
+                            <span className="text-foreground/40">·</span>
+                            <span className="inline-flex items-center gap-1.5">
+                              <Star className="h-3 w-3 fill-amber-400 text-amber-400 shrink-0" />
+                              {getRating(skill).toFixed(1)}
+                            </span>
+                            <span className="text-foreground/40">·</span>
+                            <span className="inline-flex items-center gap-1.5">
+                              <Download className="h-3 w-3 shrink-0 text-foreground/60" />
+                              {(skill.downloads ?? 0).toLocaleString()}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-2">
-                        {t('skills.author')}: {getAuthorName(skill.author)}
-                      </p>
+                        <p className="text-sm text-muted-foreground line-clamp-2 mb-3 flex-shrink-0">
+                          {skill.description || '—'}
+                        </p>
 
-                      <Link to={`/skills/${skill._id}`} className="w-full mt-4">
-                        <Button className="w-full" size="sm">
-                          <Download className="h-4 w-4 mr-1" />
-                          {t('common.download')}
-                        </Button>
-                      </Link>
+                        <div className="flex flex-wrap gap-1.5 mb-4 flex-shrink-0">
+                          {(skill.tags || []).slice(0, 3).map((tag: string, idx: number) => (
+                            <span
+                              key={idx}
+                              className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-md"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        <Link to={`/skills/${skill._id}`} className="mt-auto block">
+                          <Button className="w-full" size="sm">
+                            <Download className="h-3.5 w-3.5 mr-1.5" />
+                            {t('common.download')}
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -210,9 +216,24 @@ const SkillsPage = () => {
                       className="bg-card rounded-lg border p-6 flex flex-col sm:flex-row gap-4"
                     >
                       <div className="flex-1">
-                        <Link to={`/skills/${skill._id}`} className="hover:underline">
-                          <h3 className="font-semibold text-lg mb-1">{skill.name}</h3>
-                        </Link>
+                        <div className="mb-2">
+                          <Link to={`/skills/${skill._id}`} className="hover:underline block mb-1.5">
+                            <span className="font-semibold text-lg">{skill.name}</span>
+                          </Link>
+                          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-foreground/70">
+                            <span>{getAuthorName(skill.author)}</span>
+                            <span className="text-foreground/40">·</span>
+                            <span className="inline-flex items-center gap-1.5">
+                              <Star className="h-3 w-3 fill-amber-400 text-amber-400 shrink-0" />
+                              {getRating(skill).toFixed(1)}
+                            </span>
+                            <span className="text-foreground/40">·</span>
+                            <span className="inline-flex items-center gap-1.5">
+                              <Download className="h-3 w-3 shrink-0 text-foreground/60" />
+                              {(skill.downloads ?? 0).toLocaleString()} {t('skills.downloads')}
+                            </span>
+                          </div>
+                        </div>
                         <p className="text-sm text-muted-foreground mb-2">
                           {skill.description}
                         </p>
@@ -221,31 +242,18 @@ const SkillsPage = () => {
                           {(skill.tags || []).map((tag: string, idx: number) => (
                             <span
                               key={idx}
-                              className="text-xs bg-primary/10 text-primary px-2 py-1 rounded"
+                              className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-md"
                             >
                               {tag}
                             </span>
                           ))}
                         </div>
-
-                        <p className="text-xs text-muted-foreground">
-                          {t('skills.author')}: {getAuthorName(skill.author)}
-                        </p>
                       </div>
 
-                      <div className="flex flex-col justify-between items-end">
-                        <div className="flex items-center gap-4 text-xs text-muted-foreground mb-2">
-                          <span>
-                            {(skill.downloads ?? 0).toLocaleString()} {t('skills.downloads')}
-                          </span>
-                          <div className="flex items-center gap-1">
-                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                            <span>{getRating(skill).toFixed(1)}</span>
-                          </div>
-                        </div>
+                      <div className="flex flex-col justify-end items-end shrink-0">
                         <Link to={`/skills/${skill._id}`}>
                           <Button size="sm">
-                            <Download className="h-4 w-4 mr-1" />
+                            <Download className="h-3.5 w-3.5 mr-1.5" />
                             {t('common.download')}
                           </Button>
                         </Link>

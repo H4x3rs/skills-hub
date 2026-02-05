@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   AdminSidebar,
   AdminDashboard,
@@ -14,7 +16,20 @@ import { useAdminSkills } from '@/hooks/useAdminSkills';
 import { useDashboardStats } from '@/hooks/useDashboardStats';
 
 const AdminPage = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
+  const [searchParams] = useSearchParams();
+  const tabFromUrl = searchParams.get('tab');
+  const defaultTab = isAdmin ? (tabFromUrl || 'dashboard') : 'skills';
+  const [activeTab, setActiveTab] = useState(defaultTab);
+
+  useEffect(() => {
+    if (isAdmin && tabFromUrl && ['dashboard', 'users', 'skills', 'roles', 'permissions', 'settings'].includes(tabFromUrl)) {
+      setActiveTab(tabFromUrl);
+    } else if (!isAdmin) {
+      setActiveTab('skills');
+    }
+  }, [tabFromUrl, isAdmin]);
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [newUser, setNewUser] = useState({ username: '', email: '', password: '', fullName: '', role: 'user' });
 
@@ -38,7 +53,7 @@ const AdminPage = () => {
     <div className="min-h-screen bg-background">
       <main className="container py-8 px-4 md:px-6">
         <div className="flex flex-col md:flex-row gap-8">
-          <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+          <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} isAdmin={isAdmin} />
           <div className="flex-1 min-w-0">
             {activeTab === 'dashboard' && (
               <AdminDashboard

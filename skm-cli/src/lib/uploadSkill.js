@@ -25,7 +25,7 @@ export async function findUploadFile(cwd = process.cwd()) {
 }
 
 /**
- * Upload skill file (SKILL.md, .zip, .tar.gz) to SkillsHub
+ * Upload skill file (SKILL.md, .zip, .tar.gz) to BotSkill
  * @param {string} filePath - Path to file
  */
 export async function uploadSkillFile(filePath) {

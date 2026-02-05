@@ -1,4 +1,7 @@
 const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const passport = require('passport');
 const cors = require('cors');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
@@ -6,6 +9,9 @@ const dotenv = require('dotenv');
 
 // Load environment variables
 dotenv.config();
+
+// Initialize Passport (loads OAuth strategies)
+require('./config/passport');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -22,9 +28,10 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
 
 // Database connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/skillshub')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/botskill')
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB connection error:', err));
 
@@ -41,6 +48,16 @@ app.get('/api/health', (req, res) => {
 
 // 公开站点设置（无需认证，用于 Header/Footer/页面标题）
 app.get('/api/site-settings', getPublicSiteSettings);
+
+// 生产环境：托管前端静态文件（Docker 构建时 client/dist 复制到 public）
+const publicDir = path.join(__dirname, 'public');
+if (fs.existsSync(publicDir)) {
+  app.use(express.static(publicDir));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.sendFile(path.join(publicDir, 'index.html'));
+  });
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {

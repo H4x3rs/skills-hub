@@ -1,5 +1,5 @@
 {
-  "name": "skills-hub",
+  "name": "botskill",
   "private": true,
   "version": "1.0.0",
   "description": "A full-stack application for managing and sharing AI agent skills",
@@ -14,7 +14,7 @@
     "migrate-skill-index": "cd backend && node scripts/migrate-skill-unique-index.js"
   },
   "keywords": ["ai", "skills", "agents", "management"],
-  "author": "SkillsHub Team",
+  "author": "BotSkill Team",
   "license": "MIT",
   "dependencies": {
     "concurrently": "^8.2.0"

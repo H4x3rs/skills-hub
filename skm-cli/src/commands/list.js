@@ -14,7 +14,7 @@ function formatSkillDisplay(skill) {
 const listCommand = new Command('list');
 listCommand
   .alias('ls')
-  .description('List skills from SkillsHub')
+  .description('List skills from BotSkill')
   .option('-c, --category <category>', 'Filter by category (ai, data, web, devops, security, tools)')
   .option('-s, --search <query>', 'Search skills by name or description')
   .option('-m, --mine', 'Show only your skills (requires login)')

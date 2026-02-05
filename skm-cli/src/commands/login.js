@@ -5,7 +5,7 @@ import { getApiUrl, setAuth, setApiUrl } from '../lib/auth.js';
 
 const loginCommand = new Command('login');
 loginCommand
-  .description('Login to SkillsHub platform')
+  .description('Login to BotSkill platform')
   .option('-u, --username <username>', 'Username')
   .option('-e, --email <email>', 'Email address')
   .option('-p, --password <password>', 'Password')
@@ -47,7 +47,7 @@ loginCommand
       password = answers.password;
     }
 
-    console.log('Logging in to SkillsHub...');
+    console.log('Logging in to BotSkill...');
     try {
       const res = await axios.post(`${apiUrl}/auth/login`, {
         email: emailOrUsername,

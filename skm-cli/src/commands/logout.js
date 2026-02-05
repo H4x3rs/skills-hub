@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const logoutCommand = new Command('logout');
 logoutCommand
-  .description('Logout from SkillsHub')
+  .description('Logout from BotSkill')
   .action(async () => {
     const refreshToken = getRefreshToken();
     if (refreshToken) {

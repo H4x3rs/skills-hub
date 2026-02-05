@@ -17,7 +17,7 @@ const program = new Command();
 
 program
   .name('skm')
-  .description('CLI tool for managing SkillsHub - a platform for AI agent skills')
+  .description('CLI tool for managing BotSkill - a platform for AI agent skills')
   .version('1.0.0');
 
 program.addCommand(initCommand);

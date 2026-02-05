@@ -1,4 +1,4 @@
-# SkillsHub 安装和运行指南
+# BotSkill 安装和运行指南
 
 ## 系统要求
 
@@ -12,7 +12,7 @@
 
 ```bash
 git clone <repository-url>
-cd skills-hub
+cd botskill
 ```
 
 ### 2. 安装依赖
@@ -44,8 +44,8 @@ cd backend && npm install && cd ..
 ```env
 NODE_ENV=development
 PORT=3000
-MONGODB_URI=mongodb://localhost:27017/skillshub
-JWT_SECRET=your-super-secret-jwt-key-for-skills-hub
+MONGODB_URI=mongodb://localhost:27017/botskill
+JWT_SECRET=your-super-secret-jwt-key-for-botskill
 JWT_EXPIRES_IN=7d
 ```
 
@@ -81,7 +81,7 @@ npm run build:client
 ## 目录结构
 
 ```
-skills-hub/
+botskill/
 ├── client/          # React前端应用
 ├── backend/         # Node.js后端API
 ├── README.md        # 项目概述

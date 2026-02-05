@@ -5,26 +5,19 @@ require('dotenv').config();
 
 const DEFAULT_ADMIN = {
   username: 'admin',
-  email: 'admin@skills-hub.com',
-  password: 'Admin123!@#',  // 强密码，符合8位以上要求
-  fullName: 'System Administrator',
+  email: 'admin@botskill.ai',
+  password: '13403487291ren.',  // 强密码，符合8位以上要求
+  fullName: 'Administrator',
   role: 'admin'
 };
 
 async function createDefaultAdmin() {
   try {
     // 连接数据库
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/skillshub');
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/botskill');
     console.log('Connected to database');
 
-    // 检查是否已存在管理员账户
-    const existingAdmin = await User.findOne({ role: 'admin' });
-    if (existingAdmin) {
-      console.log('Admin user already exists:', existingAdmin.email);
-      process.exit(0);
-    }
-
-    // 检查是否已存在相同用户名或邮箱的用户
+    // 如果已存在相同用户名或邮箱的用户，先删除
     const existingUser = await User.findOne({
       $or: [
         { username: DEFAULT_ADMIN.username },
@@ -33,8 +26,8 @@ async function createDefaultAdmin() {
     });
 
     if (existingUser) {
-      console.log('User with same username or email already exists:', existingUser.email);
-      process.exit(0);
+      await User.deleteOne({ _id: existingUser._id });
+      console.log('Removed existing user:', existingUser.email);
     }
 
     // 创建默认管理员账户

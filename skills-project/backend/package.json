@@ -1,7 +1,7 @@
 {
   "name": "skills-backend",
   "version": "1.0.0",
-  "description": "Backend API for SkillsHub platform",
+  "description": "Backend API for BotSkill platform",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -18,7 +18,7 @@
     "api",
     "goframe"
   ],
-  "author": "SkillsHub Team",
+  "author": "BotSkill Team",
   "license": "MIT",
   "dependencies": {
     "adm-zip": "^0.5.16",
@@ -32,6 +32,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.22.0",
     "multer": "^2.0.2",
+    "passport": "^0.7.0",
+    "passport-github2": "^0.1.12",
+    "passport-google-oauth20": "^2.0.0",
     "tar": "^7.5.7"
   },
   "devDependencies": {

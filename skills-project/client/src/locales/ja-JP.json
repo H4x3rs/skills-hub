@@ -37,7 +37,7 @@
     "about": {
       "mission": {
         "title": "私たちの使命",
-        "description": "SkillHubは、オープンで共有されたスキルエコシステムの構築を目指しています。さまざまなスマートスキルを標準化・モジュール化することで、技術統合の敷居を大幅に下げ、開発者がコアビジネスロジックに集中し、イノベーションを加速できることを信じています。"
+        "description": "BotSkillは、オープンで共有されたスキルエコシステムの構築を目指しています。さまざまなスマートスキルを標準化・モジュール化することで、技術統合の敷居を大幅に下げ、開発者がコアビジネスロジックに集中し、イノベーションを加速できることを信じています。"
       },
       "features": {
         "title": "プラットフォーム機能",
@@ -66,7 +66,7 @@
       },
       "team": {
         "title": "チーム紹介",
-        "description": "SkillHubは、技術を愛し、開発者エコシステムの発展に尽力するエンジニアたちによって設立されました。私たちは豊富な技術的専門知識と製品経験を持ち、最高品質のスキル共有プラットフォームの創出に注力しています。",
+        "description": "BotSkillは、技術を愛し、開発者エコシステムの発展に尽力するエンジニアたちによって設立されました。私たちは豊富な技術的専門知識と製品経験を持ち、最高品質のスキル共有プラットフォームの創出に注力しています。",
         "member1": {
           "name": "張三",
           "position": "創業者 & CEO"
@@ -81,8 +81,8 @@
         }
       },
       "joinUs": {
-        "title": "SkillHubエコシステムに参加",
-        "description": "スキルを探すユーザーでも、スキルを共有したい開発者でも、SkillHubはあなたの参加を歓迎します"
+        "title": "BotSkillエコシステムに参加",
+        "description": "スキルを探すユーザーでも、スキルを共有したい開発者でも、BotSkillはあなたの参加を歓迎します"
       }
     },
     "auth": {
@@ -164,7 +164,15 @@
       "delete": "削除",
       "totalDownloads": "総ダウンロード数",
       "skillCount": "スキル数",
-      "trend": "ダウンロード傾向"
+      "trend": "ダウンロード傾向",
+      "chartArea": "グラフエリア（開発中）",
+      "trendDesc": "スキル別ダウンロード数（ダウンロード数でソート）",
+      "noDownloadData": "ダウンロードデータがありません",
+      "publishToSeeData": "スキルを公開してダウンロードを獲得するとデータが表示されます",
+      "needPublisherRole": "スキル公開には発行者権限が必要です。管理者に連絡してください。",
+      "noSkillsMatch": "一致するスキルがありません",
+      "manageSkill": "管理",
+      "viewDetails": "詳細を見る"
     },
     "admin": {
       "dashboard": "ダッシュボード",
@@ -186,12 +194,17 @@
       "disable": "無効化",
       "searchUsers": "ユーザーを検索...",
       "addUser": "ユーザー追加",
+      "addSkill": "スキル追加",
+      "addByUpload": "ファイルをアップロード",
+      "addByUrl": "URLからインポート",
       "userAddedSuccessfully": "ユーザーが正常に追加されました！",
       "userAddError": "ユーザー追加中にエラーが発生しました",
       "userAddNotImplemented": "管理者パネルからのユーザー追加は実装されていません。登録フォームを使用してください。",
       "userStatusUpdated": "ユーザーのステータスが正常に更新されました！",
       "userStatusUpdateError": "ユーザーのステータス更新中にエラーが発生しました",
       "fetchUsersError": "ユーザー取得中にエラーが発生しました",
+      "fetchSkillsError": "スキル取得中にエラーが発生しました",
+      "adminOnly": "管理者のみ",
       "user": {
         "username": "ユーザー名",
         "email": "メールアドレス",
@@ -246,8 +259,11 @@
       "skillStatus": {
         "published": "公開済み",
         "pending": "審査中",
-        "rejected": "却下済み"
+        "rejected": "却下済み",
+        "draft": "下書き",
+        "archived": "アーカイブ済み"
       },
+      "noSkillsFound": "スキルが見つかりません",
       "noUsersFound": "ユーザーが見つかりません"
     },
     "common": {

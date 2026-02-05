@@ -37,7 +37,7 @@
     "about": {
       "mission": {
         "title": "Notre mission",
-        "description": "SkillHub s'engage à créer un écosystème de compétences ouvert et partagé. Nous croyons qu'en standardisant et en modulant diverses compétences intelligentes, nous pouvons grandement réduire le seuil d'intégration technologique, permettant aux développeurs de se concentrer davantage sur la logique métier principale et d'accélérer l'innovation."
+        "description": "BotSkill s'engage à créer un écosystème de compétences ouvert et partagé. Nous croyons qu'en standardisant et en modulant diverses compétences intelligentes, nous pouvons grandement réduire le seuil d'intégration technologique, permettant aux développeurs de se concentrer davantage sur la logique métier principale et d'accélérer l'innovation."
       },
       "features": {
         "title": "Fonctionnalités de la plateforme",
@@ -66,7 +66,7 @@
       },
       "team": {
         "title": "Présentation de l'équipe",
-        "description": "SkillHub a été fondé par un groupe d'ingénieurs passionnés de technologie et dédiés au développement de l'écosystème des développeurs. Nous avons une riche expertise technique et une expérience produit, nous nous concentrons sur la création de la plateforme de partage de compétences de la plus haute qualité.",
+        "description": "BotSkill a été fondé par un groupe d'ingénieurs passionnés de technologie et dédiés au développement de l'écosystème des développeurs. Nous avons une riche expertise technique et une expérience produit, nous nous concentrons sur la création de la plateforme de partage de compétences de la plus haute qualité.",
         "member1": {
           "name": "Zhang San",
           "position": "Fondateur & PDG"
@@ -81,8 +81,8 @@
         }
       },
       "joinUs": {
-        "title": "Rejoignez l'écosystème SkillHub",
-        "description": "Que vous soyez un utilisateur à la recherche de compétences ou un développeur souhaitant partager des compétences, SkillHub accueille votre participation"
+        "title": "Rejoignez l'écosystème BotSkill",
+        "description": "Que vous soyez un utilisateur à la recherche de compétences ou un développeur souhaitant partager des compétences, BotSkill accueille votre participation"
       }
     },
     "auth": {
@@ -164,7 +164,15 @@
       "delete": "Supprimer",
       "totalDownloads": "Téléchargements totaux",
       "skillCount": "Nombre de compétences",
-      "trend": "Tendance des téléchargements"
+      "trend": "Tendance des téléchargements",
+      "chartArea": "Zone du graphique (à venir)",
+      "trendDesc": "Téléchargements par compétence (triés par nombre)",
+      "noDownloadData": "Aucune donnée de téléchargement",
+      "publishToSeeData": "Publiez des compétences et obtenez des téléchargements pour voir les données",
+      "needPublisherRole": "Rôle de publication requis. Contactez l'administrateur.",
+      "noSkillsMatch": "Aucune compétence correspondante",
+      "manageSkill": "Gérer",
+      "viewDetails": "Voir les détails"
     },
     "admin": {
       "dashboard": "Tableau de bord",
@@ -186,12 +194,17 @@
       "disable": "Désactiver",
       "searchUsers": "Rechercher des utilisateurs...",
       "addUser": "Ajouter un utilisateur",
+      "addSkill": "Ajouter une compétence",
+      "addByUpload": "Télécharger un fichier",
+      "addByUrl": "Importer depuis une URL",
       "userAddedSuccessfully": "Utilisateur ajouté avec succès !",
       "userAddError": "Erreur lors de l'ajout de l'utilisateur",
       "userAddNotImplemented": "L'ajout d'utilisateurs via le panneau d'administration n'est pas implémenté. Utilisez plutôt le formulaire d'inscription.",
       "userStatusUpdated": "Statut de l'utilisateur mis à jour avec succès !",
       "userStatusUpdateError": "Erreur lors de la mise à jour du statut de l'utilisateur",
       "fetchUsersError": "Erreur lors de la récupération des utilisateurs",
+      "fetchSkillsError": "Erreur lors de la récupération des compétences",
+      "adminOnly": "Réservé aux administrateurs",
       "user": {
         "username": "Nom d'utilisateur",
         "email": "E-mail",
@@ -246,8 +259,11 @@
       "skillStatus": {
         "published": "Publié",
         "pending": "En attente de revue",
-        "rejected": "Rejeté"
+        "rejected": "Rejeté",
+        "draft": "Brouillon",
+        "archived": "Archivé"
       },
+      "noSkillsFound": "Aucune compétence trouvée",
       "noUsersFound": "Aucun utilisateur trouvé"
     },
     "common": {

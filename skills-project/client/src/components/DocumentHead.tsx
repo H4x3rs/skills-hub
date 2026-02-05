@@ -20,7 +20,7 @@ export const DocumentHead = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    const baseTitle = siteTitle || 'SkillHub - 智能技能市场';
+    const baseTitle = siteTitle || 'BotSkill - AI 技能市场';
     const pageKey = PAGE_KEYS[pathname];
     const pageTitle = pageKey ? t(`navigation.${pageKey}`) : null;
     document.title = pageTitle && pageTitle !== `navigation.${pageKey}` ? `${pageTitle} - ${baseTitle}` : baseTitle;

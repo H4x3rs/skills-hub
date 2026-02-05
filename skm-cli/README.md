@@ -1,17 +1,17 @@
-# SkillsHub CLI (skm)
+# BotSkill CLI (skm)
 
-The official command-line interface for SkillsHub, a platform for managing and sharing AI agent skills.
+The official command-line interface for BotSkill, a platform for managing and sharing AI agent skills.
 
 ## Installation
 
 ```bash
-npm install -g @skillshub/cli
+npm install -g @botskill/cli
 ```
 
 Or use without installing:
 
 ```bash
-npx @skillshub/cli [command]
+npx @botskill/cli [command]
 ```
 
 ## Commands
@@ -24,7 +24,7 @@ skm init -y   # Use defaults without prompting
 ```
 
 ### login
-Login to SkillsHub platform:
+Login to BotSkill platform:
 ```bash
 skm login --token YOUR_TOKEN
 ```
@@ -39,11 +39,11 @@ skm config --list
 skm config --get apiUrl
 
 # Set configuration
-skm config --set apiUrl=https://api.skillshub.example.com
+skm config --set apiUrl=https://api.botskill.ai
 ```
 
 ### get
-Download a skill from SkillsHub and extract to directory (default: current directory). Use `name@version` for a specific version, or `name` for latest. API URL from config (optional):
+Download a skill from BotSkill and extract to directory (default: current directory). Use `name@version` for a specific version, or `name` for latest. API URL from config (optional):
 ```bash
 skm get pdf-processing
 skm get pdf-processing@1.0.0
@@ -52,7 +52,7 @@ skm get pdf-processing --dry-run
 ```
 
 ### push / publish
-Upload/push or publish a skill to SkillsHub (requires login, publisher or admin role):
+Upload/push or publish a skill to BotSkill (requires login, publisher or admin role):
 ```bash
 # From a directory with skill.config.json
 skm push
@@ -66,7 +66,7 @@ skm push --dry-run   # Validate without uploading
 ```
 
 ### list
-List skills from SkillsHub (fetches from API):
+List skills from BotSkill (fetches from API):
 ```bash
 skm list
 skm list --category ai --limit 10
@@ -98,20 +98,20 @@ skm info pdf-processing@1.0.0
 使用 `skm config` 管理配置，`skm config --path` 查看配置文件路径。
 
 ### 默认配置
-- `apiUrl`: API 地址，优先级：环境变量 `SKILLSHUB_API_URL` > 配置文件 > 构建时默认值
+- `apiUrl`: API 地址，优先级：环境变量 `BOTSKILL_API_URL` > 配置文件 > 构建时默认值
 - `token` / `refreshToken`: 登录后自动保存
 
 ### 环境变量
-- **SKILLSHUB_API_URL**：运行时覆盖 API 地址（不修改配置文件）
+- **BOTSKILL_API_URL**：运行时覆盖 API 地址（不修改配置文件）
 
 ### 发布时指定默认 API 和作者
 ```bash
-# 开发/本地默认 localhost + skillshub
+# 开发/本地默认 localhost
 npm run build
 
 # 生产环境
-SKILLSHUB_API_URL=https://api.skillshub.com npm run build
-SKILLSHUB_API_URL=https://api.skillshub.com npm publish
+BOTSKILL_API_URL=https://api.botskill.ai npm run build
+BOTSKILL_API_URL=https://api.botskill.ai npm publish
 ```
 
 ## Usage Examples
@@ -122,10 +122,10 @@ SKILLSHUB_API_URL=https://api.skillshub.com npm publish
 skm init --name my-translator --description "AI translation skill"
 
 # Edit skill.config.json (add tags, URLs, etc.)
-# Login to SkillsHub
+# Login to BotSkill
 skm login
 
-# Push or publish to SkillsHub
+# Push or publish to BotSkill
 skm push
 # or
 skm publish
@@ -153,7 +153,7 @@ node src/index.js [command]
 
 ## Contributing
 
-See our contributing guide for more information on how to contribute to the SkillsHub CLI.
+See our contributing guide for more information on how to contribute to the BotSkill CLI.
 
 ## License
 

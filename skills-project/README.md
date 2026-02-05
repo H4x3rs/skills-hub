@@ -1,11 +1,11 @@
-# SkillsHub - 全栈AI技能管理平台
+# BotSkill - 全栈AI技能管理平台
 
 一个用于管理和分享AI代理技能的全栈应用程序，前端使用React，后端使用Node.js/Express/MongoDB。
 
 ## 项目结构
 
 ```
-skills-hub/
+botskill/
 ├── client/                 # React前端应用
 │   ├── public/
 │   ├── src/
@@ -93,7 +93,7 @@ skills-hub/
 1. 克隆项目
 ```bash
 git clone <repository-url>
-cd skills-hub
+cd botskill
 ```
 
 2. 安装依赖
@@ -102,18 +102,14 @@ npm run install:all
 ```
 
 3. 设置环境变量
-在根目录和backend目录中分别创建 `.env` 文件：
+在backend目录中创建 `.env` 文件：
 
-根目录 `.env`:
-```
-# 无特殊配置，主要为前端
-```
 
 backend/.env:
 ```
 NODE_ENV=development
 PORT=3000
-MONGODB_URI=mongodb://localhost:27017/skillshub
+MONGODB_URI=mongodb://localhost:27017/botskill
 JWT_SECRET=your-super-secret-jwt-key
 JWT_EXPIRES_IN=7d
 ```

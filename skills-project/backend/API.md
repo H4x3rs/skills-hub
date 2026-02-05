@@ -1,8 +1,8 @@
-# SkillsHub API 文档
+# BotSkill API 文档
 
 ## 概述
 
-SkillsHub API 是一个 RESTful API，提供对AI技能管理平台的数据访问。API 基础路径为 `/api`。
+BotSkill API 是一个 RESTful API，提供对AI技能管理平台的数据访问。API 基础路径为 `/api`。
 
 ## 认证
 
@@ -70,6 +70,18 @@ Authorization: Bearer <jwt_token>
   }
 }
 ```
+
+#### GET /api/auth/google
+Google OAuth 登录 - 跳转到 Google 授权页，授权后回调并重定向到前端 `/login?token=xxx`
+
+#### GET /api/auth/github
+GitHub OAuth 登录 - 跳转到 GitHub 授权页，授权后回调并重定向到前端 `/login?token=xxx`
+
+**环境变量（需在 .env 中配置）：**
+- `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` - Google OAuth 凭据
+- `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` - GitHub OAuth 凭据
+- `FRONTEND_URL` - 前端地址，用于 OAuth 回调重定向（默认 http://localhost:5173）
+- `BACKEND_URL` - 后端地址，用于 OAuth callback URL（默认 http://localhost:3001）
 
 #### GET /api/auth/me
 获取当前用户信息（需要认证）

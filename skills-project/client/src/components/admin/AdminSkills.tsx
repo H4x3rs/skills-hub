@@ -1,14 +1,14 @@
 import { useState, useMemo } from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Search, Eye, Trash2, Plus, Pencil, Upload, Link, ChevronDown, Tag, BookOpen, User, FolderOpen, Download } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
 import { useAdminSkills } from '@/hooks/useAdminSkills';
 import { TruncateWithTooltip } from '@/components/ui/truncate-with-tooltip';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
 import { AddSkillModal, type AddSkillMode } from './AddSkillModal';
 import { EditSkillModal } from './EditSkillModal';
 
@@ -80,15 +80,15 @@ const SkillViewModal = ({ skill, authorName, getDisplayStatus, onClose }: SkillV
             <div className="min-w-0 flex-1">
               <h2 className="text-xl font-bold font-heading truncate">{skill.name}</h2>
               <div className="flex flex-wrap items-center gap-3 mt-2 text-sm text-muted-foreground">
-                <span className="inline-flex items-center gap-1">
+                <span className="inline-flex items-center gap-1.5">
                   <User className="h-3.5 w-3.5" />
                   {authorName}
                 </span>
-                <span className="inline-flex items-center gap-1">
+                <span className="inline-flex items-center gap-1.5">
                   <FolderOpen className="h-3.5 w-3.5" />
                   {skill.category ? t(`skills.category.${skill.category}`) : '—'}
                 </span>
-                <span className="inline-flex items-center gap-1">
+                <span className="inline-flex items-center gap-1.5">
                   <Download className="h-3.5 w-3.5" />
                   {(skill.downloads ?? 0).toLocaleString()} {t('admin.downloads')}
                 </span>
@@ -132,7 +132,7 @@ const SkillViewModal = ({ skill, authorName, getDisplayStatus, onClose }: SkillV
               {t('admin.permissionDesc')}
             </h3>
             <div className="prose prose-sm dark:prose-invert max-w-none text-foreground/90">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{displayDesc}</ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>{displayDesc}</ReactMarkdown>
             </div>
           </div>
 
@@ -164,9 +164,7 @@ const SkillViewModal = ({ skill, authorName, getDisplayStatus, onClose }: SkillV
             <div className="rounded-lg border bg-muted/20 p-4 min-h-[120px]">
               <div className="prose prose-sm dark:prose-invert max-w-none prose-pre:my-2 prose-pre:text-sm">
                 {selectedVer?.content ? (
-                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
-                    {selectedVer.content}
-                  </ReactMarkdown>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>{selectedVer.content}</ReactMarkdown>
                 ) : (
                   <p className="text-muted-foreground text-sm">{t('skills.noDocumentation', '暂无文档内容')}</p>
                 )}
@@ -282,7 +280,7 @@ export const AdminSkills = () => {
                 onSelect={() => { setAddMode('url'); setShowAddModal(true); }}
               >
                 <Link className="h-4 w-4" />
-                {t('admin.addByUrl', '从远程/GitHub 地址')}
+                {t('admin.addByUrl', '从URL导入')}
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Root>

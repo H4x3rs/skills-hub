@@ -1,22 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
+import { getOAuthUrl } from '@/lib/api';
 
 const LoginPage = () => {
   const { t } = useTranslation();
-  const { login } = useAuth();
+  const { login, loginWithOAuthToken } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+
+  // 处理 OAuth 回调：URL 中带有 token 表示从第三方登录返回
+  useEffect(() => {
+    const token = searchParams.get('token');
+    const refreshToken = searchParams.get('refreshToken');
+    const oauthError = searchParams.get('oauth_error');
+
+    if (oauthError) {
+      toast.error(decodeURIComponent(oauthError));
+      setSearchParams({}, { replace: true });
+      return;
+    }
+
+    if (token) {
+      loginWithOAuthToken(token, refreshToken || undefined)
+        .then(() => {
+          toast.success(t('auth.login.success') || 'Login successful!');
+          navigate('/');
+        })
+        .catch((err) => {
+          console.error('OAuth login error:', err);
+          toast.error(t('auth.login.generalError') || 'Login failed');
+        })
+        .finally(() => setSearchParams({}, { replace: true }));
+    }
+  }, [searchParams, loginWithOAuthToken, navigate, t, setSearchParams]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -155,12 +183,16 @@ const LoginPage = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" className="w-full">
-              Google
-            </Button>
-            <Button variant="outline" className="w-full">
-              GitHub
-            </Button>
+            <a href={getOAuthUrl('google')} className="contents">
+              <Button variant="outline" type="button" className="w-full">
+                {t('auth.login.continueWithGoogle')}
+              </Button>
+            </a>
+            <a href={getOAuthUrl('github')} className="contents">
+              <Button variant="outline" type="button" className="w-full">
+                {t('auth.login.continueWithGithub')}
+              </Button>
+            </a>
           </div>
         </div>
       </div>

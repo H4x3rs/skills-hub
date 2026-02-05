@@ -6,7 +6,7 @@ import { uploadSkillFile, findUploadFile, validCategories } from '../lib/uploadS
 
 const pushCommand = new Command('push');
 pushCommand
-  .description('Upload/push a skill to SkillsHub (SKILL.md, .zip, or .tar.gz)')
+  .description('Upload/push a skill to BotSkill (SKILL.md, .zip, or .tar.gz)')
   .option('-f, --file <path>', 'Path to SKILL.md, .zip, or .tar.gz')
   .option('--dry-run', 'Validate without uploading')
   .option('--api-url <url>', 'API base URL')

@@ -1,7 +1,7 @@
 import { BarChart3, Users, Package, ShieldCheck, Key, Settings, Shield } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-const TABS = [
+const ALL_TABS = [
   { id: 'dashboard', icon: BarChart3 },
   { id: 'users', icon: Users },
   { id: 'skills', icon: Package },
@@ -13,10 +13,12 @@ const TABS = [
 interface AdminSidebarProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
+  isAdmin?: boolean;
 }
 
-export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
+export const AdminSidebar = ({ activeTab, onTabChange, isAdmin = true }: AdminSidebarProps) => {
   const { t } = useTranslation();
+  const tabs = isAdmin ? ALL_TABS : ALL_TABS.filter((t) => t.id === 'skills');
 
   return (
     <div className="w-full md:w-56 flex-shrink-0">
@@ -26,11 +28,13 @@ export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
             <Shield className="h-5 w-5" />
           </div>
           <div className="min-w-0">
-            <h3 className="font-semibold text-sm truncate">{t('admin.adminPanel', '管理后台')}</h3>
+            <h3 className="font-semibold text-sm truncate">
+              {isAdmin ? t('admin.adminPanel', '管理后台') : t('profile.mySkills', '我的技能')}
+            </h3>
           </div>
         </div>
         <nav className="space-y-0.5">
-          {TABS.map(({ id, icon: Icon }) => (
+          {tabs.map(({ id, icon: Icon }) => (
             <button
               key={id}
               className={`flex items-center gap-2.5 w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${

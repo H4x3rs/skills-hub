@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Skill = require('../models/Skill');
 
 const getAllUsers = async (req, res) => {
   try {
@@ -61,11 +62,23 @@ const getUserById = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
+    // 仅允许用户更新自己的资料，或管理员更新任意用户
+    if (req.user.userId !== req.params.id && req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        error: 'Not authorized to update this user'
+      });
+    }
+
     const { fullName, bio, avatar } = req.body;
-    
+    const updates = {};
+    if (fullName !== undefined) updates.fullName = fullName;
+    if (bio !== undefined) updates.bio = bio;
+    if (avatar !== undefined) updates.avatar = avatar;
+
     const user = await User.findByIdAndUpdate(
       req.params.id,
-      { fullName, bio, avatar },
+      updates,
       { new: true, runValidators: true }
     ).select('-password');
     
@@ -147,10 +160,101 @@ const getUserStats = async (req, res) => {
   }
 };
 
+function normalizeAuthor(skill) {
+  if (skill && (!skill.author || (!skill.author.username && !skill.author.fullName))) {
+    skill.author = { username: 'unknown', fullName: '未知' };
+  }
+  return skill;
+}
+
+const getMyFavorites = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('favorites').populate({
+      path: 'favorites',
+      match: { status: 'published' },
+      select: 'name description version category tags downloads rating author'
+    });
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    const skills = (user.favorites || []).filter(Boolean).map(normalizeAuthor);
+    res.json({ success: true, data: { skills } });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Server error while fetching favorites',
+      message: error.message
+    });
+  }
+};
+
+const addFavorite = async (req, res) => {
+  try {
+    const { skillId } = req.params;
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    const skill = await Skill.findById(skillId);
+    if (!skill || skill.status !== 'published') {
+      return res.status(404).json({ success: false, error: 'Skill not found' });
+    }
+    const favs = user.favorites || [];
+    if (favs.some((id) => id.toString() === skillId)) {
+      const skills = await getFavoritesSkills(req.user.userId);
+      return res.json({ success: true, message: 'Already in favorites', data: { skills } });
+    }
+    favs.push(skillId);
+    user.favorites = favs;
+    await user.save();
+    const skills = await getFavoritesSkills(req.user.userId);
+    res.json({ success: true, message: 'Added to favorites', data: { skills } });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Server error',
+      message: error.message
+    });
+  }
+};
+
+const removeFavorite = async (req, res) => {
+  try {
+    const { skillId } = req.params;
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    const favs = (user.favorites || []).filter((id) => id.toString() !== skillId);
+    user.favorites = favs;
+    await user.save();
+    const skills = await getFavoritesSkills(req.user.userId);
+    res.json({ success: true, message: 'Removed from favorites', data: { skills } });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Server error',
+      message: error.message
+    });
+  }
+};
+
+async function getFavoritesSkills(userId) {
+  const u = await User.findById(userId).populate({
+    path: 'favorites',
+    match: { status: 'published' },
+    select: 'name description version category tags downloads rating author'
+  });
+  return (u?.favorites || []).filter(Boolean).map(normalizeAuthor);
+}
+
 module.exports = {
   getAllUsers,
   getUserById,
   updateUser,
   deleteUser,
-  getUserStats
+  getUserStats,
+  getMyFavorites,
+  addFavorite,
+  removeFavorite
 };

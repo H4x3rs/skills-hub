@@ -3,6 +3,14 @@ const Skill = require('../models/Skill');
 const User = require('../models/User');
 const { NAME_REGEX } = require('../utils/parseSkillMd');
 
+/** 确保 author 有默认值（作者用户被删除时 populate 返回 null） */
+function normalizeAuthor(skill) {
+  if (!skill.author || (!skill.author.username && !skill.author.fullName)) {
+    skill.author = { username: 'unknown', fullName: '未知' };
+  }
+  return skill;
+}
+
 const getAllSkills = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -17,7 +25,7 @@ const getAllSkills = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
-    
+    skills.forEach(normalizeAuthor);
     const total = await Skill.countDocuments(query);
     
     res.json({
@@ -48,6 +56,7 @@ const getSkillById = async (req, res) => {
       return res.status(404).json({ error: 'Skill not found' });
     }
     
+    normalizeAuthor(skill);
     // Legacy: ensure versions array for backward compatibility
     if (!skill.versions || skill.versions.length === 0) {
       skill.versions = [{
@@ -109,6 +118,7 @@ const downloadSkill = async (req, res) => {
     if (skill.status !== 'published') {
       return res.status(404).json({ error: 'Skill not found' });
     }
+    normalizeAuthor(skill);
 
     const versions = skill.versions || [];
     const versionParam = req.query.version;
@@ -374,7 +384,7 @@ const searchSkills = async (req, res) => {
       .sort({ downloads: -1 }) // Sort by downloads by default
       .skip(skip)
       .limit(parseInt(limit));
-    
+    skills.forEach(normalizeAuthor);
     const total = await Skill.countDocuments(query);
     
     res.json({
@@ -400,7 +410,7 @@ const getPopularSkills = async (req, res) => {
       .populate('author', 'username fullName avatar')
       .sort({ downloads: -1 })
       .limit(limit);
-    
+    skills.forEach(normalizeAuthor);
     res.json({ skills });
   } catch (error) {
     res.status(500).json({ error: 'Server error while fetching popular skills' });
@@ -415,7 +425,7 @@ const getLatestSkills = async (req, res) => {
       .populate('author', 'username fullName avatar')
       .sort({ createdAt: -1 })
       .limit(limit);
-    
+    skills.forEach(normalizeAuthor);
     res.json({ skills });
   } catch (error) {
     res.status(500).json({ error: 'Server error while fetching latest skills' });
@@ -429,10 +439,12 @@ const getMySkills = async (req, res) => {
     const limit = parseInt(req.query.limit) || 20;
     const skip = (page - 1) * limit;
     const categoryFilter = req.query.category || null;
+    const statusFilter = req.query.status || null;
     const search = req.query.q || req.query.search || null;
 
     const query = { author: req.user.userId };
     if (categoryFilter) query.category = categoryFilter;
+    if (statusFilter) query.status = statusFilter;
     if (search && search.trim()) {
       query.$or = [
         { name: new RegExp(search.trim(), 'i') },
@@ -446,6 +458,7 @@ const getMySkills = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
+    skills.forEach(normalizeAuthor);
     const total = await Skill.countDocuments(query);
 
     res.json({
@@ -499,7 +512,7 @@ const getAllSkillsForAdmin = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
-    
+    skills.forEach(normalizeAuthor);
     const total = await Skill.countDocuments(query);
     
     res.json({
@@ -616,15 +629,137 @@ const createSkillForAdmin = async (req, res) => {
   }
 };
 
-const updateSkillForAdmin = async (req, res) => {
+/**
+ * 发布技能（管理员或发布者）
+ * 管理员：可设置任意状态、指定作者
+ * 发布者：仅能创建自己的技能，状态为 draft 或 pending_review
+ */
+const createSkillFromForm = async (req, res) => {
   try {
     const { name, description, version, category, tags, repositoryUrl, documentationUrl, demoUrl, license, compatibility, allowedTools, status, authorId, content } = req.body;
-    
+    const isAdmin = req.user.role === 'admin';
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: 'Skill name is required' });
+    }
+    const nameTrimmed = name.trim().toLowerCase();
+    if (nameTrimmed.length > 64) {
+      return res.status(400).json({ error: 'Skill name cannot exceed 64 characters' });
+    }
+    if (!NAME_REGEX.test(nameTrimmed)) {
+      return res.status(400).json({ error: 'Skill name must contain only lowercase letters, numbers, hyphens, @, and /; must not start or end with hyphen' });
+    }
+
+    const ver = version || '1.0.0';
+    const versionTags = Array.isArray(tags) ? tags : (tags ? [].concat(tags) : []);
+    const versionDoc = {
+      version: ver,
+      description: description || '',
+      content: content || '',
+      tags: versionTags,
+      createdAt: new Date(),
+    };
+
+    const existing = await Skill.findOne({
+      name: { $regex: new RegExp(`^${nameTrimmed.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') },
+    });
+
+    if (existing) {
+      if (!isAdmin && existing.author.toString() !== req.user.userId) {
+        return res.status(400).json({ error: 'Skill name already exists' });
+      }
+      const versionExists = existing.versions?.some(v => v.version === ver);
+      const overwrite = req.body.overwrite === true || req.body.overwrite === 'true';
+      if (versionExists && !overwrite) {
+        return res.status(400).json({
+          error: 'VERSION_EXISTS',
+          message: `Version ${ver} already exists. Overwrite?`,
+          version: ver,
+        });
+      }
+      if (versionExists && overwrite) {
+        const idx = existing.versions.findIndex(v => v.version === ver);
+        existing.versions[idx] = versionDoc;
+      } else {
+        existing.versions.push(versionDoc);
+      }
+      existing.description = description || existing.description;
+      existing.version = ver;
+      if (category) existing.category = category;
+      existing.tags = versionTags.length > 0 ? versionTags : existing.tags;
+      if (repositoryUrl !== undefined) existing.repositoryUrl = repositoryUrl;
+      if (documentationUrl !== undefined) existing.documentationUrl = documentationUrl;
+      if (demoUrl !== undefined) existing.demoUrl = demoUrl;
+      if (license) existing.license = license;
+      if (compatibility !== undefined) existing.compatibility = compatibility;
+      if (allowedTools !== undefined) existing.allowedTools = Array.isArray(allowedTools) ? allowedTools : allowedTools;
+      existing.lastUpdated = new Date();
+      await existing.save();
+      await existing.populate('author', 'username fullName avatar email');
+      return res.status(201).json({
+        message: `Version ${ver} added successfully`,
+        skill: existing,
+      });
+    }
+
+    const effectiveAuthor = isAdmin && authorId ? authorId : req.user.userId;
+    let effectiveStatus = status || 'pending_review';
+    if (!isAdmin) {
+      effectiveStatus = (effectiveStatus === 'draft') ? 'draft' : 'pending_review';
+    }
+
+    const skill = new Skill({
+      name: nameTrimmed,
+      description,
+      version: ver,
+      category: category || 'tools',
+      tags,
+      repositoryUrl,
+      documentationUrl,
+      demoUrl,
+      license,
+      compatibility,
+      allowedTools: Array.isArray(allowedTools) ? allowedTools : undefined,
+      author: effectiveAuthor,
+      status: effectiveStatus,
+      publishedAt: effectiveStatus === 'published' ? new Date() : undefined,
+      versions: [versionDoc],
+    });
+
+    await skill.save();
+    await skill.populate('author', 'username fullName avatar email');
+
+    res.status(201).json({
+      message: isAdmin ? 'Skill created successfully' : 'Skill created successfully and is pending review',
+      skill
+    });
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({ error: 'Validation failed', details: errors });
+    }
+    res.status(500).json({ error: 'Server error while creating skill' });
+  }
+};
+
+/**
+ * 更新技能（管理员或发布者）
+ * 发布者：仅能更新自己的技能，不能修改 status 为 published
+ */
+const updateSkillFromForm = async (req, res) => {
+  try {
+    const { name, description, version, category, tags, repositoryUrl, documentationUrl, demoUrl, license, compatibility, allowedTools, status, authorId, content } = req.body;
+    const isAdmin = req.user.role === 'admin';
+
     const skill = await Skill.findById(req.params.id);
     if (!skill) {
       return res.status(404).json({ error: 'Skill not found' });
     }
-    
+
+    if (!isAdmin && skill.author.toString() !== req.user.userId) {
+      return res.status(403).json({ error: 'Not authorized to update this skill' });
+    }
+
     let nameTrimmed;
     if (name !== undefined && name.trim()) {
       nameTrimmed = name.trim().toLowerCase();
@@ -678,21 +813,28 @@ const updateSkillForAdmin = async (req, res) => {
     if (license !== undefined) updateData.license = license;
     if (compatibility !== undefined) updateData.compatibility = compatibility;
     if (allowedTools !== undefined) updateData.allowedTools = Array.isArray(allowedTools) ? allowedTools : allowedTools;
-    if (status !== undefined) updateData.status = status;
-    if (authorId !== undefined) updateData.author = authorId; // 管理员可以更改作者
+    if (status !== undefined) {
+      if (isAdmin) {
+        updateData.status = status;
+      } else {
+        const s = status === 'draft' ? 'draft' : 'pending_review';
+        updateData.status = s;
+      }
+    }
+    if (isAdmin && authorId !== undefined) updateData.author = authorId;
     updateData.lastUpdated = Date.now();
-    
+
     const finalUpdate = { ...updateData };
     if (versionUpdate) finalUpdate.versions = skill.versions;
-    
+
     const updatedSkill = await Skill.findByIdAndUpdate(
       req.params.id,
       finalUpdate,
       { new: true, runValidators: true }
     ).populate('author', 'username fullName avatar email');
-    
+
     res.json({
-      message: 'Skill updated successfully by admin',
+      message: 'Skill updated successfully',
       skill: updatedSkill
     });
   } catch (error) {
@@ -700,10 +842,11 @@ const updateSkillForAdmin = async (req, res) => {
       const errors = Object.values(error.errors).map(err => err.message);
       return res.status(400).json({ error: 'Validation failed', details: errors });
     }
-    
-    res.status(500).json({ error: 'Server error while updating skill for admin' });
+    res.status(500).json({ error: 'Server error while updating skill' });
   }
 };
+
+const updateSkillForAdmin = updateSkillFromForm;
 
 const deleteSkillForAdmin = async (req, res) => {
   try {
@@ -737,6 +880,8 @@ module.exports = {
   // 管理员专用功能
   getAllSkillsForAdmin,
   createSkillForAdmin,
+  createSkillFromForm,
   updateSkillForAdmin,
+  updateSkillFromForm,
   deleteSkillForAdmin
 };

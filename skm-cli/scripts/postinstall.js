@@ -2,7 +2,7 @@
 /**
  * postinstall: 在用户目录下创建默认配置文件
  * 路径: ~/.skm/config.json
- * 默认 API 来自构建时 SKILLSHUB_API_URL，未构建时用 localhost
+ * 默认 API 来自构建时 BOTSKILL_API_URL，未构建时用 localhost
  */
 import path from 'path';
 import os from 'os';
@@ -14,7 +14,7 @@ const CONFIG_PATH = path.join(os.homedir(), '.skm', 'config.json');
 const defaultUrl = getDefaultApiUrl();
 
 try {
-  const config = new Configstore('skillshub-cli', { apiUrl: defaultUrl }, {
+  const config = new Configstore('botskill-cli', { apiUrl: defaultUrl }, {
     configPath: CONFIG_PATH,
   });
   if (!fs.existsSync(config.path)) {

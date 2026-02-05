@@ -1,9 +1,9 @@
-# SkillsHub 项目结构说明
+# BotSkill 项目结构说明
 
 ## 整体架构
 
 ```
-skills-hub/                    # 项目根目录
+botskill/                    # 项目根目录
 ├── client/                    # React前端应用
 │   ├── public/                # 静态资源
 │   │   └── favicon.ico

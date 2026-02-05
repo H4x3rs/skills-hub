@@ -13,7 +13,7 @@ function formatSkillDisplay(skill) {
 
 const searchCommand = new Command('search');
 searchCommand
-  .description('Search skills from SkillsHub')
+  .description('Search skills from BotSkill')
   .argument('<query>', 'Search query (name or description)')
   .option('-c, --category <category>', 'Filter by category (ai, data, web, devops, security, tools)')
   .option('-l, --limit <number>', 'Maximum number of results (default: 20)', '20')

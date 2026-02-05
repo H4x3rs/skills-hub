@@ -7,15 +7,15 @@ import { getDefaultApiUrl } from './constants.js';
 const CONFIG_PATH = path.join(os.homedir(), '.skm', 'config.json');
 const defaultUrl = getDefaultApiUrl();
 
-const config = new Configstore('skillshub-cli', { apiUrl: defaultUrl }, {
+const config = new Configstore('botskill-cli', { apiUrl: defaultUrl }, {
   configPath: CONFIG_PATH,
 });
 
 export const getConfigPath = () => config.path;
 
-/** 优先级: 环境变量 SKILLSHUB_API_URL > 配置文件 > 构建时默认值 */
+/** 优先级: 环境变量 BOTSKILL_API_URL > 配置文件 > 构建时默认值 */
 export const getApiUrl = () =>
-  process.env.SKILLSHUB_API_URL || config.get('apiUrl') || getDefaultApiUrl();
+  process.env.BOTSKILL_API_URL || config.get('apiUrl') || getDefaultApiUrl();
 
 export const setApiUrl = (url) => config.set('apiUrl', url);
 

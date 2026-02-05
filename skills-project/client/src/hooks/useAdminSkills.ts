@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { skillAdminAPI } from '@/lib/api';
+import { skillAdminAPI, skillAPI } from '@/lib/api';
+import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
 export interface AdminSkillVersion {
@@ -42,6 +43,8 @@ export const useAdminSkills = (
   params?: { page?: number; limit?: number; status?: string; category?: string; q?: string }
 ) => {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
   const [skills, setSkills] = useState<AdminSkill[]>([]);
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState<AdminSkillsPagination>({
@@ -55,23 +58,45 @@ export const useAdminSkills = (
   const fetchSkills = useCallback(async (fetchParams?: typeof params) => {
     try {
       setLoading(true);
-      const res = await skillAdminAPI.getAll(fetchParams || params);
-      const data = res.data;
-      setSkills(data.skills || []);
-      setPagination(data.pagination || {
-        currentPage: 1,
-        totalPages: 0,
-        totalSkills: 0,
-        hasNext: false,
-        hasPrev: false,
-      });
+      const p = fetchParams || params;
+      if (isAdmin) {
+        const res = await skillAdminAPI.getAll(p);
+        const data = res.data;
+        setSkills(data.skills || []);
+        setPagination(data.pagination || {
+          currentPage: 1,
+          totalPages: 0,
+          totalSkills: 0,
+          hasNext: false,
+          hasPrev: false,
+        });
+      } else {
+        const res = await skillAPI.getMySkills({
+          page: p?.page,
+          limit: p?.limit,
+          status: p?.status,
+          category: p?.category,
+          q: p?.q,
+        });
+        const data = res.data;
+        const list = data.skills || data.data?.skills || [];
+        setSkills(list);
+        const pag = data.pagination || data.data?.pagination || {};
+        setPagination({
+          currentPage: pag.currentPage || 1,
+          totalPages: pag.totalPages || 0,
+          totalSkills: pag.totalSkills || list.length,
+          hasNext: pag.hasNext ?? false,
+          hasPrev: pag.hasPrev ?? false,
+        });
+      }
     } catch (error) {
       console.error('Error fetching skills:', error);
       toast.error(t('admin.fetchSkillsError') || 'Error fetching skills');
     } finally {
       setLoading(false);
     }
-  }, [params?.page, params?.limit, params?.status, params?.category, params?.q, t]);
+  }, [isAdmin, params?.page, params?.limit, params?.status, params?.category, params?.q, t]);
 
   useEffect(() => {
     if (fetchWhenActive) fetchSkills();
@@ -79,7 +104,15 @@ export const useAdminSkills = (
 
   const updateSkillStatus = useCallback(async (skillId: string, status: string) => {
     try {
-      await skillAdminAPI.update(skillId, { status });
+      if (status === 'published' || status === 'archived') {
+        if (!isAdmin) {
+          toast.error(t('admin.adminOnly', '仅管理员可审核发布'));
+          return false;
+        }
+        await skillAdminAPI.update(skillId, { status });
+      } else {
+        await skillAdminAPI.update(skillId, { status });
+      }
       setSkills(prev => prev.map(s => (s._id === skillId ? { ...s, status } : s)));
       toast.success(t('admin.updateSuccess'));
       return true;
@@ -87,7 +120,7 @@ export const useAdminSkills = (
       toast.error(error.response?.data?.error || 'Error');
       return false;
     }
-  }, [t]);
+  }, [isAdmin, t]);
 
   const createSkill = useCallback(async (data: {
     name: string;
@@ -115,7 +148,7 @@ export const useAdminSkills = (
       if (apiError === 'VERSION_EXISTS') {
         return { ok: false as const, error: 'VERSION_EXISTS' };
       }
-      toast.error(apiError || err?.response?.data?.message || 'Error creating skill');
+      toast.error(apiError || (err?.response?.data as { message?: string })?.message || 'Error creating skill');
       return { ok: false as const, error: apiError };
     }
   }, [fetchSkills, t]);
@@ -140,7 +173,8 @@ export const useAdminSkills = (
 
   const deleteSkill = useCallback(async (skillId: string) => {
     try {
-      await skillAdminAPI.delete(skillId);
+      const api = isAdmin ? skillAdminAPI : skillAPI;
+      await api.delete(skillId);
       setSkills(prev => prev.filter(s => s._id !== skillId));
       toast.success(t('admin.deleteSuccess'));
       return true;
@@ -148,7 +182,7 @@ export const useAdminSkills = (
       toast.error(error.response?.data?.error || 'Error');
       return false;
     }
-  }, [t]);
+  }, [isAdmin, t]);
 
   const approveSkill = useCallback((skillId: string) => updateSkillStatus(skillId, 'published'), [updateSkillStatus]);
   const rejectSkill = useCallback((skillId: string) => updateSkillStatus(skillId, 'archived'), [updateSkillStatus]);

@@ -11,7 +11,7 @@ const AboutPage = () => {
         <section className="py-16 md:py-24 bg-gradient-to-r from-primary/5 to-secondary/5">
           <div className="container px-4 md:px-6 text-center">
             <h1 className="text-4xl md:text-5xl font-bold font-heading mb-6">
-              {t('navigation.about')} SkillHub
+              {t('navigation.about')} BotSkill
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
               {t('home.subtitle')}

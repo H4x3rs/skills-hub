@@ -37,7 +37,7 @@
     "about": {
       "mission": {
         "title": "Unsere Mission",
-        "description": "SkillHub ist bestrebt, ein offenes und gemeinschaftliches Fähigkeiten-Ökosystem zu schaffen. Wir glauben, dass durch die Standardisierung und Modularisierung verschiedener intelligenter Fähigkeiten die Hürden für die Technologieintegration erheblich gesenkt werden können, sodass sich Entwickler stärker auf die Kerngeschäftslogik konzentrieren und Innovationen beschleunigen können."
+        "description": "BotSkill ist bestrebt, ein offenes und gemeinschaftliches Fähigkeiten-Ökosystem zu schaffen. Wir glauben, dass durch die Standardisierung und Modularisierung verschiedener intelligenter Fähigkeiten die Hürden für die Technologieintegration erheblich gesenkt werden können, sodass sich Entwickler stärker auf die Kerngeschäftslogik konzentrieren und Innovationen beschleunigen können."
       },
       "features": {
         "title": "Plattformfunktionen",
@@ -66,7 +66,7 @@
       },
       "team": {
         "title": "Teamvorstellung",
-        "description": "SkillHub wurde von einer Gruppe von Ingenieuren gegründet, die Technologie lieben und sich für die Förderung der Entwickler-Ökosystementwicklung einsetzen. Wir haben reiche technische Expertise und Produkterfahrung und konzentrieren uns auf die Schaffung der höchsten Qualität Plattform zum Teilen von Fähigkeiten.",
+        "description": "BotSkill wurde von einer Gruppe von Ingenieuren gegründet, die Technologie lieben und sich für die Förderung der Entwickler-Ökosystementwicklung einsetzen. Wir haben reiche technische Expertise und Produkterfahrung und konzentrieren uns auf die Schaffung der höchsten Qualität Plattform zum Teilen von Fähigkeiten.",
         "member1": {
           "name": "Zhang San",
           "position": "Gründer & CEO"
@@ -81,8 +81,8 @@
         }
       },
       "joinUs": {
-        "title": "Treten Sie dem SkillHub-Ökosystem bei",
-        "description": "Ob Sie als Nutzer nach Fähigkeiten suchen oder als Entwickler Fähigkeiten teilen möchten - SkillHub heißt Ihre Teilnahme willkommen"
+        "title": "Treten Sie dem BotSkill-Ökosystem bei",
+        "description": "Ob Sie als Nutzer nach Fähigkeiten suchen oder als Entwickler Fähigkeiten teilen möchten - BotSkill heißt Ihre Teilnahme willkommen"
       }
     },
     "auth": {
@@ -164,7 +164,15 @@
       "delete": "Löschen",
       "totalDownloads": "Gesamtzahl der Downloads",
       "skillCount": "Anzahl der Fähigkeiten",
-      "trend": "Download-Trend"
+      "trend": "Download-Trend",
+      "chartArea": "Diagrammbereich (in Kürze)",
+      "trendDesc": "Downloads pro Fähigkeit (nach Anzahl sortiert)",
+      "noDownloadData": "Noch keine Download-Daten",
+      "publishToSeeData": "Veröffentlichen Sie Fähigkeiten und erhalten Sie Downloads, um Daten zu sehen",
+      "needPublisherRole": "Veröffentlichungsberechtigung erforderlich. Kontaktieren Sie den Admin.",
+      "noSkillsMatch": "Keine passenden Fähigkeiten",
+      "manageSkill": "Verwalten",
+      "viewDetails": "Details anzeigen"
     },
     "admin": {
       "dashboard": "Dashboard",
@@ -186,12 +194,17 @@
       "disable": "Deaktivieren",
       "searchUsers": "Benutzer suchen...",
       "addUser": "Benutzer hinzufügen",
+      "addSkill": "Fähigkeit hinzufügen",
+      "addByUpload": "Datei hochladen",
+      "addByUrl": "Von URL importieren",
       "userAddedSuccessfully": "Benutzer erfolgreich hinzugefügt!",
       "userAddError": "Fehler beim Hinzufügen des Benutzers",
       "userAddNotImplemented": "Hinzufügen von Benutzern über das Admin-Panel ist nicht implementiert. Verwenden Sie stattdessen das Registrierungsformular.",
       "userStatusUpdated": "Benutzerstatus erfolgreich aktualisiert!",
       "userStatusUpdateError": "Fehler beim Aktualisieren des Benutzerstatus",
       "fetchUsersError": "Fehler beim Abrufen der Benutzer",
+      "fetchSkillsError": "Fehler beim Abrufen der Fähigkeiten",
+      "adminOnly": "Nur für Administratoren",
       "user": {
         "username": "Benutzername",
         "email": "E-Mail",
@@ -246,8 +259,11 @@
       "skillStatus": {
         "published": "Veröffentlicht",
         "pending": "Ausstehend",
-        "rejected": "Abgelehnt"
+        "rejected": "Abgelehnt",
+        "draft": "Entwurf",
+        "archived": "Archiviert"
       },
+      "noSkillsFound": "Keine Fähigkeiten gefunden",
       "noUsersFound": "Keine Benutzer gefunden"
     },
     "common": {

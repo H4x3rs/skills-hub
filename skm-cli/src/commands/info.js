@@ -13,7 +13,7 @@ function parseSpecifier(spec) {
 
 const infoCommand = new Command('info');
 infoCommand
-  .description('Show skill details from SkillsHub')
+  .description('Show skill details from BotSkill')
   .argument('<specifier>', 'Skill name or name@version')
   .action(async (specifier) => {
     const { name, version } = parseSpecifier(specifier);

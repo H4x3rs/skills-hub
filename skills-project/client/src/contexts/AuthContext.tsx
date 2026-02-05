@@ -8,6 +8,9 @@ interface User {
   fullName: string;
   role: string;
   avatar?: string;
+  bio?: string;
+  joinDate?: string;
+  createdAt?: string;
 }
 
 interface AuthContextType {
@@ -16,6 +19,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  loginWithOAuthToken: (accessToken: string, refreshToken?: string) => Promise<void>;
   register: (userData: {
     username: string;
     email: string;
@@ -108,6 +112,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const loginWithOAuthToken = React.useCallback(async (accessToken: string, refreshToken?: string) => {
+    localStorage.setItem('token', accessToken);
+    if (refreshToken) {
+      localStorage.setItem('refreshToken', refreshToken);
+    }
+    setToken(accessToken);
+    await fetchCurrentUser();
+  }, [fetchCurrentUser]);
+
   const register = async (userData: {
     username: string;
     email: string;
@@ -146,6 +159,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isAuthenticated: !!user,
     isLoading,
     login,
+    loginWithOAuthToken,
     register,
     logout,
     fetchCurrentUser

@@ -3,7 +3,7 @@ const path = require('path');
 const os = require('os');
 const fs = require('fs');
 
-const uploadDir = path.join(os.tmpdir(), 'skillshub-uploads');
+const uploadDir = path.join(os.tmpdir(), 'botskill-uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }

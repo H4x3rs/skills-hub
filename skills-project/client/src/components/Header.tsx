@@ -40,12 +40,9 @@ const Header = () => {
         {/* Logo - always on left */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <Link to="/" className="flex items-center gap-2 font-heading text-xl font-bold">
-            <div className="bg-gradient-to-r from-primary to-secondary w-8 h-8 rounded-lg flex items-center justify-center">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-              </svg>
-            </div>
-            <span className="text-primary">{siteTitle?.split(' - ')[0] || 'skillshub'}</span>
+            {/* 原内联 SVG 已替换为 logo.svg */}
+            <img src="/logo.svg" alt="BotSkill" className="h-8 w-8 rounded-lg flex-shrink-0" />
+            <span className="text-primary">{siteTitle?.split(' - ')[0] || 'botskill'}</span>
           </Link>
         </div>
 
@@ -140,14 +137,14 @@ const Header = () => {
                         {t('navigation.mySkills')}
                       </Link>
                       
-                      {user.role === 'admin' && (
+                      {(user.role === 'admin' || user.role === 'publisher') && (
                         <Link 
-                          to="/admin" 
+                          to={user.role === 'admin' ? "/admin" : "/admin?tab=skills"}
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
                           onClick={() => setIsUserDropdownOpen(false)}
                         >
                           <Settings className="h-4 w-4" />
-                          {t('navigation.adminPanel')}
+                          {user.role === 'admin' ? t('navigation.adminPanel') : t('profile.mySkills')}
                         </Link>
                       )}
                       
@@ -248,14 +245,14 @@ const Header = () => {
                         {t('navigation.mySkills')}
                       </Link>
                       
-                      {user.role === 'admin' && (
+                      {(user.role === 'admin' || user.role === 'publisher') && (
                         <Link 
-                          to="/admin" 
+                          to={user.role === 'admin' ? "/admin" : "/admin?tab=skills"}
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
                           onClick={() => setIsUserDropdownOpen(false)}
                         >
                           <Settings className="h-4 w-4" />
-                          {t('navigation.adminPanel')}
+                          {user.role === 'admin' ? t('navigation.adminPanel') : t('profile.mySkills')}
                         </Link>
                       )}
                       

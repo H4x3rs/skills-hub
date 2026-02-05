@@ -6,4 +6,5 @@ export { AdminPermissions } from './AdminPermissions';
 export { AdminRoles } from './AdminRoles';
 export { AdminSettings } from './AdminSettings';
 export { AddUserModal } from './AddUserModal';
+export { AddSkillModal } from './AddSkillModal';
 export { StatCard } from './StatCard';

@@ -6,31 +6,31 @@
 @tailwind utilities;
 
 /* 深色模式代码高亮 - GitHub Dark 风格 */
-.dark .prose pre code.hljs {
+html.dark .prose pre code.hljs {
   background: transparent !important;
   color: #c9d1d9;
 }
-.dark .prose pre code.hljs .hljs-doctag,
-.dark .prose pre code.hljs .hljs-keyword,
-.dark .prose pre code.hljs .hljs-meta .hljs-keyword { color: #ff7b72; }
-.dark .prose pre code.hljs .hljs-title,
-.dark .prose pre code.hljs .hljs-title.class_,
-.dark .prose pre code.hljs .hljs-title.function_ { color: #d2a8ff; }
-.dark .prose pre code.hljs .hljs-attr,
-.dark .prose pre code.hljs .hljs-attribute,
-.dark .prose pre code.hljs .hljs-literal,
-.dark .prose pre code.hljs .hljs-number,
-.dark .prose pre code.hljs .hljs-operator,
-.dark .prose pre code.hljs .hljs-variable { color: #79c0ff; }
-.dark .prose pre code.hljs .hljs-string,
-.dark .prose pre code.hljs .hljs-regexp { color: #a5d6ff; }
-.dark .prose pre code.hljs .hljs-built_in,
-.dark .prose pre code.hljs .hljs-symbol { color: #ffa657; }
-.dark .prose pre code.hljs .hljs-comment,
-.dark .prose pre code.hljs .hljs-formula { color: #8b949e; }
-.dark .prose pre code.hljs .hljs-name,
-.dark .prose pre code.hljs .hljs-quote,
-.dark .prose pre code.hljs .hljs-selector-tag { color: #7ee787; }
+html.dark .prose pre code.hljs .hljs-doctag,
+html.dark .prose pre code.hljs .hljs-keyword,
+html.dark .prose pre code.hljs .hljs-meta .hljs-keyword { color: #ff7b72; }
+html.dark .prose pre code.hljs .hljs-title,
+html.dark .prose pre code.hljs .hljs-title.class_,
+html.dark .prose pre code.hljs .hljs-title.function_ { color: #d2a8ff; }
+html.dark .prose pre code.hljs .hljs-attr,
+html.dark .prose pre code.hljs .hljs-attribute,
+html.dark .prose pre code.hljs .hljs-literal,
+html.dark .prose pre code.hljs .hljs-number,
+html.dark .prose pre code.hljs .hljs-operator,
+html.dark .prose pre code.hljs .hljs-variable { color: #79c0ff; }
+html.dark .prose pre code.hljs .hljs-string,
+html.dark .prose pre code.hljs .hljs-regexp { color: #a5d6ff; }
+html.dark .prose pre code.hljs .hljs-built_in,
+html.dark .prose pre code.hljs .hljs-symbol { color: #ffa657; }
+html.dark .prose pre code.hljs .hljs-comment,
+html.dark .prose pre code.hljs .hljs-formula { color: #8b949e; }
+html.dark .prose pre code.hljs .hljs-name,
+html.dark .prose pre code.hljs .hljs-quote,
+html.dark .prose pre code.hljs .hljs-selector-tag { color: #7ee787; }
 
 /* Markdown 代码块样式优化 */
 .prose pre {
@@ -41,13 +41,57 @@
 }
 .prose pre code {
   padding: 0;
-  background: transparent !important;
   font-size: inherit;
 }
 /* 行内代码 */
 .prose :not(pre) > code {
   @apply px-1.5 py-0.5 rounded bg-muted/80 text-foreground;
   font-size: 0.875em;
+}
+
+/* 文档页代码块 - 确保正确显示 */
+.prose pre,
+.prose pre code,
+pre.docs-code,
+pre.docs-code code,
+.docs-prose pre,
+.docs-prose pre code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace !important;
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+.prose pre code,
+pre.docs-code code,
+.docs-prose pre code {
+  display: block;
+  min-width: min-content;
+}
+/* 浅色模式：覆盖 Typography 的 pre { color: gray[200] }，避免 prose-pre:bg-muted 下文字发白 */
+html:not(.dark) .docs-prose pre,
+html:not(.dark) .docs-prose pre code.hljs {
+  color: #24292e;
+}
+/* 深色模式下代码块文字可读 */
+html.dark pre.docs-code,
+html.dark pre.docs-code code,
+html.dark .docs-prose pre,
+html.dark .docs-prose pre code {
+  color: hsl(var(--foreground));
+}
+/* 文档页 Markdown 表格 */
+.docs-prose table {
+  @apply w-full border-collapse rounded-lg overflow-hidden border border-border;
+}
+.docs-prose thead th {
+  @apply text-left text-xs font-medium uppercase tracking-wider;
+}
+/* 深色模式下表头文字可见 */
+html.dark .docs-prose thead th {
+  color: hsl(var(--foreground));
+}
+.docs-prose tbody tr {
+  @apply border-t border-border;
 }
 
 @layer base {
@@ -275,7 +319,7 @@ img, video {
 }
 
 /* Toast 基础 - 卡片风格 */
-[data-sonner-toast].skillshub-toast,
+[data-sonner-toast].botskill-toast,
 [data-sonner-toast][data-styled='true'] {
   position: relative !important;
   min-width: 320px !important;
@@ -307,7 +351,7 @@ img, video {
 }
 
 /* 关闭按钮 - 右侧，极简风格 */
-[data-sonner-toast] .skillshub-toast-close,
+[data-sonner-toast] .botskill-toast-close,
 [data-sonner-toast][data-styled='true'] [data-close-button] {
   left: unset !important;
   right: 10px !important;
@@ -323,7 +367,7 @@ img, video {
   transition: opacity 0.15s, background 0.15s !important;
 }
 
-[data-sonner-toast] .skillshub-toast-close:hover,
+[data-sonner-toast] .botskill-toast-close:hover,
 [data-sonner-toast][data-styled='true'] [data-close-button]:hover {
   background: hsl(var(--accent)) !important;
   color: hsl(var(--accent-foreground)) !important;

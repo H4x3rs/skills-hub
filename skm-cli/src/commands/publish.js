@@ -6,7 +6,7 @@ import { uploadSkillFile, findUploadFile } from '../lib/uploadSkill.js';
 
 const publishCommand = new Command('publish');
 publishCommand
-  .description('Publish a skill to SkillsHub (alias for push)')
+  .description('Publish a skill to BotSkill (alias for push)')
   .option('-f, --file <path>', 'Path to SKILL.md, .zip, or .tar.gz')
   .option('--dry-run', 'Validate without uploading')
   .option('--api-url <url>', 'API base URL')
