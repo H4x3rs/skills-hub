@@ -58,7 +58,7 @@ export const useSkills = (
 
   // 使用 useRef 防止重复请求
   const fetchingRef = useRef(false);
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const fetchSkills = useCallback(async (
     q: string = '',
