@@ -19,6 +19,10 @@ const DocsPage = () => {
   const handleSectionClick = (id: string) => {
     setActiveSection(id);
     window.history.replaceState(null, '', `#${id}`);
+    // 如果页面不在顶部，滚动到顶部
+    if (window.scrollY > 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const sections = [
