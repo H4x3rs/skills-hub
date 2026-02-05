@@ -45,6 +45,8 @@ cd /var/www/skills-project/backend
 npm install --production
 ```
 
+> **npm 404 错误**：若服务器使用腾讯云等国内镜像且出现 `E404 Not Found`（如 npm-run-path），项目根目录的 `.npmrc` 会强制使用官方源。若官方源较慢，可改为 `registry=https://registry.npmmirror.com`。
+
 ### 4. 配置环境变量
 
 创建 `backend/.env` 文件：
@@ -174,6 +176,7 @@ curl http://localhost:3001/api/health
 
 | 问题 | 处理 |
 |------|------|
+| **npm E404**（如 npm-run-path 等包找不到） | 项目含 `.npmrc` 指定官方源；若仍失败，执行 `npm config set registry https://registry.npmjs.org/` 或改用 `https://registry.npmmirror.com` |
 | 端口被占用 | 修改 `.env` 中 `PORT`，或 `pm2 delete` 后重启 |
 | MongoDB 连接失败 | 检查 `MONGODB_URI`、防火墙、MongoDB 服务状态 |
 | 502 Bad Gateway | 确认 PM2 中 backend 进程在运行，端口与 Nginx 一致 |
