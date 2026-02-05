@@ -499,21 +499,28 @@ const getAllSkillsForAdmin = async (req, res) => {
     if (categoryFilter) {
       query.category = categoryFilter;
     }
+    // 优化搜索：使用文本索引进行搜索（性能更好）
     if (search && search.trim()) {
-      query.$or = [
-        { name: new RegExp(search.trim(), 'i') },
-        { description: new RegExp(search.trim(), 'i') },
-        { tags: new RegExp(search.trim(), 'i') },
-      ];
+      const trimmedSearch = search.trim();
+      // 使用文本搜索（需要文本索引支持，已在模型中定义）
+      query.$text = { $search: trimmedSearch };
     }
     
-    const skills = await Skill.find(query)
-      .populate('author', 'username fullName avatar email')
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
-    skills.forEach(normalizeAuthor);
-    const total = await Skill.countDocuments(query);
+    // 并行执行查询和计数，提高性能
+    const [skillsResult, total] = await Promise.all([
+      Skill.find(query)
+        .populate('author', 'username fullName avatar email')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      Skill.countDocuments(query)
+    ]);
+    
+    // 处理 author 信息
+    const skills = skillsResult.map(skill => {
+      normalizeAuthor(skill);
+      return skill;
+    });
     
     res.json({
       skills,
@@ -526,6 +533,7 @@ const getAllSkillsForAdmin = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Error in getAllSkillsForAdmin:', error);
     res.status(500).json({ error: 'Server error while fetching skills for admin' });
   }
 };

@@ -97,6 +97,9 @@ skillSchema.index({ name: 'text', description: 'text', tags: 'text' });
 skillSchema.index({ category: 1, status: 1 });
 skillSchema.index({ downloads: -1 });
 skillSchema.index({ createdAt: -1 });
+skillSchema.index({ author: 1 }); // 优化按作者查询
+skillSchema.index({ author: 1, status: 1, createdAt: -1 }); // 复合索引优化常见查询
+skillSchema.index({ status: 1, category: 1, downloads: -1 }); // 优化搜索排序
 // slug index is created by sparse: true on the field
 skillSchema.index({ name: 1 }, { unique: true, collation: { locale: 'en', strength: 2 } });
 

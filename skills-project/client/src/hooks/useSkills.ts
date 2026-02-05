@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { skillAPI } from '@/lib/api';
 import { toast } from 'sonner';
 
-const SEARCH_DEBOUNCE_MS = 300;
+const SEARCH_DEBOUNCE_MS = 500;
 
 export interface PublicSkill {
   _id: string;
@@ -50,15 +50,31 @@ export const useSkills = (
     hasPrev: false,
   });
 
+  // 使用 useRef 存储 t 函数，避免依赖变化
+  const tRef = useRef(t);
+  useEffect(() => {
+    tRef.current = t;
+  }, [t]);
+
+  // 使用 useRef 防止重复请求
+  const fetchingRef = useRef(false);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+
   const fetchSkills = useCallback(async (
     q: string = '',
     cat: string = 'all',
     p: number = 1
   ) => {
+    // 防止重复请求
+    if (fetchingRef.current) {
+      return;
+    }
+
     const categoryParam = cat === 'all' || !cat ? undefined : cat;
     const trimmedQ = q.trim();
 
     try {
+      fetchingRef.current = true;
       setLoading(true);
       setError(null);
 
@@ -81,7 +97,7 @@ export const useSkills = (
       });
     } catch (err: any) {
       console.error('Error fetching skills:', err);
-      const msg = err.response?.data?.error || t('skills.fetchError', '获取技能失败');
+      const msg = err.response?.data?.error || tRef.current('skills.fetchError', '获取技能失败');
       setError(msg);
       toast.error(msg);
       setSkills([]);
@@ -94,20 +110,32 @@ export const useSkills = (
       });
     } finally {
       setLoading(false);
+      fetchingRef.current = false;
     }
-  }, [t]);
+  }, []);
 
   const trimmedSearchTerm = (searchTerm ?? '').trim();
 
   useEffect(() => {
+    // 清除之前的定时器
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
     if (trimmedSearchTerm) {
-      const timer = setTimeout(
+      debounceTimerRef.current = setTimeout(
         () => fetchSkills(searchTerm, category, page),
         SEARCH_DEBOUNCE_MS
       );
-      return () => clearTimeout(timer);
+    } else {
+      fetchSkills(searchTerm, category, page);
     }
-    fetchSkills(searchTerm, category, page);
+
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
   }, [searchTerm, category, page, fetchSkills]);
 
   const refetch = useCallback(
