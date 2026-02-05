@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
 import {
   AdminSidebar,
   AdminDashboard,
@@ -16,12 +17,29 @@ import { useAdminSkills } from '@/hooks/useAdminSkills';
 import { useDashboardStats } from '@/hooks/useDashboardStats';
 
 const AdminPage = () => {
-  const { user } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const navigate = useNavigate();
   const isAdmin = user?.role === 'admin';
   const [searchParams] = useSearchParams();
   const tabFromUrl = searchParams.get('tab');
   const defaultTab = isAdmin ? (tabFromUrl || 'dashboard') : 'skills';
   const [activeTab, setActiveTab] = useState(defaultTab);
+
+  // 权限检查：只有管理员可以访问
+  useEffect(() => {
+    if (!isLoading) {
+      if (!isAuthenticated || !user) {
+        toast.error('请先登录');
+        navigate('/login');
+        return;
+      }
+      if (user.role !== 'admin') {
+        toast.error('权限不足，只有管理员可以访问此页面');
+        navigate('/profile');
+        return;
+      }
+    }
+  }, [user, isAuthenticated, isLoading, navigate]);
 
   useEffect(() => {
     if (isAdmin && tabFromUrl && ['dashboard', 'users', 'skills', 'roles', 'permissions', 'settings'].includes(tabFromUrl)) {
@@ -30,6 +48,11 @@ const AdminPage = () => {
       setActiveTab('skills');
     }
   }, [tabFromUrl, isAdmin]);
+
+  // 如果正在加载或没有权限，不渲染内容
+  if (isLoading || !isAuthenticated || !user || user.role !== 'admin') {
+    return null;
+  }
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [newUser, setNewUser] = useState({ username: '', email: '', password: '', fullName: '', role: 'user' });
 
