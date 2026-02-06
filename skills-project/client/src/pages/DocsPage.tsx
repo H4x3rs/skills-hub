@@ -3,15 +3,18 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import { BookOpen, Terminal, Code, FileText, GitBranch, Globe, Server, HelpCircle, Layers } from 'lucide-react';
-import { docsContent } from '../content/docsContent';
+import { useTranslation } from 'react-i18next';
+
+const SECTION_IDS = ['overview', 'getting-started', 'web-usage', 'cli-tool', 'publish-skill', 'deployment', 'api-reference', 'best-practices', 'faq', 'appendix'] as const;
 
 const DocsPage = () => {
-  const [activeSection, setActiveSection] = React.useState('overview');
+  const { t } = useTranslation('docs');
+  const [activeSection, setActiveSection] = React.useState<string>('overview');
 
   // 支持 URL 哈希，如 /docs#api-reference
   useEffect(() => {
     const hash = window.location.hash.slice(1);
-    if (hash && ['overview', 'getting-started', 'web-usage', 'cli-tool', 'publish-skill', 'deployment', 'api-reference', 'best-practices', 'faq', 'appendix'].includes(hash)) {
+    if (hash && SECTION_IDS.includes(hash as typeof SECTION_IDS[number])) {
       setActiveSection(hash);
     }
   }, []);
@@ -19,26 +22,26 @@ const DocsPage = () => {
   const handleSectionClick = (id: string) => {
     setActiveSection(id);
     window.history.replaceState(null, '', `#${id}`);
-    // 如果页面不在顶部，滚动到顶部
     if (window.scrollY > 0) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const sections = [
-    { id: 'overview', title: '概述', icon: <BookOpen className="h-4 w-4" /> },
-    { id: 'getting-started', title: '快速开始', icon: <BookOpen className="h-4 w-4" /> },
-    { id: 'web-usage', title: 'Web 端使用', icon: <Globe className="h-4 w-4" /> },
-    { id: 'cli-tool', title: 'CLI 工具', icon: <Terminal className="h-4 w-4" /> },
-    { id: 'publish-skill', title: '发布技能', icon: <Code className="h-4 w-4" /> },
-    { id: 'deployment', title: '部署指南', icon: <Server className="h-4 w-4" /> },
-    { id: 'api-reference', title: 'API 参考', icon: <FileText className="h-4 w-4" /> },
-    { id: 'best-practices', title: '最佳实践', icon: <GitBranch className="h-4 w-4" /> },
-    { id: 'faq', title: '常见问题', icon: <HelpCircle className="h-4 w-4" /> },
-    { id: 'appendix', title: '附录', icon: <Layers className="h-4 w-4" /> },
+    { id: 'overview', icon: <BookOpen className="h-4 w-4" /> },
+    { id: 'getting-started', icon: <BookOpen className="h-4 w-4" /> },
+    { id: 'web-usage', icon: <Globe className="h-4 w-4" /> },
+    { id: 'cli-tool', icon: <Terminal className="h-4 w-4" /> },
+    { id: 'publish-skill', icon: <Code className="h-4 w-4" /> },
+    { id: 'deployment', icon: <Server className="h-4 w-4" /> },
+    { id: 'api-reference', icon: <FileText className="h-4 w-4" /> },
+    { id: 'best-practices', icon: <GitBranch className="h-4 w-4" /> },
+    { id: 'faq', icon: <HelpCircle className="h-4 w-4" /> },
+    { id: 'appendix', icon: <Layers className="h-4 w-4" /> },
   ];
 
-  const content = docsContent[activeSection] ?? docsContent.overview;
+  const contentKey = SECTION_IDS.includes(activeSection as typeof SECTION_IDS[number]) ? activeSection : 'overview';
+  const content = t(`content.${contentKey}`);
 
   return (
     <div className="min-h-screen bg-background">
@@ -47,7 +50,7 @@ const DocsPage = () => {
           {/* Sidebar */}
           <div className="w-full md:w-64 flex-shrink-0">
             <div className="bg-card rounded-lg border p-4 sticky top-24">
-              <h2 className="font-semibold text-lg mb-4">文档目录</h2>
+              <h2 className="font-semibold text-lg mb-4">{t('toc')}</h2>
               <nav className="space-y-2">
                 {sections.map((section) => (
                   <button
@@ -60,7 +63,7 @@ const DocsPage = () => {
                     onClick={() => handleSectionClick(section.id)}
                   >
                     {section.icon}
-                    {section.title}
+                    {t(`sectionTitles.${section.id}`)}
                   </button>
                 ))}
               </nav>
