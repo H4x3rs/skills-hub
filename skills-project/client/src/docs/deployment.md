@@ -11,7 +11,7 @@
 
 ```bash
 # 克隆并安装
-git clone <repo> && cd skills-project
+git clone https://github.com/botskill-ai/botskill && cd botskill
 npm run install:all
 
 # 配置 backend/.env

@@ -90,12 +90,12 @@ const ContactPage = () => {
                     <div>
                       <h3 className="font-semibold mb-1">GitHub</h3>
                       <a 
-                        href="https://github.com/botskill" 
+                        href="https://github.com/botskill-ai/botskill" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="text-primary hover:underline"
                       >
-                        github.com/botskill
+                        github.com/botskill-ai/botskill
                       </a>
                     </div>
                   </div>
