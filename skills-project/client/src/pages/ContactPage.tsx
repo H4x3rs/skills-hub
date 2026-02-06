@@ -67,8 +67,8 @@ const ContactPage = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold mb-1">{t('contact.email', '邮箱')}</h3>
-                      <a href="mailto:admin@botskill.ai" className="text-primary hover:underline">
-                        admin@botskill.ai
+                      <a href="mailto:support@botskill.ai" className="text-primary hover:underline">
+                        support@botskill.ai
                       </a>
                     </div>
                   </div>
