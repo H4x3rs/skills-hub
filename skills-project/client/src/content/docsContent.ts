@@ -464,7 +464,7 @@ location / {
 
 \`\`\`bash
 sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d yourdomain.com
+sudo certbot --nginx -d botskill.ai
 \`\`\`
 
 ### 5. 初始化数据
@@ -514,7 +514,7 @@ npm run seed-permissions # 初始化权限与角色
 
 ### 如何配置 HTTPS？
 
-使用 Let's Encrypt：\`certbot --nginx -d yourdomain.com\`
+使用 Let's Encrypt：\`certbot --nginx -d botskill.ai\`
 
 ## 使用
 

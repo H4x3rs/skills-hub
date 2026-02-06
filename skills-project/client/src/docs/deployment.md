@@ -139,7 +139,7 @@ location / {
 
 ```bash
 sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d yourdomain.com
+sudo certbot --nginx -d botskill.ai
 ```
 
 ### 5. 初始化数据
