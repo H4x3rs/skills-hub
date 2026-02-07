@@ -47,7 +47,22 @@ PORT=3000
 MONGODB_URI=mongodb://localhost:27017/botskill
 JWT_SECRET=your-super-secret-jwt-key-for-botskill
 JWT_EXPIRES_IN=7d
+
+# OAuth 配置（可选，如需使用 Google/GitHub 登录）
+# 详细配置步骤请参考 OAUTH_SETUP.md
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GOOGLE_CALLBACK_URL=http://localhost:3001/api/auth/google/callback
+
+GITHUB_CLIENT_ID=your-github-client-id
+GITHUB_CLIENT_SECRET=your-github-client-secret
+GITHUB_CALLBACK_URL=http://localhost:3001/api/auth/github/callback
+
+FRONTEND_URL=http://localhost:5173
+BACKEND_URL=http://localhost:3001
 ```
+
+> **注意**：OAuth 配置是可选的。如果不配置，Google 和 GitHub 登录按钮将不会显示或会显示错误。详细配置步骤请参考 [OAUTH_SETUP.md](./OAUTH_SETUP.md)。
 
 ### 4. 启动应用
 

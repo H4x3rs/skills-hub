@@ -273,6 +273,7 @@
       "error": "Fehler",
       "success": "Erfolg",
       "cancel": "Abbrechen",
+      "close": "Schließen",
       "ok": "OK",
       "deleteConfirm": "Sind Sie sicher, dass Sie dies löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
       "save": "Speichern",
@@ -283,6 +284,194 @@
       "pageInfo": "Seite {{currentPage}} von {{totalPages}}",
       "prev": "Vorherige",
       "next": "Nächste"
+    },
+    "contact": {
+      "title": "Kontaktieren Sie uns",
+      "subtitle": "Wir freuen uns über Ihr Feedback und Ihre Vorschläge",
+      "getInTouch": "Kontakt aufnehmen",
+      "email": "E-Mail",
+      "feedback": "Feedback",
+      "feedbackDesc": "Senden Sie Ihr Feedback über das untenstehende Formular",
+      "website": "Website",
+      "sendMessage": "Nachricht senden",
+      "name": "Name",
+      "namePlaceholder": "Bitte geben Sie Ihren Namen ein",
+      "emailPlaceholder": "ihre@email.com",
+      "subject": "Betreff",
+      "subjectPlaceholder": "Bitte geben Sie den Betreff ein",
+      "message": "Nachricht",
+      "messagePlaceholder": "Bitte geben Sie Ihre Nachricht ein...",
+      "send": "Senden",
+      "sending": "Wird gesendet...",
+      "submitSuccess": "Nachricht gesendet! Wir werden uns so schnell wie möglich bei Ihnen melden."
+    },
+    "privacy": {
+      "title": "Datenschutzrichtlinie",
+      "lastUpdated": "Zuletzt aktualisiert: 1. Januar 2024",
+      "introduction": {
+        "title": "1. Einführung",
+        "content": "BotSkill (\"wir\", \"unser\" oder \"diese Plattform\") ist dem Schutz Ihrer Privatsphäre verpflichtet. Diese Datenschutzrichtlinie erklärt, wie wir Ihre persönlichen Informationen sammeln, verwenden, speichern und schützen."
+      },
+      "dataCollection": {
+        "title": "2. Informationssammlung",
+        "content": "Wir können folgende Arten von Informationen sammeln:",
+        "item1": "Kontoinformationen: Benutzername, E-Mail-Adresse, Passwort (verschlüsselt gespeichert)",
+        "item2": "Profilinformationen: Name, Avatar, Biografie und andere optionale Informationen",
+        "item3": "Nutzungsdaten: Zugriffsprotokolle, Download-Protokolle, Suchverlauf usw.",
+        "item4": "Technische Informationen: IP-Adresse, Browsertyp, Geräteinformationen usw."
+      },
+      "dataUse": {
+        "title": "3. Informationsverwendung",
+        "content": "Wir verwenden die gesammelten Informationen für folgende Zwecke:",
+        "item1": "Bereitstellung, Wartung und Verbesserung unserer Dienste",
+        "item2": "Bearbeitung Ihrer Anfragen und Transaktionen",
+        "item3": "Versendung wichtiger Benachrichtigungen und Updates",
+        "item4": "Analyse der Nutzung zur Verbesserung der Benutzererfahrung",
+        "item5": "Erkennung und Verhinderung von Betrug, Missbrauch und Sicherheitsproblemen"
+      },
+      "dataSharing": {
+        "title": "4. Informationsweitergabe",
+        "content": "Wir verkaufen, handeln oder vermieten Ihre persönlichen Informationen nicht an Dritte. Wir können Informationen in folgenden Fällen weitergeben:",
+        "item1": "Mit Ihrer ausdrücklichen Zustimmung",
+        "item2": "Rechtliche Anforderungen oder als Reaktion auf Rechtsverfahren",
+        "item3": "Zum Schutz unserer Rechte, unseres Eigentums oder unserer Sicherheit",
+        "item4": "Weitergabe an Dienstleister (unter Wahrung der Vertraulichkeit)"
+      },
+      "dataSecurity": {
+        "title": "5. Datensicherheit",
+        "content": "Wir verwenden branchenübliche Sicherheitsmaßnahmen zum Schutz Ihrer persönlichen Informationen, einschließlich verschlüsselter Übertragung, sicherer Speicherung und Zugriffskontrollen. Keine Methode der Internetübertragung oder -speicherung ist jedoch 100% sicher."
+      },
+      "yourRights": {
+        "title": "6. Ihre Rechte",
+        "content": "Sie haben das Recht:",
+        "item1": "Auf Ihre persönlichen Informationen zuzugreifen, sie zu aktualisieren oder zu löschen",
+        "item2": "Ihre Zustimmung zur Datenverarbeitung zu widerrufen",
+        "item3": "Datenexport anzufordern",
+        "item4": "Beschwerden einzureichen oder Fragen zu stellen"
+      },
+      "cookies": {
+        "title": "7. Cookies und Tracking-Technologien",
+        "content": "Wir verwenden Cookies und ähnliche Technologien zur Verbesserung der Benutzererfahrung, Analyse der Nutzung und Bereitstellung personalisierter Inhalte. Sie können Cookie-Einstellungen über Ihre Browsereinstellungen verwalten."
+      },
+      "changes": {
+        "title": "8. Richtlinienänderungen",
+        "content": "Wir können diese Datenschutzrichtlinie von Zeit zu Zeit aktualisieren. Wesentliche Änderungen werden per E-Mail oder Website-Ankündigungen mitgeteilt. Die fortgesetzte Nutzung unserer Dienste bedeutet, dass Sie die aktualisierte Richtlinie akzeptieren."
+      },
+      "contact": {
+        "title": "9. Kontaktieren Sie uns",
+        "content": "Wenn Sie Fragen oder Bedenken zu dieser Datenschutzrichtlinie haben, kontaktieren Sie uns bitte über:",
+        "email": "E-Mail: "
+      }
+    },
+    "terms": {
+      "title": "Nutzungsbedingungen",
+      "lastUpdated": "Zuletzt aktualisiert: 1. Januar 2024",
+      "acceptance": {
+        "title": "1. Annahme der Bedingungen",
+        "content": "Durch den Zugriff auf und die Nutzung der BotSkill-Plattform (\"Dienst\") stimmen Sie zu, an diese Nutzungsbedingungen gebunden zu sein und sie einzuhalten. Wenn Sie diesen Bedingungen nicht zustimmen, verwenden Sie bitte unseren Dienst nicht."
+      },
+      "description": {
+        "title": "2. Dienstbeschreibung",
+        "content": "BotSkill ist eine Plattform zum Teilen von Fähigkeiten, die es Benutzern ermöglicht, Fähigkeiten zu entdecken, herunterzuladen und zu veröffentlichen. Wir behalten uns das Recht vor, den Dienst jederzeit ohne vorherige Ankündigung zu ändern, auszusetzen oder zu beenden."
+      },
+      "account": {
+        "title": "3. Benutzerkonten",
+        "content": "Für bestimmte Funktionen ist die Erstellung eines Kontos erforderlich. Sie stimmen zu:",
+        "item1": "Genaue, vollständige und aktuelle Informationen bereitzustellen",
+        "item2": "Die Sicherheit und Vertraulichkeit Ihrer Kontoinformationen zu gewährleisten",
+        "item3": "Für alle Aktivitäten unter Ihrem Konto verantwortlich zu sein",
+        "item4": "Uns sofort über unbefugte Nutzung zu benachrichtigen"
+      },
+      "userContent": {
+        "title": "4. Benutzerinhalte",
+        "content": "Sie behalten alle Rechte an den Inhalten, die Sie auf die Plattform hochladen. Durch das Hochladen von Inhalten gewähren Sie uns:",
+        "item1": "Eine Lizenz zur weltweiten Nutzung, Vervielfältigung, Verbreitung und Anzeige der Inhalte",
+        "item2": "Das Recht, Inhalte zu ändern, um sie an das Plattformformat anzupassen",
+        "item3": "Das Recht, Inhalte zu entfernen, die gegen diese Bedingungen verstoßen"
+      },
+      "prohibited": {
+        "title": "5. Verbotenes Verhalten",
+        "content": "Sie stimmen zu, nicht:",
+        "item1": "Illegale, schädliche, bedrohliche, beleidigende, belästigende, diffamierende, vulgäre oder anderweitig anstößige Inhalte hochzuladen",
+        "item2": "Die Rechte des geistigen Eigentums Dritter zu verletzen",
+        "item3": "Malware, Viren oder anderen schädlichen Code zu verbreiten",
+        "item4": "Unbefugten Zugriff auf Systeme oder Daten zu versuchen",
+        "item5": "Den normalen Betrieb des Dienstes zu stören oder zu unterbrechen"
+      },
+      "intellectualProperty": {
+        "title": "6. Geistiges Eigentum",
+        "content": "Die Plattform und alle ihre Inhalte (einschließlich, aber nicht beschränkt auf Text, Grafiken, Logos, Symbole, Bilder, Audioclips, digitale Downloads und Software) sind Eigentum von BotSkill oder seinen Inhaltsanbietern und durch Urheberrecht, Markenrecht und andere Gesetze zum geistigen Eigentum geschützt."
+      },
+      "disclaimer": {
+        "title": "7. Haftungsausschluss",
+        "content": "Der Dienst wird \"wie besehen\" und \"wie verfügbar\" bereitgestellt. Wir garantieren nicht, dass der Dienst unterbrechungsfrei, rechtzeitig, sicher oder fehlerfrei sein wird. Wir haften nicht für direkte, indirekte, zufällige oder Folgeschäden."
+      },
+      "termination": {
+        "title": "8. Kündigung",
+        "content": "Wir behalten uns das Recht vor, Ihr Konto und den Zugang zum Dienst jederzeit ohne vorherige Ankündigung zu kündigen oder zu sperren, einschließlich, aber nicht beschränkt auf Verstöße gegen diese Nutzungsbedingungen."
+      },
+      "changes": {
+        "title": "9. Änderungen der Bedingungen",
+        "content": "Wir behalten uns das Recht vor, diese Nutzungsbedingungen jederzeit zu ändern. Wesentliche Änderungen werden per E-Mail oder Website-Ankündigungen mitgeteilt. Die fortgesetzte Nutzung des Dienstes bedeutet, dass Sie die geänderten Bedingungen akzeptieren."
+      },
+      "contact": {
+        "title": "10. Kontaktieren Sie uns",
+        "content": "Wenn Sie Fragen zu diesen Nutzungsbedingungen haben, kontaktieren Sie uns bitte über:",
+        "email": "E-Mail: "
+      }
+    },
+    "license": {
+      "title": "Lizenz",
+      "subtitle": "BotSkill-Plattform-Lizenzinformationen",
+      "platform": {
+        "title": "Plattform-Lizenz",
+        "content": "Die BotSkill-Plattform selbst ist urheberrechtlich geschützt, alle Rechte vorbehalten. Kein Teil der Plattform darf ohne ausdrückliche schriftliche Genehmigung kopiert, geändert, verteilt oder verwendet werden."
+      },
+      "skills": {
+        "title": "Fähigkeitslizenzen",
+        "content": "Auf der Plattform veröffentlichte Fähigkeiten können verschiedene Lizenzen verwenden. Jede Fähigkeit sollte ihre Lizenz in der SKILL.md-Datei klar angeben. Häufige Lizenzen sind:",
+        "mit": "Erlaubt kommerzielle und nicht-kommerzielle Nutzung, Änderung und Verbreitung",
+        "apache": "Ähnlich wie MIT, enthält aber Patentrechte",
+        "gpl": "Erfordert, dass abgeleitete Werke auch die GPL-Lizenz verwenden",
+        "bsd": "Erlaubt Nutzung, erfordert aber die Beibehaltung des Urheberrechtshinweises",
+        "proprietary": "Proprietäre Lizenz mit eingeschränkter Nutzung"
+      },
+      "userRights": {
+        "title": "Benutzerrechte",
+        "content": "Als Benutzer haben Sie das Recht:",
+        "item1": "Fähigkeiten gemäß ihren Lizenzen herunterzuladen und zu verwenden",
+        "item2": "Den Quellcode von Fähigkeiten anzuzeigen (falls bereitgestellt)",
+        "item3": "Fähigkeiten gemäß ihren Lizenzen zu ändern und zu verteilen",
+        "item4": "Lizenzverstöße zu melden"
+      },
+      "publisherRights": {
+        "title": "Veröffentlichungsrechte",
+        "content": "Als Veröffentlicher:",
+        "item1": "Behalten Sie alle Rechte an den von Ihnen veröffentlichten Fähigkeiten",
+        "item2": "Können Sie jede Open-Source- oder proprietäre Lizenz wählen",
+        "item3": "Können Sie Ihre Fähigkeiten jederzeit aktualisieren oder löschen",
+        "item4": "Sind Sie für die von Ihnen veröffentlichten Inhalte verantwortlich und stellen sicher, dass keine Rechte Dritter verletzt werden"
+      },
+      "compliance": {
+        "title": "Compliance",
+        "content": "Alle Benutzer und Veröffentlicher müssen:",
+        "item1": "Die Lizenzbedingungen jeder Fähigkeit respektieren",
+        "item2": "Bei der Nutzung von Fähigkeiten alle geltenden Gesetze und Vorschriften einhalten",
+        "item3": "Keine Fähigkeiten veröffentlichen, die das geistige Eigentum anderer verletzen",
+        "item4": "Lizenzinformationen in Fähigkeiten klar angeben"
+      },
+      "violations": {
+        "title": "Lizenzverstöße",
+        "content": "Wenn wir Lizenzverstöße feststellen, behalten wir uns vor:",
+        "item1": "Verstößende Inhalte zu entfernen",
+        "item2": "Verstößende Konten zu sperren oder zu kündigen",
+        "item3": "Mit Rechtsverfahren zusammenzuarbeiten"
+      },
+      "contact": {
+        "title": "Kontaktieren Sie uns",
+        "content": "Wenn Sie Fragen zu Lizenzen haben oder Verstöße melden müssen, kontaktieren Sie uns bitte über:",
+        "email": "E-Mail: "
+      }
     },
     "footer": {
       "description": "Wir verbinden Entwickler und intelligente Fähigkeiten, um Technologie zugänglicher zu machen.",

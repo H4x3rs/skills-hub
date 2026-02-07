@@ -21,102 +21,118 @@ const PolicyModal = ({ isOpen, onClose, type }: PolicyModalProps) => {
     ? t('terms.title', '服务条款')
     : t('privacy.title', '隐私政策');
 
-  // 获取内容 - 这里可以复用现有页面的内容
+  // 获取内容 - 使用国际化翻译
   const getContent = () => {
     if (isTerms) {
       return `
-## 1. 接受条款
+## ${t('terms.acceptance.title')}
 
-通过访问和使用 BotSkill 平台（"服务"），您同意遵守并受本服务条款的约束。如果您不同意这些条款，请不要使用我们的服务。
+${t('terms.acceptance.content')}
 
-## 2. 服务描述
+## ${t('terms.description.title')}
 
-BotSkill 是一个技能分享平台，允许用户发现、下载和发布技能。我们保留随时修改、暂停或终止服务的权利，恕不另行通知。
+${t('terms.description.content')}
 
-## 3. 用户账户
+## ${t('terms.account.title')}
 
-使用某些功能需要创建账户。您同意：
-- 提供准确、完整和最新的信息
-- 维护账户信息的安全性和保密性
-- 对账户下的所有活动负责
-- 立即通知我们任何未经授权的使用
+${t('terms.account.content')}
+- ${t('terms.account.item1')}
+- ${t('terms.account.item2')}
+- ${t('terms.account.item3')}
+- ${t('terms.account.item4')}
 
-## 4. 用户内容
+## ${t('terms.userContent.title')}
 
-您保留对您上传到平台的所有内容的权利。通过上传内容，您授予我们在全球范围内使用、复制、分发和展示内容的许可。
+${t('terms.userContent.content')}
+- ${t('terms.userContent.item1')}
+- ${t('terms.userContent.item2')}
+- ${t('terms.userContent.item3')}
 
-## 5. 禁止行为
+## ${t('terms.prohibited.title')}
 
-您同意不上传非法、有害、威胁、辱骂、骚扰、诽谤、粗俗或其他令人反感的内容，不侵犯任何第三方的知识产权。
+${t('terms.prohibited.content')}
+- ${t('terms.prohibited.item1')}
+- ${t('terms.prohibited.item2')}
+- ${t('terms.prohibited.item3')}
+- ${t('terms.prohibited.item4')}
+- ${t('terms.prohibited.item5')}
 
-## 6. 知识产权
+## ${t('terms.intellectualProperty.title')}
 
-平台及其所有内容均为 BotSkill 或其内容提供商的财产，受版权、商标和其他知识产权法保护。
+${t('terms.intellectualProperty.content')}
 
-## 7. 免责声明
+## ${t('terms.disclaimer.title')}
 
-服务按"现状"和"可用"基础提供。我们不保证服务将无中断、及时、安全或无错误。
+${t('terms.disclaimer.content')}
 
-## 8. 终止
+## ${t('terms.termination.title')}
 
-我们保留随时终止或暂停您的账户和访问服务的权利，无需事先通知。
+${t('terms.termination.content')}
 
-## 9. 条款变更
+## ${t('terms.changes.title')}
 
-我们保留随时修改本服务条款的权利。重大变更将通过电子邮件或网站公告通知您。
+${t('terms.changes.content')}
 
-## 10. 联系我们
+## ${t('terms.contact.title')}
 
-如果您对本服务条款有任何问题，请通过以下方式联系我们：
-邮箱：admin@botskill.ai
+${t('terms.contact.content')}
+${t('terms.contact.email')} admin@botskill.ai
       `;
     } else {
       return `
-## 1. 介绍
+## ${t('privacy.introduction.title')}
 
-BotSkill（"我们"、"我们的"或"本平台"）致力于保护您的隐私。本隐私政策说明了我们如何收集、使用、存储和保护您的个人信息。
+${t('privacy.introduction.content')}
 
-## 2. 信息收集
+## ${t('privacy.dataCollection.title')}
 
-我们可能收集以下类型的信息：
-- 账户信息：用户名、邮箱地址、密码（加密存储）
-- 个人资料：姓名、头像、个人简介等可选信息
-- 使用数据：访问记录、下载记录、搜索历史等
-- 技术信息：IP地址、浏览器类型、设备信息等
+${t('privacy.dataCollection.content')}
+- ${t('privacy.dataCollection.item1')}
+- ${t('privacy.dataCollection.item2')}
+- ${t('privacy.dataCollection.item3')}
+- ${t('privacy.dataCollection.item4')}
 
-## 3. 信息使用
+## ${t('privacy.dataUse.title')}
 
-我们使用收集的信息用于以下目的：
-- 提供、维护和改进我们的服务
-- 处理您的请求和交易
-- 发送重要通知和更新
-- 分析使用情况以改善用户体验
-- 检测和防止欺诈、滥用和安全问题
+${t('privacy.dataUse.content')}
+- ${t('privacy.dataUse.item1')}
+- ${t('privacy.dataUse.item2')}
+- ${t('privacy.dataUse.item3')}
+- ${t('privacy.dataUse.item4')}
+- ${t('privacy.dataUse.item5')}
 
-## 4. 信息共享
+## ${t('privacy.dataSharing.title')}
 
-我们不会出售、交易或出租您的个人信息给第三方。我们可能在获得您的明确同意、法律要求或保护我们的权利时共享信息。
+${t('privacy.dataSharing.content')}
+- ${t('privacy.dataSharing.item1')}
+- ${t('privacy.dataSharing.item2')}
+- ${t('privacy.dataSharing.item3')}
+- ${t('privacy.dataSharing.item4')}
 
-## 5. 数据安全
+## ${t('privacy.dataSecurity.title')}
 
-我们采用行业标准的安全措施来保护您的个人信息，包括加密传输、安全存储和访问控制。
+${t('privacy.dataSecurity.content')}
 
-## 6. 您的权利
+## ${t('privacy.yourRights.title')}
 
-您有权访问、更新或删除您的个人信息，撤回对数据处理的同意，请求数据导出，提出投诉或问题。
+${t('privacy.yourRights.content')}
+- ${t('privacy.yourRights.item1')}
+- ${t('privacy.yourRights.item2')}
+- ${t('privacy.yourRights.item3')}
+- ${t('privacy.yourRights.item4')}
 
-## 7. Cookie 和跟踪技术
+## ${t('privacy.cookies.title')}
 
-我们使用 Cookie 和类似技术来改善用户体验、分析使用情况并提供个性化内容。
+${t('privacy.cookies.content')}
 
-## 8. 政策变更
+## ${t('privacy.changes.title')}
 
-我们可能会不时更新本隐私政策。重大变更将通过电子邮件或网站公告通知您。
+${t('privacy.changes.content')}
 
-## 9. 联系我们
+## ${t('privacy.contact.title')}
 
-如果您对本隐私政策有任何问题或疑虑，请通过以下方式联系我们：
-邮箱：admin@botskill.ai
+${t('privacy.contact.content')}
+${t('privacy.contact.email')} admin@botskill.ai
       `;
     }
   };

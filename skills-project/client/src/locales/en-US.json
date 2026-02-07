@@ -356,6 +356,7 @@
       "error": "Error",
       "success": "Success",
       "cancel": "Cancel",
+      "close": "Close",
       "ok": "OK",
       "deleteConfirm": "Are you sure you want to delete this? This action cannot be undone.",
       "save": "Save",
@@ -367,6 +368,194 @@
       "pageInfo": "Page {{currentPage}} of {{totalPages}}",
       "prev": "Previous",
       "next": "Next"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "We'd love to hear from you. Your feedback and suggestions are always welcome",
+      "getInTouch": "Get in Touch",
+      "email": "Email",
+      "feedback": "Feedback",
+      "feedbackDesc": "Submit your feedback through the form below",
+      "website": "Website",
+      "sendMessage": "Send Message",
+      "name": "Name",
+      "namePlaceholder": "Please enter your name",
+      "emailPlaceholder": "your@email.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "Please enter subject",
+      "message": "Message",
+      "messagePlaceholder": "Please enter your message...",
+      "send": "Send",
+      "sending": "Sending...",
+      "submitSuccess": "Message sent! We'll get back to you as soon as possible."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "lastUpdated": "Last Updated: January 1, 2024",
+      "introduction": {
+        "title": "1. Introduction",
+        "content": "BotSkill (\"we\", \"our\", or \"this platform\") is committed to protecting your privacy. This privacy policy explains how we collect, use, store, and protect your personal information."
+      },
+      "dataCollection": {
+        "title": "2. Information Collection",
+        "content": "We may collect the following types of information:",
+        "item1": "Account information: username, email address, password (encrypted storage)",
+        "item2": "Profile information: name, avatar, bio, and other optional information",
+        "item3": "Usage data: access records, download records, search history, etc.",
+        "item4": "Technical information: IP address, browser type, device information, etc."
+      },
+      "dataUse": {
+        "title": "3. Information Use",
+        "content": "We use the collected information for the following purposes:",
+        "item1": "Provide, maintain, and improve our services",
+        "item2": "Process your requests and transactions",
+        "item3": "Send important notifications and updates",
+        "item4": "Analyze usage to improve user experience",
+        "item5": "Detect and prevent fraud, abuse, and security issues"
+      },
+      "dataSharing": {
+        "title": "4. Information Sharing",
+        "content": "We do not sell, trade, or rent your personal information to third parties. We may share information in the following circumstances:",
+        "item1": "With your explicit consent",
+        "item2": "Legal requirements or in response to legal proceedings",
+        "item3": "To protect our rights, property, or security",
+        "item4": "Sharing with service providers (subject to confidentiality agreements)"
+      },
+      "dataSecurity": {
+        "title": "5. Data Security",
+        "content": "We employ industry-standard security measures to protect your personal information, including encrypted transmission, secure storage, and access controls. However, no method of internet transmission or storage is 100% secure."
+      },
+      "yourRights": {
+        "title": "6. Your Rights",
+        "content": "You have the right to:",
+        "item1": "Access, update, or delete your personal information",
+        "item2": "Withdraw consent for data processing",
+        "item3": "Request data export",
+        "item4": "File complaints or raise questions"
+      },
+      "cookies": {
+        "title": "7. Cookies and Tracking Technologies",
+        "content": "We use cookies and similar technologies to improve user experience, analyze usage, and provide personalized content. You can manage cookie preferences through your browser settings."
+      },
+      "changes": {
+        "title": "8. Policy Changes",
+        "content": "We may update this privacy policy from time to time. Significant changes will be notified via email or website announcements. Continued use of our services indicates your acceptance of the updated policy."
+      },
+      "contact": {
+        "title": "9. Contact Us",
+        "content": "If you have any questions or concerns about this privacy policy, please contact us through:",
+        "email": "Email: "
+      }
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "lastUpdated": "Last Updated: January 1, 2024",
+      "acceptance": {
+        "title": "1. Acceptance of Terms",
+        "content": "By accessing and using the BotSkill platform (\"Service\"), you agree to be bound by and comply with these Terms of Service. If you do not agree to these terms, please do not use our Service."
+      },
+      "description": {
+        "title": "2. Service Description",
+        "content": "BotSkill is a skill sharing platform that allows users to discover, download, and publish skills. We reserve the right to modify, suspend, or terminate the Service at any time without prior notice."
+      },
+      "account": {
+        "title": "3. User Accounts",
+        "content": "Creating an account is required for certain features. You agree to:",
+        "item1": "Provide accurate, complete, and up-to-date information",
+        "item2": "Maintain the security and confidentiality of your account information",
+        "item3": "Be responsible for all activities under your account",
+        "item4": "Immediately notify us of any unauthorized use"
+      },
+      "userContent": {
+        "title": "4. User Content",
+        "content": "You retain all rights to the content you upload to the platform. By uploading content, you grant us:",
+        "item1": "A license to use, copy, distribute, and display the content worldwide",
+        "item2": "The right to modify content to adapt it to the platform format",
+        "item3": "The right to remove content that violates these terms"
+      },
+      "prohibited": {
+        "title": "5. Prohibited Conduct",
+        "content": "You agree not to:",
+        "item1": "Upload illegal, harmful, threatening, abusive, harassing, defamatory, vulgar, or otherwise objectionable content",
+        "item2": "Infringe on any third party's intellectual property rights",
+        "item3": "Distribute malware, viruses, or other harmful code",
+        "item4": "Attempt unauthorized access to systems or data",
+        "item5": "Interfere with or disrupt the normal operation of the Service"
+      },
+      "intellectualProperty": {
+        "title": "6. Intellectual Property",
+        "content": "The platform and all its content (including but not limited to text, graphics, logos, icons, images, audio clips, digital downloads, and software) are the property of BotSkill or its content providers, protected by copyright, trademark, and other intellectual property laws."
+      },
+      "disclaimer": {
+        "title": "7. Disclaimer",
+        "content": "The Service is provided \"as is\" and \"as available\". We do not guarantee that the Service will be uninterrupted, timely, secure, or error-free. We are not liable for any direct, indirect, incidental, or consequential damages."
+      },
+      "termination": {
+        "title": "8. Termination",
+        "content": "We reserve the right to terminate or suspend your account and access to the Service at any time without prior notice, including but not limited to violations of these Terms of Service."
+      },
+      "changes": {
+        "title": "9. Changes to Terms",
+        "content": "We reserve the right to modify these Terms of Service at any time. Significant changes will be notified via email or website announcements. Continued use of the Service indicates your acceptance of the modified terms."
+      },
+      "contact": {
+        "title": "10. Contact Us",
+        "content": "If you have any questions about these Terms of Service, please contact us through:",
+        "email": "Email: "
+      }
+    },
+    "license": {
+      "title": "License",
+      "subtitle": "BotSkill Platform License Information",
+      "platform": {
+        "title": "Platform License",
+        "content": "The BotSkill platform itself is copyright protected, all rights reserved. No part of the platform may be copied, modified, distributed, or used without explicit written permission."
+      },
+      "skills": {
+        "title": "Skill Licenses",
+        "content": "Skills published on the platform may use different licenses. Each skill should clearly state its license in the SKILL.md file. Common licenses include:",
+        "mit": "Allows commercial and non-commercial use, modification, and distribution",
+        "apache": "Similar to MIT, but includes patent grant",
+        "gpl": "Requires derivative works to also use GPL license",
+        "bsd": "Allows use but requires copyright notice retention",
+        "proprietary": "Proprietary license with restricted use"
+      },
+      "userRights": {
+        "title": "User Rights",
+        "content": "As a user, you have the right to:",
+        "item1": "Download and use skills in accordance with their licenses",
+        "item2": "View the source code of skills (if provided)",
+        "item3": "Modify and distribute skills according to their licenses",
+        "item4": "Report license violations"
+      },
+      "publisherRights": {
+        "title": "Publisher Rights",
+        "content": "As a publisher, you:",
+        "item1": "Retain all rights to the skills you publish",
+        "item2": "May choose any open source or proprietary license",
+        "item3": "May update or delete your skills at any time",
+        "item4": "Are responsible for the content you publish, ensuring no infringement of third-party rights"
+      },
+      "compliance": {
+        "title": "Compliance",
+        "content": "All users and publishers must comply with:",
+        "item1": "Respecting the license terms of each skill",
+        "item2": "Complying with all applicable laws and regulations when using skills",
+        "item3": "Not publishing skills that infringe on others' intellectual property",
+        "item4": "Clearly stating license information in skills"
+      },
+      "violations": {
+        "title": "License Violations",
+        "content": "If we discover any license violations, we reserve the right to:",
+        "item1": "Remove violating content",
+        "item2": "Suspend or terminate violating accounts",
+        "item3": "Cooperate with legal proceedings"
+      },
+      "contact": {
+        "title": "Contact Us",
+        "content": "If you have any questions about licenses or need to report violations, please contact us through:",
+        "email": "Email: "
+      }
     },
     "footer": {
       "description": "Bridging developers and smart skills, making technology more accessible.",
