@@ -19,7 +19,7 @@ interface AdminSidebarProps {
   isAdmin?: boolean;
 }
 
-export const AdminSidebar = ({ activeTab, onTabChange, isAdmin = true }: AdminSidebarProps) => {
+export const AdminSidebar = ({ activeTab: _activeTab, onTabChange, isAdmin = true }: AdminSidebarProps) => {
   const { t } = useTranslation();
   const location = useLocation();
   const tabs = isAdmin ? ALL_TABS : ALL_TABS.filter((t) => t.id === 'skills');

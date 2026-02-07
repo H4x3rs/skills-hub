@@ -84,7 +84,7 @@ export const SimpleEditor = ({
     if (editor && content !== undefined) {
       const currentHtml = editor.getHTML();
       if (currentHtml !== content) {
-        editor.commands.setContent(content, false);
+        editor.commands.setContent(content);
       }
     }
   }, [content, editor]);

@@ -1,5 +1,5 @@
 import { Editor } from '@tiptap/react';
-import { List, ListOrdered, CheckSquare } from 'lucide-react';
+import { List, ListOrdered } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,

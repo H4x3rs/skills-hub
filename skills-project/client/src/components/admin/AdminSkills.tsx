@@ -41,6 +41,7 @@ interface SkillViewModalProps {
   authorName: string;
   getDisplayStatus: (s: string) => string;
   onClose: () => void;
+  categories: Array<{ name: string; displayName: string }>;
 }
 
 interface SkillVersionItem {
@@ -51,7 +52,7 @@ interface SkillVersionItem {
   createdAt?: string;
 }
 
-const SkillViewModal = ({ skill, authorName, getDisplayStatus, onClose }: SkillViewModalProps) => {
+const SkillViewModal = ({ skill, authorName, getDisplayStatus, onClose, categories }: SkillViewModalProps) => {
   const { t } = useTranslation();
   const versions: SkillVersionItem[] = skill.versions || [];
   const hasVersions = versions.length > 0;
@@ -433,6 +434,7 @@ export const AdminSkills = () => {
       />
       {viewingSkill && (
         <SkillViewModal
+          categories={categories}
           skill={viewingSkill}
           authorName={authorName(viewingSkill)}
           getDisplayStatus={getDisplayStatus}
