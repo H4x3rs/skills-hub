@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Plus, Trash2, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
 import { permissionAPI } from '@/lib/api';
 import { TruncateWithTooltip } from '@/components/ui/truncate-with-tooltip';
+import { PermissionModal } from './PermissionModal';
 import { toast } from 'sonner';
 
 interface Permission {
@@ -15,21 +15,27 @@ interface Permission {
   action: string;
 }
 
-const ACTIONS = ['create', 'read', 'update', 'delete', 'manage'];
-
 export const AdminPermissions = () => {
   const { t } = useTranslation();
   const [permissions, setPermissions] = useState<Permission[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
-  const [editing, setEditing] = useState<Permission | null>(null);
-  const [form, setForm] = useState({ name: '', description: '', resource: '', action: 'read' });
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState<{
+    currentPage: number;
+    totalPages: number;
+    totalPermissions?: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  } | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [editingPermission, setEditingPermission] = useState<Permission | null>(null);
 
-  const fetchPermissions = async () => {
+  const fetchPermissions = async (pageNum: number = page) => {
     try {
       setLoading(true);
-      const res = await permissionAPI.getAll({ limit: 100 });
+      const res = await permissionAPI.getAll({ page: pageNum, limit: 10 });
       setPermissions(res.data.data?.permissions || []);
+      setPagination(res.data.data?.pagination || null);
     } catch (error) {
       toast.error(t('admin.fetchUsersError'));
     } finally {
@@ -38,29 +44,36 @@ export const AdminPermissions = () => {
   };
 
   useEffect(() => {
-    fetchPermissions();
-  }, []);
+    fetchPermissions(page);
+  }, [page]);
 
-  const resetForm = () => {
-    setForm({ name: '', description: '', resource: '', action: 'read' });
-    setShowForm(false);
-    setEditing(null);
+  const handleOpenModal = (permission?: Permission) => {
+    setEditingPermission(permission || null);
+    setShowModal(true);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setEditingPermission(null);
+  };
+
+  const handleSave = async (data: { name: string; description: string; resource: string; action: string }) => {
     try {
-      if (editing) {
-        await permissionAPI.update(editing._id, { description: form.description, resource: form.resource, action: form.action });
+      if (editingPermission) {
+        await permissionAPI.update(editingPermission._id, {
+          description: data.description,
+          resource: data.resource,
+          action: data.action
+        });
         toast.success(t('admin.updateSuccess'));
       } else {
-        await permissionAPI.create(form);
+        await permissionAPI.create(data);
         toast.success(t('admin.createSuccess'));
       }
-      resetForm();
-      fetchPermissions();
+      fetchPermissions(page);
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Error');
+      throw error;
     }
   };
 
@@ -69,7 +82,7 @@ export const AdminPermissions = () => {
     try {
       await permissionAPI.delete(id);
       toast.success(t('admin.deleteSuccess'));
-      fetchPermissions();
+      fetchPermissions(page);
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Error');
     }
@@ -79,55 +92,11 @@ export const AdminPermissions = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold font-heading">{t('admin.permissions')}</h1>
-        <Button onClick={() => setShowForm(true)}>
+        <Button onClick={() => handleOpenModal()}>
           <Plus className="h-4 w-4 mr-2" />
           {t('admin.addPermission')}
         </Button>
       </div>
-
-      {(showForm || editing) && (
-        <div className="bg-card rounded-lg border p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4">{editing ? t('admin.edit') : t('admin.addPermission')}</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">{t('admin.permissionName')}</label>
-              <Input
-                value={form.name}
-                onChange={e => setForm({ ...form, name: e.target.value })}
-                placeholder="e.g. skill_create"
-                required
-                disabled={!!editing}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">{t('admin.permissionDesc')}</label>
-              <Input value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} required />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">{t('admin.resource')}</label>
-                <Input value={form.resource} onChange={e => setForm({ ...form, resource: e.target.value })} placeholder="e.g. skill" required />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">{t('admin.action')}</label>
-                <select
-                  value={form.action}
-                  onChange={e => setForm({ ...form, action: e.target.value })}
-                  className="w-full border rounded-md px-3 py-2 bg-background"
-                >
-                  {ACTIONS.map(a => (
-                    <option key={a} value={a}>{a}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <Button type="submit">{t('admin.save')}</Button>
-              <Button type="button" variant="outline" onClick={resetForm}>{t('common.cancel')}</Button>
-            </div>
-          </form>
-        </div>
-      )}
 
       <div className="bg-card rounded-lg border overflow-hidden">
         {loading ? (
@@ -166,7 +135,7 @@ export const AdminPermissions = () => {
                   </td>
                   <td className="py-3 px-4">
                     <div className="flex justify-center gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => { setEditing(p); setForm({ name: p.name, description: p.description, resource: p.resource, action: p.action }); }}>
+                      <Button variant="ghost" size="sm" onClick={() => handleOpenModal(p)}>
                         <Pencil className="h-4 w-4" />
                       </Button>
                       <Button variant="ghost" size="sm" className="text-destructive" onClick={() => handleDelete(p._id)}>
@@ -181,6 +150,43 @@ export const AdminPermissions = () => {
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {pagination && pagination.totalPages > 1 && (
+        <div className="flex justify-between items-center mt-6 px-4 py-3 border-t">
+          <span className="text-sm text-muted-foreground">
+            {t('pagination.pageInfo', {
+              currentPage: pagination.currentPage,
+              totalPages: pagination.totalPages
+            })}
+          </span>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={!pagination.hasPrev}
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+            >
+              {t('pagination.prev')}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={!pagination.hasNext}
+              onClick={() => setPage(p => p + 1)}
+            >
+              {t('pagination.next')}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      <PermissionModal
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        permission={editingPermission}
+        onSave={handleSave}
+      />
     </div>
   );
 };

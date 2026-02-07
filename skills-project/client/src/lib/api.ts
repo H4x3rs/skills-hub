@@ -317,6 +317,27 @@ export const skillAdminAPI = {
   deleteOwn: (id: string) => api.delete(`/skills/${id}`),
 };
 
+// 分类管理 API
+export const categoryAPI = {
+  getAll: (params?: { page?: number; limit?: number }) => 
+    api.get('/admin/categories', { params: params || {} }),
+  create: (data: {
+    name: string;
+    displayName: string;
+    description?: string;
+    icon?: string;
+    order?: number;
+  }) => api.post('/admin/categories', data),
+  update: (id: string, data: {
+    displayName?: string;
+    description?: string;
+    icon?: string;
+    order?: number;
+    isActive?: boolean;
+  }) => api.put(`/admin/categories/${id}`, data),
+  delete: (id: string) => api.delete(`/admin/categories/${id}`),
+};
+
 // 角色管理 API
 export const roleAPI = {
   getAll: (params?: { page?: number; limit?: number; isActive?: boolean }) =>
@@ -329,6 +350,45 @@ export const roleAPI = {
   delete: (roleName: string) => api.delete(`/admin/roles/${encodeURIComponent(roleName)}`),
   updatePermissions: (roleName: string, permissionIds: string[]) =>
     api.put(`/admin/roles/${encodeURIComponent(roleName)}/permissions`, { permissionIds }),
+};
+
+// 博客管理 API
+export const blogAPI = {
+  getAll: (params?: { page?: number; limit?: number; category?: string; tag?: string; featured?: boolean }) =>
+    api.get('/blogs', { params }),
+  getBySlug: (slug: string) => api.get(`/blogs/slug/${slug}`),
+  getById: (id: string) => api.get(`/blogs/${id}`),
+  create: (data: {
+    title: string;
+    slug?: string;
+    excerpt?: string;
+    content: string;
+    contentType?: 'markdown' | 'html' | 'rich-text';
+    coverImage?: string;
+    tags?: string[];
+    category?: string;
+    status?: 'draft' | 'published' | 'archived';
+    featured?: boolean;
+    seoTitle?: string;
+    seoDescription?: string;
+  }) => api.post('/blogs', data),
+  update: (id: string, data: {
+    title?: string;
+    slug?: string;
+    excerpt?: string;
+    content?: string;
+    contentType?: 'markdown' | 'html' | 'rich-text';
+    coverImage?: string;
+    tags?: string[];
+    category?: string;
+    status?: 'draft' | 'published' | 'archived';
+    featured?: boolean;
+    seoTitle?: string;
+    seoDescription?: string;
+  }) => api.put(`/blogs/${id}`, data),
+  delete: (id: string) => api.delete(`/blogs/${id}`),
+  adminGetAll: (params?: { page?: number; limit?: number; status?: string; category?: string; author?: string }) =>
+    api.get('/blogs/admin/all', { params }),
 };
 
 export default api;

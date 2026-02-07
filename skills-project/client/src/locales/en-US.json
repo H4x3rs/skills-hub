@@ -38,6 +38,33 @@
       "adminPanel": "Admin Panel",
       "logout": "Logout"
     },
+    "download": {
+      "title": "Download BotSkill",
+      "subtitle": "Choose the installation method that suits your environment",
+      "systemRequirements": "System Requirements",
+      "systemRequirementsNote": "The following are the minimum system requirements for deploying BotSkill Server. If your environment cannot meet the minimum system requirements, it may cause BotSkill Server to fail to deploy and start.",
+      "requirements": {
+        "nodejs": "Node.js",
+        "cpu": "CPU",
+        "memory": "Memory",
+        "storage": "Storage",
+        "mongodb": "MongoDB",
+        "os": "Operating System"
+      },
+      "stableVersions": "Stable Versions",
+      "stable": "Stable",
+      "binaryPackage": "Binary Package Download",
+      "dockerImage": "Docker Image",
+      "download": "Download",
+      "releaseNotes": "Release Notes",
+      "referenceDocs": "Reference Documentation",
+      "otherMethods": "Other Download Methods",
+      "gitClone": "Git Clone",
+      "npmInstall": "NPM Install",
+      "dockerPull": "Docker Pull",
+      "licenseNote": "License Notice",
+      "licenseText": "Distributed under Apache License v2.0. For more historical version downloads, please refer to the release history."
+    },
     "auth": {
       "login": {
         "title": "Sign In",
@@ -284,9 +311,20 @@
       "addPermission": "Add Permission",
       "permissionName": "Permission Name",
       "permissionDesc": "Description",
-      "category": "Category",
+      "categoryLabel": "Category",
       "resource": "Resource",
+      "resourceHint": "Resource type, e.g.: skill, user, category",
       "action": "Action",
+      "actionHint": "Action type: create, read, update, delete, manage",
+      "actionLabels": {
+        "create": "Create",
+        "read": "Read",
+        "update": "Update",
+        "delete": "Delete",
+        "manage": "Manage"
+      },
+      "permissionNameHint": "Permission name, usually in format: resource_action, e.g. skill_create",
+      "permissionDescPlaceholder": "Permission description, explain what this permission is for",
       "addRole": "Add Role",
       "roleName": "Role Name",
       "roleDesc": "Description",
@@ -300,7 +338,31 @@
       "reuploadVersion": "Re-upload this version",
       "reuploadVersionFile": "Upload .zip / .tar.gz / .md to overwrite this version",
       "updateSuccess": "Updated successfully",
-      "deleteSuccess": "Deleted successfully"
+      "deleteSuccess": "Deleted successfully",
+      "createBlog": "Create Blog",
+      "editBlog": "Edit Blog",
+      "basicInfo": "Basic Information",
+      "publishSettings": "Publish Settings",
+      "settings": "Settings",
+      "blogSettingsDesc": "Configure blog publish settings, categories, tags, and other information",
+      "untitledBlog": "Untitled Blog",
+      "contentInfo": "Content Information",
+      "optional": "Optional",
+      "tagsHint": "Separate multiple tags with commas",
+      "categories": "Categories",
+      "addCategory": "Add Category",
+      "editCategory": "Edit Category",
+      "noCategories": "No categories found",
+      "active": "Active",
+      "inactive": "Inactive",
+      "category": {
+        "name": "Name",
+        "displayName": "Display Name",
+        "description": "Description",
+        "icon": "Icon",
+        "order": "Order",
+        "status": "Status"
+      }
     },
     "about": {
       "mission": {
@@ -367,7 +429,9 @@
       "save": "Save",
       "saving": "Saving...",
       "download": "Download",
-      "actions": "Actions"
+      "actions": "Actions",
+      "create": "Create",
+      "update": "Update"
     },
     "pagination": {
       "pageInfo": "Page {{currentPage}} of {{totalPages}}",

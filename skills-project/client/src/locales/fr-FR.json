@@ -269,7 +269,37 @@
         "archived": "Archivé"
       },
       "noSkillsFound": "Aucune compétence trouvée",
-      "noUsersFound": "Aucun utilisateur trouvé"
+      "noUsersFound": "Aucun utilisateur trouvé",
+      "updateSuccess": "Mis à jour avec succès",
+      "deleteSuccess": "Supprimé avec succès",
+      "categories": "Gérer les catégories",
+      "addCategory": "Ajouter une catégorie",
+      "editCategory": "Modifier la catégorie",
+      "noCategories": "Aucune catégorie trouvée",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "category": {
+        "name": "Nom de la catégorie",
+        "displayName": "Nom d'affichage",
+        "description": "Description",
+        "icon": "Icône",
+        "order": "Ordre",
+        "status": "Statut"
+      },
+      "categoryLabel": "Catégorie",
+      "resource": "Ressource",
+      "resourceHint": "Type de ressource, ex.: skill, user, category",
+      "action": "Action",
+      "actionHint": "Type d'action: create（Créer）、read（Lire）、update（Mettre à jour）、delete（Supprimer）、manage（Gérer）",
+      "actionLabels": {
+        "create": "Créer",
+        "read": "Lire",
+        "update": "Mettre à jour",
+        "delete": "Supprimer",
+        "manage": "Gérer"
+      },
+      "permissionNameHint": "Nom de la permission, généralement au format: resource_action, ex. skill_create",
+      "permissionDescPlaceholder": "Description de la permission, expliquer à quoi sert cette permission"
     },
     "common": {
       "previous": "Précédent",
@@ -283,7 +313,9 @@
       "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cela ? Cette action ne peut pas être annulée.",
       "save": "Enregistrer",
       "download": "Télécharger",
-      "actions": "Actions"
+      "actions": "Actions",
+      "create": "Créer",
+      "update": "Mettre à jour"
     },
     "pagination": {
       "pageInfo": "Page {{currentPage}} sur {{totalPages}}",

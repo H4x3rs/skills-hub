@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
 import { useAdminSkills } from '@/hooks/useAdminSkills';
+import { useCategories } from '@/hooks/useCategories';
 import { TruncateWithTooltip } from '@/components/ui/truncate-with-tooltip';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -20,15 +21,7 @@ const STATUS_OPTIONS = [
   { value: 'draft', labelKey: 'admin.skillStatus.draft' },
 ];
 
-const CATEGORY_OPTIONS = [
-  { value: '', labelKey: 'skills.category.all' },
-  { value: 'ai', labelKey: 'skills.category.ai' },
-  { value: 'data', labelKey: 'skills.category.data' },
-  { value: 'web', labelKey: 'skills.category.web' },
-  { value: 'devops', labelKey: 'skills.category.devops' },
-  { value: 'security', labelKey: 'skills.category.security' },
-  { value: 'tools', labelKey: 'skills.category.tools' },
-];
+// CATEGORY_OPTIONS will be populated dynamically from API
 
 const getStatusBadgeClass = (status: string) => {
   if (status === 'published') return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
@@ -86,7 +79,7 @@ const SkillViewModal = ({ skill, authorName, getDisplayStatus, onClose }: SkillV
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <FolderOpen className="h-3.5 w-3.5" />
-                  {skill.category ? t(`skills.category.${skill.category}`) : '—'}
+                  {skill.category ? (categories.find(c => c.name === skill.category)?.displayName || skill.category) : '—'}
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <Download className="h-3.5 w-3.5" />
@@ -179,6 +172,7 @@ const SkillViewModal = ({ skill, authorName, getDisplayStatus, onClose }: SkillV
 
 export const AdminSkills = () => {
   const { t } = useTranslation();
+  const { categories, loading: categoriesLoading } = useCategories();
   const [search, setSearch] = useState('');
   const [appliedSearch, setAppliedSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -250,12 +244,21 @@ export const AdminSkills = () => {
             ))}
           </select>
           <select
-            className="border rounded-md px-3 py-2 bg-background text-sm"
+            className="border rounded-md px-3 py-2 bg-background text-sm min-w-[140px] sm:w-[160px] truncate"
             value={categoryFilter}
             onChange={e => { setCategoryFilter(e.target.value); setPage(1); }}
+            disabled={categoriesLoading}
+            style={{ 
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap'
+            }}
           >
-            {CATEGORY_OPTIONS.map(opt => (
-              <option key={opt.value || 'all'} value={opt.value}>{t(opt.labelKey)}</option>
+            <option value="">{t('skills.category.all', '全部')}</option>
+            {categories.map(cat => (
+              <option key={cat._id} value={cat.name} title={cat.displayName}>
+                {cat.displayName.length > 18 ? `${cat.displayName.slice(0, 18)}...` : cat.displayName}
+              </option>
             ))}
           </select>
           <Button variant="outline" size="sm" onClick={handleSearch}>{t('admin.searchSkills')}</Button>
@@ -299,17 +302,17 @@ export const AdminSkills = () => {
                 <colgroup>
                   <col style={{ width: 200 }} />
                   <col style={{ width: 120 }} />
-                  <col style={{ width: 100 }} />
+                  <col style={{ width: 140 }} />
                   <col style={{ width: 90 }} />
                   <col style={{ width: 110 }} />
                   <col style={{ width: 110 }} />
-                  <col style={{ width: 270 }} />
+                  <col style={{ width: 230 }} />
                 </colgroup>
                 <thead className="bg-muted">
                   <tr>
                     <th className="text-left py-3 px-4">{t('profile.skillName')}</th>
                     <th className="text-left py-3 px-4">{t('skills.author')}</th>
-                    <th className="text-left py-3 px-4">{t('admin.category')}</th>
+                    <th className="text-left py-3 px-4">{t('admin.categoryLabel', '分类')}</th>
                     <th className="text-right py-3 px-4">{t('admin.downloads')}</th>
                     <th className="text-left py-3 px-4">{t('profile.status')}</th>
                     <th className="text-left py-3 px-4">{t('admin.createdAt')}</th>
@@ -331,7 +334,15 @@ export const AdminSkills = () => {
                       <td className="py-3 px-4 overflow-hidden min-w-0">
                         <TruncateWithTooltip content={authorName(skill)}>{authorName(skill)}</TruncateWithTooltip>
                       </td>
-                      <td className="py-3 px-4">{skill.category ? t(`skills.category.${skill.category}`) : '—'}</td>
+                      <td className="py-3 px-4 overflow-hidden min-w-0">
+                        {skill.category ? (
+                          <TruncateWithTooltip content={categories.find(c => c.name === skill.category)?.displayName || skill.category}>
+                            {categories.find(c => c.name === skill.category)?.displayName || skill.category}
+                          </TruncateWithTooltip>
+                        ) : (
+                          '—'
+                        )}
+                      </td>
                       <td className="py-3 px-4 text-right">{(skill.downloads ?? 0).toLocaleString()}</td>
                       <td className="py-3 px-4">
                         <span className={`px-2 py-1 rounded-full text-xs ${getStatusBadgeClass(skill.status)}`}>

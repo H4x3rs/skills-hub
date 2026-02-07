@@ -17,6 +17,7 @@ require('./config/passport');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const skillRoutes = require('./routes/skills');
+const blogRoutes = require('./routes/blogs');
 const adminRoutes = require('./routes/admin');
 const { getPublicSiteSettings } = require('./controllers/adminController');
 
@@ -39,6 +40,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/botskill'
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/skills', skillRoutes);
+app.use('/api/blogs', blogRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Health check endpoint

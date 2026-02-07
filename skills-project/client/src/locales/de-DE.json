@@ -269,7 +269,37 @@
         "archived": "Archiviert"
       },
       "noSkillsFound": "Keine Fähigkeiten gefunden",
-      "noUsersFound": "Keine Benutzer gefunden"
+      "noUsersFound": "Keine Benutzer gefunden",
+      "updateSuccess": "Erfolgreich aktualisiert",
+      "deleteSuccess": "Erfolgreich gelöscht",
+      "categories": "Kategorien verwalten",
+      "addCategory": "Kategorie hinzufügen",
+      "editCategory": "Kategorie bearbeiten",
+      "noCategories": "Keine Kategorien gefunden",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "category": {
+        "name": "Kategoriename",
+        "displayName": "Anzeigename",
+        "description": "Beschreibung",
+        "icon": "Symbol",
+        "order": "Reihenfolge",
+        "status": "Status"
+      },
+      "categoryLabel": "Kategorie",
+      "resource": "Ressource",
+      "resourceHint": "Ressourcentyp, z.B.: skill, user, category",
+      "action": "Aktion",
+      "actionHint": "Aktionstyp: create（Erstellen）、read（Lesen）、update（Aktualisieren）、delete（Löschen）、manage（Verwalten）",
+      "actionLabels": {
+        "create": "Erstellen",
+        "read": "Lesen",
+        "update": "Aktualisieren",
+        "delete": "Löschen",
+        "manage": "Verwalten"
+      },
+      "permissionNameHint": "Berechtigungsname, normalerweise im Format: resource_action, z.B. skill_create",
+      "permissionDescPlaceholder": "Berechtigungsbeschreibung, erklären Sie, wofür diese Berechtigung verwendet wird"
     },
     "common": {
       "previous": "Vorherige",
@@ -283,7 +313,9 @@
       "deleteConfirm": "Sind Sie sicher, dass Sie dies löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
       "save": "Speichern",
       "download": "Herunterladen",
-      "actions": "Aktionen"
+      "actions": "Aktionen",
+      "create": "Erstellen",
+      "update": "Aktualisieren"
     },
     "pagination": {
       "pageInfo": "Seite {{currentPage}} von {{totalPages}}",

@@ -23,7 +23,11 @@ const {
   assignRoleToUser,
   getUsersWithRoles,
   getSettings,
-  updateSettings
+  updateSettings,
+  getCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory
 } = require('../controllers/adminController');
 const { authenticateToken, authorizeAdmin } = require('../middleware/auth');
 
@@ -66,5 +70,11 @@ router.post('/assign-role', authenticateToken, authorizeAdmin, assignRoleToUser)
 // 系统设置
 router.get('/settings', authenticateToken, authorizeAdmin, getSettings);
 router.put('/settings', authenticateToken, authorizeAdmin, updateSettings);
+
+// 分类管理
+router.get('/categories', authenticateToken, authorizeAdmin, getCategories);
+router.post('/categories', authenticateToken, authorizeAdmin, createCategory);
+router.put('/categories/:id', authenticateToken, authorizeAdmin, updateCategory);
+router.delete('/categories/:id', authenticateToken, authorizeAdmin, deleteCategory);
 
 module.exports = router;

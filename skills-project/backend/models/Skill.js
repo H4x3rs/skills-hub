@@ -64,8 +64,8 @@ const skillSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['ai', 'data', 'web', 'devops', 'security', 'tools'],
     required: true,
+    // Category validation will be done at application level using Category model
   },
   tags: [{
     type: String,

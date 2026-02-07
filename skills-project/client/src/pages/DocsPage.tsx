@@ -1,21 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
-import { BookOpen, Terminal, Code, FileText, GitBranch, Globe, Server, HelpCircle, Layers } from 'lucide-react';
+import { BookOpen, Terminal, Code, FileText, GitBranch, Globe, Server, HelpCircle, Layers, ChevronRight, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-const SECTION_IDS = ['overview', 'getting-started', 'web-usage', 'cli-tool', 'publish-skill', 'deployment', 'api-reference', 'best-practices', 'faq', 'appendix'] as const;
+const SECTION_IDS = ['overview', 'getting-started', 'getting-started-standalone', 'getting-started-docker', 'getting-started-kubernetes', 'web-usage', 'cli-tool', 'publish-skill', 'deployment', 'api-reference', 'best-practices', 'faq', 'appendix'] as const;
 
 const DocsPage = () => {
   const { t } = useTranslation('docs');
   const [activeSection, setActiveSection] = React.useState<string>('overview');
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['getting-started']));
 
   // 支持 URL 哈希，如 /docs#api-reference
   useEffect(() => {
     const hash = window.location.hash.slice(1);
     if (hash && SECTION_IDS.includes(hash as typeof SECTION_IDS[number])) {
       setActiveSection(hash);
+      // 如果点击的是快速开始的子菜单，展开快速开始
+      if (hash.startsWith('getting-started-')) {
+        setExpandedSections(prev => new Set([...prev, 'getting-started']));
+      }
     }
   }, []);
 
@@ -27,17 +32,35 @@ const DocsPage = () => {
     }
   };
 
+  const toggleSection = (id: string) => {
+    setExpandedSections(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
+
+  const gettingStartedSubsections = [
+    { id: 'getting-started-standalone', icon: <Terminal className="h-3 w-3" /> },
+    { id: 'getting-started-docker', icon: <Server className="h-3 w-3" /> },
+    { id: 'getting-started-kubernetes', icon: <Layers className="h-3 w-3" /> },
+  ];
+
   const sections = [
-    { id: 'overview', icon: <BookOpen className="h-4 w-4" /> },
-    { id: 'getting-started', icon: <BookOpen className="h-4 w-4" /> },
-    { id: 'web-usage', icon: <Globe className="h-4 w-4" /> },
-    { id: 'cli-tool', icon: <Terminal className="h-4 w-4" /> },
-    { id: 'publish-skill', icon: <Code className="h-4 w-4" /> },
-    { id: 'deployment', icon: <Server className="h-4 w-4" /> },
-    { id: 'api-reference', icon: <FileText className="h-4 w-4" /> },
-    { id: 'best-practices', icon: <GitBranch className="h-4 w-4" /> },
-    { id: 'faq', icon: <HelpCircle className="h-4 w-4" /> },
-    { id: 'appendix', icon: <Layers className="h-4 w-4" /> },
+    { id: 'overview', icon: <BookOpen className="h-4 w-4" />, hasSubsections: false },
+    { id: 'getting-started', icon: <BookOpen className="h-4 w-4" />, hasSubsections: true },
+    { id: 'web-usage', icon: <Globe className="h-4 w-4" />, hasSubsections: false },
+    { id: 'cli-tool', icon: <Terminal className="h-4 w-4" />, hasSubsections: false },
+    { id: 'publish-skill', icon: <Code className="h-4 w-4" />, hasSubsections: false },
+    { id: 'deployment', icon: <Server className="h-4 w-4" />, hasSubsections: false },
+    { id: 'api-reference', icon: <FileText className="h-4 w-4" />, hasSubsections: false },
+    { id: 'best-practices', icon: <GitBranch className="h-4 w-4" />, hasSubsections: false },
+    { id: 'faq', icon: <HelpCircle className="h-4 w-4" />, hasSubsections: false },
+    { id: 'appendix', icon: <Layers className="h-4 w-4" />, hasSubsections: false },
   ];
 
   const contentKey = SECTION_IDS.includes(activeSection as typeof SECTION_IDS[number]) ? activeSection : 'overview';
@@ -51,20 +74,67 @@ const DocsPage = () => {
           <div className="w-full md:w-64 flex-shrink-0">
             <div className="bg-card rounded-lg border p-4 sticky top-24">
               <h2 className="font-semibold text-lg mb-4">{t('toc')}</h2>
-              <nav className="space-y-2">
+              <nav className="space-y-1">
                 {sections.map((section) => (
-                  <button
-                    key={section.id}
-                    className={`flex items-center gap-2 w-full text-left px-3 py-2 rounded-md text-sm ${
-                      activeSection === section.id
-                        ? 'bg-primary text-primary-foreground'
-                        : 'hover:bg-muted'
-                    }`}
-                    onClick={() => handleSectionClick(section.id)}
-                  >
-                    {section.icon}
-                    {t(`sectionTitles.${section.id}`)}
-                  </button>
+                  <div key={section.id}>
+                    {section.hasSubsections ? (
+                      <>
+                        <button
+                          className={`flex items-center justify-between w-full text-left px-3 py-2 rounded-md text-sm ${
+                            activeSection === section.id || activeSection.startsWith(`${section.id}-`)
+                              ? 'bg-primary text-primary-foreground'
+                              : 'hover:bg-muted'
+                          }`}
+                          onClick={() => {
+                            toggleSection(section.id);
+                            if (!expandedSections.has(section.id)) {
+                              handleSectionClick(section.id);
+                            }
+                          }}
+                        >
+                          <div className="flex items-center gap-2">
+                            {section.icon}
+                            {t(`sectionTitles.${section.id}`)}
+                          </div>
+                          {expandedSections.has(section.id) ? (
+                            <ChevronDown className="h-4 w-4" />
+                          ) : (
+                            <ChevronRight className="h-4 w-4" />
+                          )}
+                        </button>
+                        {expandedSections.has(section.id) && section.id === 'getting-started' && (
+                          <div className="ml-4 mt-1 space-y-1">
+                            {gettingStartedSubsections.map((subsection) => (
+                              <button
+                                key={subsection.id}
+                                className={`flex items-center gap-2 w-full text-left px-3 py-2 rounded-md text-sm ${
+                                  activeSection === subsection.id
+                                    ? 'bg-primary text-primary-foreground'
+                                    : 'hover:bg-muted'
+                                }`}
+                                onClick={() => handleSectionClick(subsection.id)}
+                              >
+                                {subsection.icon}
+                                {t(`sectionTitles.${subsection.id}`)}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <button
+                        className={`flex items-center gap-2 w-full text-left px-3 py-2 rounded-md text-sm ${
+                          activeSection === section.id
+                            ? 'bg-primary text-primary-foreground'
+                            : 'hover:bg-muted'
+                        }`}
+                        onClick={() => handleSectionClick(section.id)}
+                      >
+                        {section.icon}
+                        {t(`sectionTitles.${section.id}`)}
+                      </button>
+                    )}
+                  </div>
                 ))}
               </nav>
             </div>

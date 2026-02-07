@@ -12,6 +12,15 @@ import { TruncateWithTooltip } from '@/components/ui/truncate-with-tooltip';
 interface AdminUsersProps {
   users: AdminUser[];
   loading: boolean;
+  pagination?: {
+    currentPage: number;
+    totalPages: number;
+    totalUsers?: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  } | null;
+  page: number;
+  onPageChange: (page: number) => void;
   onToggleStatus: (id: string | number) => void;
   onUpdateRole: (id: string | number, role: string) => void;
   onAddUser: () => void;
@@ -24,7 +33,7 @@ const getStatusBadgeClass = (isActive: boolean) =>
 
 const USER_ROLES = ['user', 'publisher', 'admin'];
 
-export const AdminUsers = ({ users, loading, onToggleStatus, onUpdateRole, onAddUser, onDeleteUser, onUserUpdated }: AdminUsersProps) => {
+export const AdminUsers = ({ users, loading, pagination, page, onPageChange, onToggleStatus, onUpdateRole, onAddUser, onDeleteUser, onUserUpdated }: AdminUsersProps) => {
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const [menuRect, setMenuRect] = useState<{ top: number; left: number } | null>(null);
@@ -204,6 +213,36 @@ export const AdminUsers = ({ users, loading, onToggleStatus, onUpdateRole, onAdd
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {pagination && pagination.totalPages > 1 && (
+        <div className="flex justify-between items-center mt-6 px-4 py-3 border-t">
+          <span className="text-sm text-muted-foreground">
+            {t('pagination.pageInfo', {
+              currentPage: pagination.currentPage,
+              totalPages: pagination.totalPages
+            })}
+          </span>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={!pagination.hasPrev}
+              onClick={() => onPageChange(Math.max(1, page - 1))}
+            >
+              {t('pagination.prev')}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={!pagination.hasNext}
+              onClick={() => onPageChange(page + 1)}
+            >
+              {t('pagination.next')}
+            </Button>
+          </div>
+        </div>
+      )}
 
       <EditUserModal
         isOpen={!!editUser}

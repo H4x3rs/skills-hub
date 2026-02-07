@@ -23,26 +23,35 @@ export const useAdminUsers = (fetchWhenActive: boolean) => {
   const { t } = useTranslation();
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState<{
+    currentPage: number;
+    totalPages: number;
+    totalUsers?: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  } | null>(null);
 
-  const fetchUsers = useCallback(async () => {
+  const fetchUsers = useCallback(async (pageNum: number = page) => {
     try {
       setLoading(true);
-      const response = await userAPI.getAllUsers();
+      const response = await userAPI.getAllUsers({ page: pageNum, limit: 10 });
       const usersData = response.data.success !== undefined
         ? response.data.data?.users || []
         : response.data.users || [];
       setUsers(usersData);
+      setPagination(response.data.data?.pagination || response.data.pagination || null);
     } catch (error) {
       console.error('Error fetching users:', error);
       toast.error(t('admin.fetchUsersError') || 'Error fetching users');
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [t, page]);
 
   useEffect(() => {
-    if (fetchWhenActive) fetchUsers();
-  }, [fetchWhenActive, fetchUsers]);
+    if (fetchWhenActive) fetchUsers(page);
+  }, [fetchWhenActive, fetchUsers, page]);
 
   const updateUserRole = useCallback(async (userId: string | number, role: string) => {
     try {
@@ -100,7 +109,8 @@ export const useAdminUsers = (fetchWhenActive: boolean) => {
         : response.data.user;
       
       if (newUser) {
-        setUsers(prev => [newUser, ...prev]);
+        // 刷新当前页面的用户列表
+        fetchUsers(page);
         toast.success(t('admin.userCreateSuccess') || 'User created successfully');
         return { success: true, user: newUser };
       }
@@ -112,5 +122,5 @@ export const useAdminUsers = (fetchWhenActive: boolean) => {
     }
   }, [t]);
 
-  return { users, loading, fetchUsers, toggleUserStatus, updateUserRole, deleteUser, createUser };
+  return { users, loading, pagination, page, setPage, fetchUsers, toggleUserStatus, updateUserRole, deleteUser, createUser };
 };

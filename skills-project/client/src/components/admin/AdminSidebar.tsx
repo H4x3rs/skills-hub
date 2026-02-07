@@ -1,10 +1,12 @@
-import { BarChart3, Users, Package, ShieldCheck, Key, Settings, Shield } from 'lucide-react';
+import { BarChart3, Users, Package, ShieldCheck, Key, Settings, Shield, FolderTree, FileText } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const ALL_TABS = [
   { id: 'dashboard', icon: BarChart3 },
   { id: 'users', icon: Users },
   { id: 'skills', icon: Package },
+  { id: 'blogs', icon: FileText },
+  { id: 'categories', icon: FolderTree },
   { id: 'roles', icon: ShieldCheck },
   { id: 'permissions', icon: Key },
   { id: 'settings', icon: Settings },

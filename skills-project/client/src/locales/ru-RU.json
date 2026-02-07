@@ -269,7 +269,37 @@
         "archived": "В архиве"
       },
       "noSkillsFound": "Навыки не найдены",
-      "noUsersFound": "Пользователи не найдены"
+      "noUsersFound": "Пользователи не найдены",
+      "updateSuccess": "Успешно обновлено",
+      "deleteSuccess": "Успешно удалено",
+      "categories": "Управление категориями",
+      "addCategory": "Добавить категорию",
+      "editCategory": "Редактировать категорию",
+      "noCategories": "Категории не найдены",
+      "active": "Активна",
+      "inactive": "Неактивна",
+      "category": {
+        "name": "Название категории",
+        "displayName": "Отображаемое имя",
+        "description": "Описание",
+        "icon": "Иконка",
+        "order": "Порядок",
+        "status": "Статус"
+      },
+      "categoryLabel": "Категория",
+      "resource": "Ресурс",
+      "resourceHint": "Тип ресурса, например: skill, user, category",
+      "action": "Действие",
+      "actionHint": "Тип действия: create（Создать）、read（Читать）、update（Обновить）、delete（Удалить）、manage（Управлять）",
+      "actionLabels": {
+        "create": "Создать",
+        "read": "Читать",
+        "update": "Обновить",
+        "delete": "Удалить",
+        "manage": "Управлять"
+      },
+      "permissionNameHint": "Имя разрешения, обычно в формате: resource_action, например skill_create",
+      "permissionDescPlaceholder": "Описание разрешения, объясните, для чего это разрешение"
     },
     "common": {
       "previous": "Предыдущая",
@@ -283,7 +313,9 @@
       "deleteConfirm": "Вы уверены, что хотите удалить это? Это действие нельзя отменить.",
       "save": "Сохранить",
       "download": "Скачать",
-      "actions": "Действия"
+      "actions": "Действия",
+      "create": "Создать",
+      "update": "Обновить"
     },
     "pagination": {
       "pageInfo": "Страница {{currentPage}} из {{totalPages}}",

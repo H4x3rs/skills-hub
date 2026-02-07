@@ -103,7 +103,7 @@ const Header = () => {
           <nav className="flex items-center gap-6 text-sm font-medium">
             <Link to="/skills" className="transition-colors hover:text-primary">{t('navigation.skills')}</Link>
             <Link to="/docs" className="transition-colors hover:text-primary">{t('navigation.docs')}</Link>
-            <Link to="/skills" className="transition-colors hover:text-primary">{t('navigation.download')}</Link>
+            <Link to="/download" className="transition-colors hover:text-primary">{t('navigation.download')}</Link>
             <Link to="/about" className="transition-colors hover:text-primary">{t('navigation.about')}</Link>
             <Link to="/blog" className="transition-colors hover:text-primary">{t('navigation.blog')}</Link>
           </nav>
@@ -399,7 +399,7 @@ const Header = () => {
           <div className="flex flex-col gap-4">
             <Link to="/skills" className="transition-colors hover:text-primary">{t('navigation.skills')}</Link>
             <Link to="/docs" className="transition-colors hover:text-primary">{t('navigation.docs')}</Link>
-            <Link to="/skills" className="transition-colors hover:text-primary">{t('navigation.download')}</Link>
+            <Link to="/download" className="transition-colors hover:text-primary">{t('navigation.download')}</Link>
             <Link to="/about" className="transition-colors hover:text-primary">{t('navigation.about')}</Link>
             <Link to="/blog" className="transition-colors hover:text-primary">{t('navigation.blog')}</Link>
           </div>

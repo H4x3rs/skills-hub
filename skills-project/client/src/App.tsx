@@ -9,12 +9,16 @@ import SkillsPage from './pages/SkillsPage';
 import SkillDetailPage from './pages/SkillDetailPage';
 import AboutPage from './pages/AboutPage';
 import DocsPage from './pages/DocsPage';
+import DownloadPage from './pages/DownloadPage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
 import LicensePage from './pages/LicensePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import BlogPage from './pages/BlogPage';
+import BlogDetailPage from './pages/BlogDetailPage';
+import BlogEditPage from './pages/BlogEditPage';
 import ProfileLayout from './components/ProfileLayout';
 import ProfileInfoPage from './pages/profile/ProfileInfoPage';
 import ProfileSkillsPage from './pages/profile/ProfileSkillsPage';
@@ -73,6 +77,9 @@ function App() {
           <Route path="/docs" element={<Layout />}>
             <Route index element={<DocsPage />} />
           </Route>
+          <Route path="/download" element={<Layout />}>
+            <Route index element={<DownloadPage />} />
+          </Route>
           <Route path="/login" element={<Layout />}>
             <Route index element={<LoginPage />} />
           </Route>
@@ -91,8 +98,11 @@ function App() {
             <Route index element={<AdminPage />} />
           </Route>
           <Route path="/blog" element={<Layout />}>
-            <Route index element={<div className="container py-8"><h1 className="text-2xl font-bold">Blog Page</h1><p>Coming soon...</p></div>} />
+            <Route index element={<BlogPage />} />
+            <Route path=":slug" element={<BlogDetailPage />} />
           </Route>
+          <Route path="/blog/edit/:id" element={<BlogEditPage />} />
+          <Route path="/blog/new" element={<BlogEditPage />} />
         </Routes>
       </Router>
     </AuthProvider>

@@ -1,6 +1,7 @@
 const AdmZip = require('adm-zip');
 const Skill = require('../models/Skill');
 const User = require('../models/User');
+const Category = require('../models/Category');
 const { NAME_REGEX } = require('../utils/parseSkillMd');
 
 /** 确保 author 有默认值（作者用户被删除时 populate 返回 null） */
@@ -607,7 +608,7 @@ const createSkillForAdmin = async (req, res) => {
       name: nameTrimmed,
       description,
       version: ver,
-      category: category || 'tools',
+      category: categoryName,
       tags,
       repositoryUrl,
       documentationUrl,
@@ -658,6 +659,13 @@ const createSkillFromForm = async (req, res) => {
       return res.status(400).json({ error: 'Skill name must contain only lowercase letters, numbers, hyphens, @, and /; must not start or end with hyphen' });
     }
 
+    // Validate category exists and is active
+    const categoryName = (category || 'tools').toLowerCase();
+    const categoryDoc = await Category.findOne({ name: categoryName, isActive: true });
+    if (!categoryDoc) {
+      return res.status(400).json({ error: `Category "${categoryName}" does not exist or is not active` });
+    }
+
     const ver = version || '1.0.0';
     const versionTags = Array.isArray(tags) ? tags : (tags ? [].concat(tags) : []);
     const versionDoc = {
@@ -693,7 +701,7 @@ const createSkillFromForm = async (req, res) => {
       }
       existing.description = description || existing.description;
       existing.version = ver;
-      if (category) existing.category = category;
+      if (category) existing.category = categoryName;
       existing.tags = versionTags.length > 0 ? versionTags : existing.tags;
       if (repositoryUrl !== undefined) existing.repositoryUrl = repositoryUrl;
       if (documentationUrl !== undefined) existing.documentationUrl = documentationUrl;
@@ -720,7 +728,7 @@ const createSkillFromForm = async (req, res) => {
       name: nameTrimmed,
       description,
       version: ver,
-      category: category || 'tools',
+      category: categoryName,
       tags,
       repositoryUrl,
       documentationUrl,

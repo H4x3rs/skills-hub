@@ -9,10 +9,12 @@ import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 import { skillAPI, skillAdminAPI } from '@/lib/api';
 import { AddSkillModal } from '@/components/admin';
+import { useCategories } from '@/hooks/useCategories';
 
 const ProfileSkillsPage = () => {
   const { t } = useTranslation();
   const { user, isAuthenticated } = useAuth();
+  const { categories, loading: categoriesLoading } = useCategories();
   const [skills, setSkills] = useState<any[]>([]);
   const [skillsLoading, setSkillsLoading] = useState(false);
   const [skillsPagination, setSkillsPagination] = useState({ currentPage: 1, totalPages: 0, totalSkills: 0 });
@@ -117,11 +119,19 @@ const ProfileSkillsPage = () => {
             <select
               value={skillsCategory}
               onChange={(e) => { setSkillsCategory(e.target.value); setSkillsPage(1); }}
-              className="border rounded-md px-3 py-2 bg-background text-sm min-w-[120px]"
+              className="border rounded-md px-3 py-2 bg-background text-sm min-w-[140px] sm:w-[160px] truncate"
+              disabled={categoriesLoading}
+              style={{ 
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap'
+              }}
             >
-              <option value="">{t('skills.category.all')}</option>
-              {['ai', 'data', 'web', 'devops', 'security', 'tools'].map((c) => (
-                <option key={c} value={c}>{t(`skills.category.${c}`)}</option>
+              <option value="">{t('skills.category.all', '全部')}</option>
+              {categories.map((cat) => (
+                <option key={cat._id} value={cat.name} title={cat.displayName}>
+                  {cat.displayName.length > 18 ? `${cat.displayName.slice(0, 18)}...` : cat.displayName}
+                </option>
               ))}
             </select>
             <select

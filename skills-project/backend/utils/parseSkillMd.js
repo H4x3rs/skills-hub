@@ -61,9 +61,8 @@ function parseSkillMd(content) {
 
     // --- Platform-specific (not in spec, for our UI/classification) ---
     const category = String(data.category ?? 'tools').toLowerCase();
-    if (!VALID_CATEGORIES.includes(category)) {
-      errors.push(`category must be one of: ${VALID_CATEGORIES.join(', ')}`);
-    }
+    // Category validation will be done at application level using Category model
+    // For now, accept any lowercase string (will be validated against Category collection)
 
     const tags = Array.isArray(data.tags)
       ? data.tags.map(t => String(t).trim()).filter(Boolean)

@@ -7,6 +7,8 @@ import {
   AdminDashboard,
   AdminUsers,
   AdminSkills,
+  AdminBlogs,
+  AdminCategories,
   AdminRoles,
   AdminPermissions,
   AdminSettings,
@@ -42,7 +44,7 @@ const AdminPage = () => {
   }, [user, isAuthenticated, isLoading, navigate]);
 
   useEffect(() => {
-    if (isAdmin && tabFromUrl && ['dashboard', 'users', 'skills', 'roles', 'permissions', 'settings'].includes(tabFromUrl)) {
+    if (isAdmin && tabFromUrl && ['dashboard', 'users', 'skills', 'blogs', 'categories', 'roles', 'permissions', 'settings'].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     } else if (!isAdmin) {
       setActiveTab('skills');
@@ -56,7 +58,7 @@ const AdminPage = () => {
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [newUser, setNewUser] = useState({ username: '', email: '', password: '', fullName: '', role: 'user' });
 
-  const { users, loading, fetchUsers, toggleUserStatus, updateUserRole, deleteUser, createUser } = useAdminUsers(activeTab === 'users');
+  const { users, loading, pagination: usersPagination, page: usersPage, setPage: setUsersPage, fetchUsers: refetchUsers, toggleUserStatus, updateUserRole, deleteUser, createUser } = useAdminUsers(activeTab === 'users');
   const { skills: dashboardSkills, approveSkill, rejectSkill } = useAdminSkills(
     activeTab === 'dashboard',
     { status: 'pending_review', limit: 5 }
@@ -93,16 +95,21 @@ const AdminPage = () => {
               <AdminUsers
                 users={users}
                 loading={loading}
+                pagination={usersPagination}
+                page={usersPage}
+                onPageChange={setUsersPage}
                 onToggleStatus={toggleUserStatus}
                 onUpdateRole={updateUserRole}
                 onAddUser={() => setShowAddUserModal(true)}
                 onDeleteUser={deleteUser}
-                onUserUpdated={fetchUsers}
+                onUserUpdated={() => refetchUsers(usersPage)}
               />
             )}
             {activeTab === 'roles' && <AdminRoles />}
             {activeTab === 'permissions' && <AdminPermissions />}
+            {activeTab === 'categories' && <AdminCategories />}
             {activeTab === 'skills' && <AdminSkills />}
+            {activeTab === 'blogs' && <AdminBlogs />}
             {activeTab === 'settings' && <AdminSettings />}
           </div>
         </div>
@@ -115,7 +122,7 @@ const AdminPage = () => {
         onCreateUser={async (userData) => {
           const result = await createUser(userData);
           if (result.success) {
-            fetchUsers(); // 刷新用户列表
+            refetchUsers(usersPage); // 刷新用户列表
           }
           return result;
         }}

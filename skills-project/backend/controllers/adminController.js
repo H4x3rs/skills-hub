@@ -3,6 +3,7 @@ const Skill = require('../models/Skill');
 const Role = require('../models/Role');
 const Permission = require('../models/Permission');
 const Settings = require('../models/Settings');
+const Category = require('../models/Category');
 
 const CACHE_TTL_MS = 60 * 1000; // 60 秒
 let statsCache = { data: null, expiresAt: 0 };
@@ -1077,6 +1078,196 @@ const updateSettings = async (req, res) => {
   }
 };
 
+// 分类管理
+const getCategories = async (req, res) => {
+  try {
+    // 如果没有提供分页参数，返回所有分类
+    if (!req.query.page && !req.query.limit) {
+      const categories = await Category.find()
+        .sort({ order: 1, createdAt: 1 });
+      
+      res.json({
+        success: true,
+        data: { categories }
+      });
+      return;
+    }
+    
+    // 分页模式
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    
+    const categories = await Category.find()
+      .sort({ order: 1, createdAt: 1 })
+      .skip(skip)
+      .limit(limit);
+    
+    const total = await Category.countDocuments();
+    
+    res.json({
+      success: true,
+      data: {
+        categories,
+        pagination: {
+          currentPage: page,
+          totalPages: Math.ceil(total / limit),
+          totalCategories: total,
+          hasNext: page < Math.ceil(total / limit),
+          hasPrev: page > 1
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Server error while fetching categories',
+      message: error.message
+    });
+  }
+};
+
+const createCategory = async (req, res) => {
+  try {
+    const { name, displayName, description, icon, order } = req.body;
+
+    if (!name || !displayName) {
+      return res.status(400).json({
+        success: false,
+        error: 'Name and displayName are required'
+      });
+    }
+
+    // 检查分类名是否已存在
+    const existing = await Category.findOne({ name: name.toLowerCase() });
+    if (existing) {
+      return res.status(400).json({
+        success: false,
+        error: 'Category name already exists'
+      });
+    }
+
+    const category = new Category({
+      name: name.toLowerCase(),
+      displayName,
+      description: description || '',
+      icon: icon || '',
+      order: order || 0,
+      isActive: true
+    });
+
+    await category.save();
+
+    res.status(201).json({
+      success: true,
+      message: 'Category created successfully',
+      data: { category }
+    });
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: errors
+      });
+    }
+    
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        error: 'Category name already exists'
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      error: 'Server error while creating category',
+      message: error.message
+    });
+  }
+};
+
+const updateCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { displayName, description, icon, order, isActive } = req.body;
+
+    const category = await Category.findById(id);
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        error: 'Category not found'
+      });
+    }
+
+    if (displayName !== undefined) category.displayName = displayName;
+    if (description !== undefined) category.description = description;
+    if (icon !== undefined) category.icon = icon;
+    if (order !== undefined) category.order = order;
+    if (isActive !== undefined) category.isActive = isActive;
+
+    await category.save();
+
+    res.json({
+      success: true,
+      message: 'Category updated successfully',
+      data: { category }
+    });
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: errors
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      error: 'Server error while updating category',
+      message: error.message
+    });
+  }
+};
+
+const deleteCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const category = await Category.findById(id);
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        error: 'Category not found'
+      });
+    }
+
+    // 检查是否有技能使用此分类（category 字段存储的是分类名称）
+    const skillsCount = await Skill.countDocuments({ category: category.name });
+    if (skillsCount > 0) {
+      return res.status(400).json({
+        success: false,
+        error: `Cannot delete category: ${skillsCount} skill(s) are using this category`
+      });
+    }
+
+    await Category.findByIdAndDelete(id);
+
+    res.json({
+      success: true,
+      message: 'Category deleted successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Server error while deleting category',
+      message: error.message
+    });
+  }
+};
+
 module.exports = {
   getDashboardStats,
   getUsersForAdmin,
@@ -1102,5 +1293,9 @@ module.exports = {
   getUsersWithRoles,
   getSettings,
   updateSettings,
-  getPublicSiteSettings
+  getPublicSiteSettings,
+  getCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory
 };

@@ -5,9 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { Upload, Loader2 } from 'lucide-react';
 import { skillAdminAPI } from '@/lib/api';
 import { toast } from 'sonner';
+import { useCategories } from '@/hooks/useCategories';
 import type { AdminSkill, AdminSkillVersion } from '@/hooks/useAdminSkills';
-
-const CATEGORIES = ['ai', 'data', 'web', 'devops', 'security', 'tools'];
 
 interface EditSkillModalProps {
   isOpen: boolean;
@@ -18,6 +17,7 @@ interface EditSkillModalProps {
 
 export const EditSkillModal = ({ isOpen, onClose, skill, onSuccess }: EditSkillModalProps) => {
   const { t } = useTranslation();
+  const { categories, loading: categoriesLoading } = useCategories();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     name: '',
@@ -163,11 +163,29 @@ export const EditSkillModal = ({ isOpen, onClose, skill, onSuccess }: EditSkillM
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">{t('admin.category')}</label>
-            <select value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} className="w-full border rounded-md px-3 py-2 bg-background text-sm">
-              {CATEGORIES.map(c => (
-                <option key={c} value={c}>{t(`skills.category.${c}`)}</option>
-              ))}
+            <label className="block text-sm font-medium mb-1">{t('admin.categoryLabel', '分类')}</label>
+            <select
+              value={form.category}
+              onChange={e => setForm({ ...form, category: e.target.value })}
+              className="w-full border rounded-md px-3 py-2 bg-background text-sm truncate"
+              disabled={categoriesLoading}
+              style={{ 
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              {categoriesLoading ? (
+                <option value="">{t('common.loading', '加载中...')}</option>
+              ) : categories.length > 0 ? (
+                categories.map(cat => (
+                  <option key={cat._id} value={cat.name} title={cat.displayName}>
+                    {cat.displayName.length > 30 ? `${cat.displayName.slice(0, 30)}...` : cat.displayName}
+                  </option>
+                ))
+              ) : (
+                <option value="tools">{t('skills.category.tools', '开发工具')}</option>
+              )}
             </select>
           </div>
           <div>

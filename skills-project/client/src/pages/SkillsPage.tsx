@@ -5,10 +5,12 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { useSkills } from '@/hooks/useSkills';
+import { useCategories } from '@/hooks/useCategories';
 
 const SkillsPage = () => {
   const { t } = useTranslation();
   const location = useLocation();
+  const { categories, loading: categoriesLoading } = useCategories();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -26,16 +28,6 @@ const SkillsPage = () => {
     pagination,
     refetch,
   } = useSkills(searchTerm, selectedCategory, currentPage);
-
-  const categories = [
-    { id: 'all', name: 'all' },
-    { id: 'ai', name: 'ai' },
-    { id: 'data', name: 'data' },
-    { id: 'web', name: 'web' },
-    { id: 'devops', name: 'devops' },
-    { id: 'security', name: 'security' },
-    { id: 'tools', name: 'tools' },
-  ];
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -57,7 +49,7 @@ const SkillsPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="container py-8 px-4 md:px-6">
+      <main className="container max-w-7xl py-8 px-4 md:px-6">
         <div className="mb-8">
           <h1 className="text-3xl font-bold font-heading mb-2">{t('skills.title')}</h1>
           <p className="text-muted-foreground">
@@ -66,8 +58,8 @@ const SkillsPage = () => {
         </div>
 
         {/* Filters and Search */}
-        <div className="mb-8 flex flex-col md:flex-row gap-4">
-          <div className="relative flex-1">
+        <div className="mb-8 flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1 min-w-0">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               placeholder={t('skills.searchPlaceholder')}
@@ -76,44 +68,53 @@ const SkillsPage = () => {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              className="pl-10"
+              className="pl-10 w-full"
             />
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2 sm:flex-nowrap">
             <select
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className="border rounded-md px-3 py-2 bg-background"
+              className="border rounded-md px-3 py-2 bg-background text-sm min-w-[160px] sm:w-[180px] flex-shrink-0 truncate"
+              disabled={categoriesLoading}
+              style={{ 
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap'
+              }}
             >
+              <option value="all">{t('skills.category.all', '全部')}</option>
               {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {t(`skills.category.${category.id}`)}
+                <option key={category._id} value={category.name} title={category.displayName}>
+                  {category.displayName.length > 20 ? `${category.displayName.slice(0, 20)}...` : category.displayName}
                 </option>
               ))}
             </select>
 
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="flex-shrink-0">
               <Filter className="h-4 w-4 mr-1" />
-              {t('skills.filter')}
+              <span className="hidden sm:inline">{t('skills.filter')}</span>
             </Button>
 
-            <div className="flex border rounded-md overflow-hidden">
+            <div className="flex border rounded-md overflow-hidden flex-shrink-0">
               <Button
                 variant={viewMode === 'grid' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setViewMode('grid')}
+                className="px-3"
               >
-                <Grid className="h-4 w-4" />
-                {t('skills.grid')}
+                <Grid className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">{t('skills.grid')}</span>
               </Button>
               <Button
                 variant={viewMode === 'list' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setViewMode('list')}
+                className="px-3"
               >
-                <List className="h-4 w-4" />
-                {t('skills.list')}
+                <List className="h-4 w-4 sm:mr-1" />
+                <span className="hidden sm:inline">{t('skills.list')}</span>
               </Button>
             </div>
           </div>

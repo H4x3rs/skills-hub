@@ -269,7 +269,37 @@
         "archived": "مؤرشف"
       },
       "noSkillsFound": "لم يتم العثور على مهارات",
-      "noUsersFound": "لم يتم العثور على مستخدمين"
+      "noUsersFound": "لم يتم العثور على مستخدمين",
+      "updateSuccess": "تم التحديث بنجاح",
+      "deleteSuccess": "تم الحذف بنجاح",
+      "categories": "إدارة الفئات",
+      "addCategory": "إضافة فئة",
+      "editCategory": "تحرير الفئة",
+      "noCategories": "لم يتم العثور على فئات",
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "category": {
+        "name": "اسم الفئة",
+        "displayName": "اسم العرض",
+        "description": "الوصف",
+        "icon": "الأيقونة",
+        "order": "الترتيب",
+        "status": "الحالة"
+      },
+      "categoryLabel": "الفئة",
+      "resource": "المورد",
+      "resourceHint": "نوع المورد، على سبيل المثال: skill, user, category",
+      "action": "الإجراء",
+      "actionHint": "نوع الإجراء: create（إنشاء）、read（قراءة）、update（تحديث）、delete（حذف）、manage（إدارة）",
+      "actionLabels": {
+        "create": "إنشاء",
+        "read": "قراءة",
+        "update": "تحديث",
+        "delete": "حذف",
+        "manage": "إدارة"
+      },
+      "permissionNameHint": "اسم الصلاحية، عادة بالتنسيق: resource_action، على سبيل المثال skill_create",
+      "permissionDescPlaceholder": "وصف الصلاحية، اشرح ما هي هذه الصلاحية"
     },
     "common": {
       "previous": "السابق",
@@ -283,7 +313,9 @@
       "deleteConfirm": "هل أنت متأكد أنك تريد حذف هذا؟ لا يمكن التراجع عن هذا الإجراء.",
       "save": "حفظ",
       "download": "تنزيل",
-      "actions": "الإجراءات"
+      "actions": "الإجراءات",
+      "create": "إنشاء",
+      "update": "تحديث"
     },
     "pagination": {
       "pageInfo": "الصفحة {{currentPage}} من {{totalPages}}",
