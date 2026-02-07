@@ -200,7 +200,7 @@ const Header = () => {
                         <button
                           onClick={() => {
                             setIsUserDropdownOpen(false);
-                            navigate('/profile?tab=skills');
+                            navigate('/profile/skills');
                           }}
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
                         >
@@ -321,7 +321,7 @@ const Header = () => {
                         <button
                           onClick={() => {
                             setIsUserDropdownOpen(false);
-                            navigate('/profile?tab=skills');
+                            navigate('/profile/skills');
                           }}
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
                         >

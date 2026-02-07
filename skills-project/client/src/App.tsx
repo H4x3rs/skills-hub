@@ -15,7 +15,11 @@ import TermsPage from './pages/TermsPage';
 import LicensePage from './pages/LicensePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import ProfilePage from './pages/ProfilePage';
+import ProfileLayout from './components/ProfileLayout';
+import ProfileInfoPage from './pages/profile/ProfileInfoPage';
+import ProfileSkillsPage from './pages/profile/ProfileSkillsPage';
+import ProfileAnalyticsPage from './pages/profile/ProfileAnalyticsPage';
+import ProfileFavoritesPage from './pages/profile/ProfileFavoritesPage';
 import AdminPage from './pages/AdminPage';
 import Layout from './components/Layout';
 import ProtectedAdminLayout from './components/ProtectedAdminLayout';
@@ -76,7 +80,12 @@ function App() {
             <Route index element={<RegisterPage />} />
           </Route>
           <Route path="/profile" element={<Layout />}>
-            <Route index element={<ProfilePage />} />
+            <Route element={<ProfileLayout />}>
+              <Route index element={<ProfileInfoPage />} />
+              <Route path="skills" element={<ProfileSkillsPage />} />
+              <Route path="favorites" element={<ProfileFavoritesPage />} />
+              <Route path="analytics" element={<ProfileAnalyticsPage />} />
+            </Route>
           </Route>
           <Route path="/admin" element={<ProtectedAdminLayout />}>
             <Route index element={<AdminPage />} />
