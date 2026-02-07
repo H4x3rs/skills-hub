@@ -45,6 +45,7 @@ const DocsPage = () => {
   };
 
   const gettingStartedSubsections = [
+    { id: 'getting-started', icon: <BookOpen className="h-3 w-3" /> }, // overview 显示快速开始的内容
     { id: 'getting-started-standalone', icon: <Terminal className="h-3 w-3" /> },
     { id: 'getting-started-docker', icon: <Server className="h-3 w-3" /> },
     { id: 'getting-started-kubernetes', icon: <Layers className="h-3 w-3" /> },
@@ -80,16 +81,10 @@ const DocsPage = () => {
                     {section.hasSubsections ? (
                       <>
                         <button
-                          className={`flex items-center justify-between w-full text-left px-3 py-2 rounded-md text-sm ${
-                            activeSection === section.id || activeSection.startsWith(`${section.id}-`)
-                              ? 'bg-primary text-primary-foreground'
-                              : 'hover:bg-muted'
-                          }`}
+                          className="flex items-center justify-between w-full text-left px-3 py-2 rounded-md text-sm bg-muted/50 hover:bg-muted"
                           onClick={() => {
                             toggleSection(section.id);
-                            if (!expandedSections.has(section.id)) {
-                              handleSectionClick(section.id);
-                            }
+                            // 快速开始菜单只展开/收起，不显示内容
                           }}
                         >
                           <div className="flex items-center gap-2">
@@ -115,7 +110,9 @@ const DocsPage = () => {
                                 onClick={() => handleSectionClick(subsection.id)}
                               >
                                 {subsection.icon}
-                                {t(`sectionTitles.${subsection.id}`)}
+                                {subsection.id === 'getting-started' 
+                                  ? t('sectionTitles.overview', '概览')
+                                  : t(`sectionTitles.${subsection.id}`)}
                               </button>
                             ))}
                           </div>

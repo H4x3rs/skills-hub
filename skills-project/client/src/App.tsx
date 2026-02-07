@@ -96,6 +96,14 @@ function App() {
           </Route>
           <Route path="/admin" element={<ProtectedAdminLayout />}>
             <Route index element={<AdminPage />} />
+            <Route path="dashboard" element={<AdminPage />} />
+            <Route path="users" element={<AdminPage />} />
+            <Route path="skills" element={<AdminPage />} />
+            <Route path="blogs" element={<AdminPage />} />
+            <Route path="categories" element={<AdminPage />} />
+            <Route path="roles" element={<AdminPage />} />
+            <Route path="permissions" element={<AdminPage />} />
+            <Route path="settings" element={<AdminPage />} />
           </Route>
           <Route path="/blog" element={<Layout />}>
             <Route index element={<BlogPage />} />

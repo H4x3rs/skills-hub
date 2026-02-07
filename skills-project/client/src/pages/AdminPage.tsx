@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import {
@@ -21,11 +21,25 @@ import { useDashboardStats } from '@/hooks/useDashboardStats';
 const AdminPage = () => {
   const { user, isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const isAdmin = user?.role === 'admin';
-  const [searchParams] = useSearchParams();
-  const tabFromUrl = searchParams.get('tab');
-  const defaultTab = isAdmin ? (tabFromUrl || 'dashboard') : 'skills';
-  const [activeTab, setActiveTab] = useState(defaultTab);
+  
+  // 从路径中获取当前 tab，例如 /admin/blogs -> blogs
+  const getActiveTabFromPath = (path: string) => {
+    if (path === '/admin' || path === '/admin/') {
+      return isAdmin ? 'dashboard' : 'skills';
+    }
+    const match = path.match(/^\/admin\/([^/]+)$/);
+    if (match) {
+      const tab = match[1];
+      if (['dashboard', 'users', 'skills', 'blogs', 'categories', 'roles', 'permissions', 'settings'].includes(tab)) {
+        return tab;
+      }
+    }
+    return isAdmin ? 'dashboard' : 'skills';
+  };
+  
+  const [activeTab, setActiveTab] = useState(() => getActiveTabFromPath(location.pathname));
 
   // 权限检查：只有管理员可以访问
   useEffect(() => {
@@ -43,13 +57,19 @@ const AdminPage = () => {
     }
   }, [user, isAuthenticated, isLoading, navigate]);
 
+  // 当路径变化时更新 activeTab
   useEffect(() => {
-    if (isAdmin && tabFromUrl && ['dashboard', 'users', 'skills', 'blogs', 'categories', 'roles', 'permissions', 'settings'].includes(tabFromUrl)) {
-      setActiveTab(tabFromUrl);
-    } else if (!isAdmin) {
-      setActiveTab('skills');
+    const tab = getActiveTabFromPath(location.pathname);
+    setActiveTab(tab);
+  }, [location.pathname, isAdmin]);
+  
+  // 如果访问 /admin，重定向到默认页面
+  useEffect(() => {
+    if (location.pathname === '/admin' || location.pathname === '/admin/') {
+      const defaultPath = isAdmin ? '/admin/dashboard' : '/admin/skills';
+      navigate(defaultPath, { replace: true });
     }
-  }, [tabFromUrl, isAdmin]);
+  }, [location.pathname, isAdmin, navigate]);
 
   // 如果正在加载或没有权限，不渲染内容
   if (isLoading || !isAuthenticated || !user || user.role !== 'admin') {

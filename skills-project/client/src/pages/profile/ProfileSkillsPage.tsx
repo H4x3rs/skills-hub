@@ -210,7 +210,7 @@ const ProfileSkillsPage = () => {
                               {t('profile.viewDetails')}
                             </Button>
                           </Link>
-                          <Link to="/admin?tab=skills">
+                          <Link to="/admin/skills">
                             <Button variant="outline" size="sm" title={t('profile.manageSkill', '管理')}>
                               <Pencil className="h-3.5 w-3.5" />
                             </Button>

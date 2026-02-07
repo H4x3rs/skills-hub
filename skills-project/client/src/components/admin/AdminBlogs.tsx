@@ -119,11 +119,15 @@ export const AdminBlogs = ({
   };
 
   const handleEdit = (blog: Blog) => {
-    navigate(`/blog/edit/${blog._id}`);
+    navigate(`/blog/edit/${blog._id}`, { 
+      state: { from: '/admin/blogs' } 
+    });
   };
 
   const handleCreate = () => {
-    navigate('/blog/new');
+    navigate('/blog/new', { 
+      state: { from: '/admin/blogs' } 
+    });
   };
 
   const formatDate = (dateString: string) => {

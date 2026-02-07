@@ -128,7 +128,7 @@ const createBlog = async (req, res) => {
       content,
       contentType: contentType || 'markdown',
       coverImage,
-      author: req.user.id,
+      author: req.user.userId,
       tags: tags || [],
       category: category || 'general',
       status: status || 'draft',
@@ -172,7 +172,7 @@ const updateBlog = async (req, res) => {
     }
     
     // 检查权限：只有作者或管理员可以编辑
-    if (blog.author.toString() !== req.user.id && req.user.role !== 'admin') {
+    if (blog.author.toString() !== req.user.userId && req.user.role !== 'admin') {
       return res.status(403).json({ success: false, error: 'Permission denied' });
     }
     
@@ -222,7 +222,7 @@ const deleteBlog = async (req, res) => {
     }
     
     // 检查权限：只有作者或管理员可以删除
-    if (blog.author.toString() !== req.user.id && req.user.role !== 'admin') {
+    if (blog.author.toString() !== req.user.userId && req.user.role !== 'admin') {
       return res.status(403).json({ success: false, error: 'Permission denied' });
     }
     

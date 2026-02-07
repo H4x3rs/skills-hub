@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { 
   ArrowLeft, Save, Loader2, Settings, FileText
 } from 'lucide-react';
@@ -24,9 +24,25 @@ import {
 const BlogEditPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation();
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const isEditMode = !!id;
+
+  // 智能返回函数：优先使用 location.state，否则使用浏览器历史记录
+  const handleGoBack = () => {
+    const from = (location.state as any)?.from;
+    if (from) {
+      navigate(from);
+    } else {
+      // 使用浏览器历史记录返回，如果没有历史记录则返回到 admin
+      if (window.history.length > 1) {
+        navigate(-1);
+      } else {
+        navigate('/admin');
+      }
+    }
+  };
 
   // 权限检查
   useEffect(() => {
@@ -206,7 +222,9 @@ const BlogEditPage = () => {
         await blogAPI.create(data);
         toast.success(t('admin.createSuccess', '创建成功'));
       }
-      navigate('/admin?tab=blogs');
+      // 保存成功后返回到来源页面，如果没有来源则返回到博客管理页面
+      const from = (location.state as any)?.from;
+      navigate(from || '/admin/blogs');
     } catch (error: any) {
       console.error('Error saving blog:', error);
       toast.error(error.response?.data?.error || 'Failed to save blog');
@@ -242,13 +260,13 @@ const BlogEditPage = () => {
         <div className="container max-w-[1600px] mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between h-16 gap-4">
             <div className="flex items-center gap-4">
-              <Link
-                to="/admin?tab=blogs"
+              <button
+                onClick={handleGoBack}
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-200"
               >
                 <ArrowLeft className="h-4 w-4" />
-                <span className="hidden sm:inline">{t('blog.backToList', '返回博客列表')}</span>
-              </Link>
+                <span className="hidden sm:inline">{t('common.back', '返回')}</span>
+              </button>
               <div className="h-6 w-px bg-border" />
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 <div className="p-1.5 rounded-lg bg-primary/10 text-primary shrink-0">
