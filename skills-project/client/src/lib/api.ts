@@ -166,6 +166,17 @@ export const userAPI = {
     return api.get('/admin/users', { params });
   },
 
+  // 创建用户（管理员）
+  createUser: (userData: {
+    username: string;
+    email: string;
+    password: string;
+    fullName?: string;
+    role?: string;
+  }) => {
+    return api.post('/admin/users', userData);
+  },
+
   // 获取特定用户信息
   getUserById: (userId: string) => {
     return api.get(`/users/${userId}`);

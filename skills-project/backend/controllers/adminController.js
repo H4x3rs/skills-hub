@@ -331,6 +331,95 @@ const resetUserPassword = async (req, res) => {
 };
 
 // 管理员删除用户
+// 管理员创建用户
+const createUserForAdmin = async (req, res) => {
+  try {
+    const { username, email, password, fullName, role } = req.body;
+
+    // 验证必填字段
+    if (!username || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        error: 'Username, email, and password are required'
+      });
+    }
+
+    // 验证密码长度
+    if (password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        error: 'Password must be at least 8 characters long'
+      });
+    }
+
+    // 验证角色
+    const validRoles = ['user', 'publisher', 'admin'];
+    if (role && !validRoles.includes(role)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid role. Must be one of: user, publisher, admin'
+      });
+    }
+
+    // 检查用户是否已存在
+    const existingUser = await User.findOne({ 
+      $or: [{ email: email.toLowerCase() }, { username }] 
+    });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        error: 'User already exists with this email or username'
+      });
+    }
+
+    // 创建新用户
+    const user = new User({
+      username,
+      email: email.toLowerCase(),
+      password,
+      fullName: fullName || '',
+      role: role || 'user',
+      isActive: true
+    });
+
+    await user.save();
+
+    // 返回用户信息（不包含密码）
+    const userResponse = user.toObject();
+    delete userResponse.password;
+
+    res.status(201).json({
+      success: true,
+      message: 'User created successfully',
+      data: { user: userResponse }
+    });
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        details: errors
+      });
+    }
+    
+    if (error.code === 11000) {
+      // MongoDB duplicate key error
+      const field = Object.keys(error.keyPattern)[0];
+      return res.status(400).json({
+        success: false,
+        error: `${field} already exists`
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      error: 'Server error while creating user',
+      message: error.message
+    });
+  }
+};
+
 const deleteUserForAdmin = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -995,6 +1084,7 @@ module.exports = {
   updateSkillStatus,
   updateUserStatus,
   updateUserForAdmin,
+  createUserForAdmin,
   resetUserPassword,
   deleteUserForAdmin,
   manageUserRoles,

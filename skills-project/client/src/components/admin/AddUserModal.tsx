@@ -1,28 +1,73 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
 interface AddUserModalProps {
   isOpen: boolean;
   onClose: () => void;
   formData: { username: string; email: string; password: string; fullName: string; role: string };
   onFormChange: (data: AddUserModalProps['formData']) => void;
+  onCreateUser: (userData: {
+    username: string;
+    email: string;
+    password: string;
+    fullName?: string;
+    role?: string;
+  }) => Promise<{ success: boolean; error?: string }>;
 }
 
 const INITIAL_FORM = { username: '', email: '', password: '', fullName: '', role: 'user' };
 
-export const AddUserModal = ({ isOpen, onClose, formData, onFormChange }: AddUserModalProps) => {
+export const AddUserModal = ({ isOpen, onClose, formData, onFormChange, onCreateUser }: AddUserModalProps) => {
   const { t } = useTranslation();
+  const [saving, setSaving] = useState(false);
 
   const handleClose = () => {
     onFormChange(INITIAL_FORM);
     onClose();
   };
 
-  const handleSave = () => {
-    toast.info(t('admin.userAddNotImplemented') || 'User addition via admin panel is not implemented. Use the registration form instead.');
-    handleClose();
+  const handleSave = async () => {
+    // 验证必填字段
+    if (!formData.username || !formData.email || !formData.password) {
+      toast.error(t('admin.userRequiredFields') || 'Username, email, and password are required');
+      return;
+    }
+
+    // 验证密码长度
+    if (formData.password.length < 8) {
+      toast.error(t('auth.register.passwordMinLength') || 'Password must be at least 8 characters long');
+      return;
+    }
+
+    // 验证邮箱格式
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error(t('auth.register.invalidEmail') || 'Please enter a valid email address');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const result = await onCreateUser({
+        username: formData.username.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+        fullName: formData.fullName.trim() || undefined,
+        role: formData.role || 'user'
+      });
+
+      if (result.success) {
+        handleClose();
+      }
+    } catch (error) {
+      console.error('Error creating user:', error);
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -62,10 +107,24 @@ export const AddUserModal = ({ isOpen, onClose, formData, onFormChange }: AddUse
           </div>
         </div>
         <div className="flex justify-end gap-2 mt-6">
-          <Button variant="outline" onClick={handleClose}>{t('common.cancel')}</Button>
-          <Button onClick={handleSave}>{t('common.save')}</Button>
+          <Button variant="outline" onClick={handleClose} disabled={saving}>
+            {t('common.cancel')}
+          </Button>
+          <Button onClick={handleSave} disabled={saving}>
+            {saving ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                {t('common.saving', '保存中...')}
+              </>
+            ) : (
+              t('common.save')
+            )}
+          </Button>
         </div>
       </div>
     </div>
   );
 };
+
+export default AddUserModal;
+

@@ -86,5 +86,31 @@ export const useAdminUsers = (fetchWhenActive: boolean) => {
     }
   }, [t]);
 
-  return { users, loading, fetchUsers, toggleUserStatus, updateUserRole, deleteUser };
+  const createUser = useCallback(async (userData: {
+    username: string;
+    email: string;
+    password: string;
+    fullName?: string;
+    role?: string;
+  }) => {
+    try {
+      const response = await userAPI.createUser(userData);
+      const newUser = response.data.success !== undefined
+        ? response.data.data?.user
+        : response.data.user;
+      
+      if (newUser) {
+        setUsers(prev => [newUser, ...prev]);
+        toast.success(t('admin.userCreateSuccess') || 'User created successfully');
+        return { success: true, user: newUser };
+      }
+      return { success: false };
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.error || error.response?.data?.details?.[0] || t('admin.userCreateError') || 'Error creating user';
+      toast.error(errorMessage);
+      return { success: false, error: errorMessage };
+    }
+  }, [t]);
+
+  return { users, loading, fetchUsers, toggleUserStatus, updateUserRole, deleteUser, createUser };
 };

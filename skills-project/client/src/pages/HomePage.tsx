@@ -78,6 +78,13 @@ const HomePage = () => {
     return skill.rating?.average ?? 0;
   };
 
+  // 截断描述文本
+  const truncateDescription = (description: string, maxLength: number = 100) => {
+    if (!description) return '—';
+    if (description.length <= maxLength) return description;
+    return description.substring(0, maxLength) + '...';
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -156,8 +163,8 @@ const HomePage = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {latestSkills.map((skill) => (
                   <Link key={skill._id} to={`/skills/${skill._id}`} className="bg-card rounded-lg border p-6 hover:shadow-md transition-shadow flex flex-col h-full">
-                    <h3 className="font-semibold text-lg mb-2">{skill.name}</h3>
-                    <p className="text-sm text-muted-foreground mb-4 flex-grow">{skill.description || '—'}</p>
+                    <h3 className="font-semibold text-lg mb-2 line-clamp-2">{skill.name}</h3>
+                    <p className="text-sm text-muted-foreground mb-4 flex-grow line-clamp-3">{truncateDescription(skill.description, 120)}</p>
                     <div className="flex justify-between items-center text-xs text-muted-foreground mt-auto">
                       <span className="inline-flex items-center gap-1.5">
                         <Download className="h-3 w-3 shrink-0" />
@@ -191,8 +198,8 @@ const HomePage = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {popularSkills.map((skill) => (
                   <Link key={skill._id} to={`/skills/${skill._id}`} className="bg-card rounded-lg border p-6 hover:shadow-md transition-shadow flex flex-col h-full">
-                    <h3 className="font-semibold text-lg mb-2">{skill.name}</h3>
-                    <p className="text-sm text-muted-foreground mb-4 flex-grow">{skill.description || '—'}</p>
+                    <h3 className="font-semibold text-lg mb-2 line-clamp-2">{skill.name}</h3>
+                    <p className="text-sm text-muted-foreground mb-4 flex-grow line-clamp-3">{truncateDescription(skill.description, 120)}</p>
                     <div className="flex justify-between items-center text-xs text-muted-foreground mt-auto">
                       <span className="inline-flex items-center gap-1.5">
                         <Download className="h-3 w-3 shrink-0" />

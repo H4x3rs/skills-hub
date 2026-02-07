@@ -6,6 +6,7 @@ const {
   updateSkillStatus, 
   updateUserStatus,
   updateUserForAdmin,
+  createUserForAdmin,
   resetUserPassword,
   deleteUserForAdmin,
   manageUserRoles,
@@ -34,6 +35,7 @@ router.get('/dashboard', authenticateToken, authorizeAdmin, getDashboardStats);
 // 用户管理
 router.get('/users', authenticateToken, authorizeAdmin, getUsersForAdmin);
 router.get('/users-with-roles', authenticateToken, authorizeAdmin, getUsersWithRoles);
+router.post('/users', authenticateToken, authorizeAdmin, createUserForAdmin);
 router.put('/users/:id', authenticateToken, authorizeAdmin, updateUserForAdmin);
 router.put('/users/:id/role', authenticateToken, authorizeAdmin, manageUserRoles);
 router.put('/users/:id/status', authenticateToken, authorizeAdmin, updateUserStatus);

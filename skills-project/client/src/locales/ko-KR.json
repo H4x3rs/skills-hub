@@ -119,6 +119,8 @@
         "signIn": "로그인",
         "success": "회원가입 성공!",
         "passwordMismatch": "비밀번호가 일치하지 않습니다",
+        "passwordMinLength": "비밀번호는 최소 8자 이상이어야 합니다",
+        "invalidEmail": "유효한 이메일 주소를 입력하세요",
         "generalError": "회원가입 중 오류가 발생했습니다"
       }
     },
@@ -205,6 +207,9 @@
       "fetchUsersError": "사용자 가져오기 오류",
       "fetchSkillsError": "스킬 가져오기 오류",
       "adminOnly": "관리자만",
+      "userRequiredFields": "사용자 이름, 이메일 및 비밀번호는 필수입니다",
+      "userCreateSuccess": "사용자가 성공적으로 생성되었습니다",
+      "userCreateError": "사용자 생성 중 오류 발생",
       "user": {
         "username": "사용자 이름",
         "email": "이메일",

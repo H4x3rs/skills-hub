@@ -38,41 +38,51 @@ const Header = () => {
 
   // 点击外部关闭下拉菜单
   useEffect(() => {
+    if (!isUserDropdownOpen && !isLangDropdownOpen) return;
+
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       
       // 关闭用户下拉菜单
       if (isUserDropdownOpen) {
         const dropdown = userDropdownRef.current;
-        const triggerButton = dropdown?.parentElement?.querySelector('button[aria-expanded]') || 
-                              dropdown?.parentElement?.querySelector('button');
-        
-        // 如果点击不在下拉菜单内，也不在触发按钮上，则关闭
-        if (dropdown && !dropdown.contains(target) && 
-            (!triggerButton || !triggerButton.contains(target))) {
-          setIsUserDropdownOpen(false);
+        if (dropdown) {
+          // 检查点击是否在下拉菜单内部
+          if (!dropdown.contains(target)) {
+            // 检查是否点击的是触发按钮
+            const parent = dropdown.parentElement;
+            const triggerButton = parent?.querySelector('button');
+            if (!triggerButton || !triggerButton.contains(target)) {
+              setIsUserDropdownOpen(false);
+            }
+          }
         }
       }
       
       // 关闭语言下拉菜单
       if (isLangDropdownOpen) {
         const dropdown = langDropdownRef.current;
-        const triggerButton = dropdown?.parentElement?.querySelector('button');
-        
-        if (dropdown && !dropdown.contains(target) && 
-            (!triggerButton || !triggerButton.contains(target))) {
-          setIsLangDropdownOpen(false);
+        if (dropdown) {
+          if (!dropdown.contains(target)) {
+            const parent = dropdown.parentElement;
+            const triggerButton = parent?.querySelector('button');
+            if (!triggerButton || !triggerButton.contains(target)) {
+              setIsLangDropdownOpen(false);
+            }
+          }
         }
       }
     };
 
-    if (isUserDropdownOpen || isLangDropdownOpen) {
-      // 使用捕获阶段，确保在其他事件之前处理
-      document.addEventListener('mousedown', handleClickOutside, true);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside, true);
-      };
-    }
+    // 使用 setTimeout 确保在下一个事件循环中添加监听器，避免立即触发
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('click', handleClickOutside);
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener('click', handleClickOutside);
+    };
   }, [isUserDropdownOpen, isLangDropdownOpen]);
 
   return (
@@ -164,15 +174,15 @@ const Header = () => {
                   <div 
                     ref={userDropdownRef}
                     className="absolute right-0 mt-2 w-48 bg-background border rounded-md shadow-lg z-[100]"
-                    onClick={(e) => e.stopPropagation()}
                   >
                     <div className="py-1">
                       <button
                         type="button"
                         onClick={(e) => {
+                          e.preventDefault();
                           e.stopPropagation();
                           setIsUserDropdownOpen(false);
-                          navigate('/profile');
+                          setTimeout(() => navigate('/profile'), 0);
                         }}
                         className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors cursor-pointer"
                       >
@@ -185,9 +195,10 @@ const Header = () => {
                         <button
                           type="button"
                           onClick={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
                             setIsUserDropdownOpen(false);
-                            navigate('/admin');
+                            setTimeout(() => navigate('/admin'), 0);
                           }}
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors cursor-pointer"
                         >
@@ -198,9 +209,10 @@ const Header = () => {
                         <button
                           type="button"
                           onClick={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
                             setIsUserDropdownOpen(false);
-                            navigate('/profile/skills');
+                            setTimeout(() => navigate('/profile/skills'), 0);
                           }}
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors cursor-pointer"
                         >
@@ -213,10 +225,13 @@ const Header = () => {
                         type="button"
                         className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent text-red-600 transition-colors cursor-pointer"
                         onClick={(e) => {
+                          e.preventDefault();
                           e.stopPropagation();
-                          logout();
                           setIsUserDropdownOpen(false);
-                          navigate('/');
+                          setTimeout(() => {
+                            logout();
+                            navigate('/');
+                          }, 0);
                         }}
                       >
                         <LogOut className="h-4 w-4" />
@@ -294,15 +309,15 @@ const Header = () => {
                   <div 
                     ref={userDropdownRef}
                     className="absolute right-0 mt-2 w-48 bg-background border rounded-md shadow-lg z-[100]"
-                    onClick={(e) => e.stopPropagation()}
                   >
                     <div className="py-1">
                       <button
                         type="button"
                         onClick={(e) => {
+                          e.preventDefault();
                           e.stopPropagation();
                           setIsUserDropdownOpen(false);
-                          navigate('/profile');
+                          setTimeout(() => navigate('/profile'), 0);
                         }}
                         className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors cursor-pointer"
                       >
@@ -315,9 +330,10 @@ const Header = () => {
                         <button
                           type="button"
                           onClick={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
                             setIsUserDropdownOpen(false);
-                            navigate('/admin');
+                            setTimeout(() => navigate('/admin'), 0);
                           }}
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors cursor-pointer"
                         >
@@ -328,9 +344,10 @@ const Header = () => {
                         <button
                           type="button"
                           onClick={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
                             setIsUserDropdownOpen(false);
-                            navigate('/profile/skills');
+                            setTimeout(() => navigate('/profile/skills'), 0);
                           }}
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors cursor-pointer"
                         >
@@ -343,10 +360,13 @@ const Header = () => {
                         type="button"
                         className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent text-red-600 transition-colors cursor-pointer"
                         onClick={(e) => {
+                          e.preventDefault();
                           e.stopPropagation();
-                          logout();
                           setIsUserDropdownOpen(false);
-                          navigate('/');
+                          setTimeout(() => {
+                            logout();
+                            navigate('/');
+                          }, 0);
                         }}
                       >
                         <LogOut className="h-4 w-4" />

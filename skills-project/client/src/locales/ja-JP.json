@@ -119,6 +119,8 @@
         "signIn": "ログイン",
         "success": "登録に成功しました！",
         "passwordMismatch": "パスワードが一致しません",
+        "passwordMinLength": "パスワードは8文字以上である必要があります",
+        "invalidEmail": "有効なメールアドレスを入力してください",
         "generalError": "登録中にエラーが発生しました"
       }
     },
@@ -205,6 +207,9 @@
       "fetchUsersError": "ユーザー取得中にエラーが発生しました",
       "fetchSkillsError": "スキル取得中にエラーが発生しました",
       "adminOnly": "管理者のみ",
+      "userRequiredFields": "ユーザー名、メールアドレス、パスワードは必須です",
+      "userCreateSuccess": "ユーザーが正常に作成されました",
+      "userCreateError": "ユーザー作成中にエラーが発生しました",
       "user": {
         "username": "ユーザー名",
         "email": "メールアドレス",

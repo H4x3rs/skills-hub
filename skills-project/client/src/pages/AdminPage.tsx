@@ -56,7 +56,7 @@ const AdminPage = () => {
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [newUser, setNewUser] = useState({ username: '', email: '', password: '', fullName: '', role: 'user' });
 
-  const { users, loading, fetchUsers, toggleUserStatus, updateUserRole, deleteUser } = useAdminUsers(activeTab === 'users');
+  const { users, loading, fetchUsers, toggleUserStatus, updateUserRole, deleteUser, createUser } = useAdminUsers(activeTab === 'users');
   const { skills: dashboardSkills, approveSkill, rejectSkill } = useAdminSkills(
     activeTab === 'dashboard',
     { status: 'pending_review', limit: 5 }
@@ -112,6 +112,13 @@ const AdminPage = () => {
         onClose={() => setShowAddUserModal(false)}
         formData={newUser}
         onFormChange={setNewUser}
+        onCreateUser={async (userData) => {
+          const result = await createUser(userData);
+          if (result.success) {
+            fetchUsers(); // 刷新用户列表
+          }
+          return result;
+        }}
       />
     </div>
   );
