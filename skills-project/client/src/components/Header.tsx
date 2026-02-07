@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Menu, X, Globe, ChevronDown, LogOut, User as UserProfileIcon, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,8 @@ const Header = () => {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const { i18n, t } = useTranslation();
   const navigate = useNavigate();
+  const userDropdownRef = useRef<HTMLDivElement>(null);
+  const langDropdownRef = useRef<HTMLDivElement>(null);
 
   const languages = [
     { code: 'zh-CN', name: 'Chinese', native: '简体中文' },
@@ -33,6 +35,52 @@ const Header = () => {
     i18n.changeLanguage(lng);
     setIsLangDropdownOpen(false);
   };
+
+  // 点击外部关闭下拉菜单
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      
+      // 关闭用户下拉菜单
+      if (isUserDropdownOpen) {
+        // 检查点击是否在下拉菜单内部
+        const dropdown = userDropdownRef.current;
+        if (dropdown && !dropdown.contains(target)) {
+          // 检查是否点击的是触发按钮（需要向上查找父元素）
+          const button = dropdown.parentElement?.querySelector('button');
+          if (button && !button.contains(target)) {
+            setIsUserDropdownOpen(false);
+          } else if (!button) {
+            // 如果没有找到按钮，直接关闭
+            setIsUserDropdownOpen(false);
+          }
+        }
+      }
+      
+      // 关闭语言下拉菜单
+      if (isLangDropdownOpen) {
+        const dropdown = langDropdownRef.current;
+        if (dropdown && !dropdown.contains(target)) {
+          const button = dropdown.parentElement?.querySelector('button');
+          if (button && !button.contains(target)) {
+            setIsLangDropdownOpen(false);
+          } else if (!button) {
+            setIsLangDropdownOpen(false);
+          }
+        }
+      }
+    };
+
+    if (isUserDropdownOpen || isLangDropdownOpen) {
+      // 使用 setTimeout 确保事件在下一个事件循环中处理
+      setTimeout(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+      }, 0);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [isUserDropdownOpen, isLangDropdownOpen]);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -74,7 +122,10 @@ const Header = () => {
                 <span>{currentLanguage.native}</span>
               </Button>
               {isLangDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-background border rounded-md shadow-lg z-50">
+                <div 
+                  ref={langDropdownRef}
+                  className="absolute right-0 mt-2 w-48 bg-background border rounded-md shadow-lg z-[100]"
+                >
                   <div className="py-1">
                     {languages.map((lang) => (
                       <button
@@ -117,36 +168,45 @@ const Header = () => {
                 </Button>
                 
                 {isUserDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-background border rounded-md shadow-lg z-50">
+                  <div 
+                    ref={userDropdownRef}
+                    className="absolute right-0 mt-2 w-48 bg-background border rounded-md shadow-lg z-[100]"
+                  >
                     <div className="py-1">
-                      <Link 
-                        to="/profile" 
+                      <button
+                        onClick={() => {
+                          setIsUserDropdownOpen(false);
+                          navigate('/profile');
+                        }}
                         className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
-                        onClick={() => setIsUserDropdownOpen(false)}
                       >
                         <UserProfileIcon className="h-4 w-4" />
                         {t('navigation.profile')}
-                      </Link>
+                      </button>
                       
                       {/* 普通用户和发布者显示"我的技能"，管理员显示"管理后台" */}
                       {user.role === 'admin' ? (
-                        <Link 
-                          to="/admin"
+                        <button
+                          onClick={() => {
+                            setIsUserDropdownOpen(false);
+                            navigate('/admin');
+                          }}
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
-                          onClick={() => setIsUserDropdownOpen(false)}
                         >
                           <Settings className="h-4 w-4" />
                           {t('navigation.adminPanel')}
-                        </Link>
+                        </button>
                       ) : (
-                        <Link 
-                          to="/profile?tab=skills" 
+                        <button
+                          onClick={() => {
+                            setIsUserDropdownOpen(false);
+                            navigate('/profile?tab=skills');
+                          }}
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
-                          onClick={() => setIsUserDropdownOpen(false)}
                         >
                           <Settings className="h-4 w-4" />
                           {t('navigation.mySkills')}
-                        </Link>
+                        </button>
                       )}
                       
                       <button
@@ -187,7 +247,10 @@ const Header = () => {
             <Globe className="h-5 w-5" />
           </Button>
           {isLangDropdownOpen && (
-            <div className="absolute right-0 top-full mt-2 w-48 bg-background border rounded-md shadow-lg z-50">
+            <div 
+              ref={langDropdownRef}
+              className="absolute right-0 top-full mt-2 w-48 bg-background border rounded-md shadow-lg z-[100]"
+            >
               <div className="py-1">
                 {languages.map((lang) => (
                   <button
@@ -226,36 +289,45 @@ const Header = () => {
                 </Button>
                 
                 {isUserDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-background border rounded-md shadow-lg z-50">
+                  <div 
+                    ref={userDropdownRef}
+                    className="absolute right-0 mt-2 w-48 bg-background border rounded-md shadow-lg z-[100]"
+                  >
                     <div className="py-1">
-                      <Link 
-                        to="/profile" 
+                      <button
+                        onClick={() => {
+                          setIsUserDropdownOpen(false);
+                          navigate('/profile');
+                        }}
                         className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
-                        onClick={() => setIsUserDropdownOpen(false)}
                       >
                         <UserProfileIcon className="h-4 w-4" />
                         {t('navigation.profile')}
-                      </Link>
+                      </button>
                       
                       {/* 普通用户和发布者显示"我的技能"，管理员显示"管理后台" */}
                       {user.role === 'admin' ? (
-                        <Link 
-                          to="/admin"
+                        <button
+                          onClick={() => {
+                            setIsUserDropdownOpen(false);
+                            navigate('/admin');
+                          }}
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
-                          onClick={() => setIsUserDropdownOpen(false)}
                         >
                           <Settings className="h-4 w-4" />
                           {t('navigation.adminPanel')}
-                        </Link>
+                        </button>
                       ) : (
-                        <Link 
-                          to="/profile?tab=skills" 
+                        <button
+                          onClick={() => {
+                            setIsUserDropdownOpen(false);
+                            navigate('/profile?tab=skills');
+                          }}
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
-                          onClick={() => setIsUserDropdownOpen(false)}
                         >
                           <Settings className="h-4 w-4" />
                           {t('navigation.mySkills')}
-                        </Link>
+                        </button>
                       )}
                       
                       <button

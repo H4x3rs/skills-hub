@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // 创建axios实例
-const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 /** OAuth 登录跳转 URL */
 export const getOAuthUrl = (provider: 'google' | 'github') =>
