@@ -43,41 +43,34 @@ const Header = () => {
       
       // 关闭用户下拉菜单
       if (isUserDropdownOpen) {
-        // 检查点击是否在下拉菜单内部
         const dropdown = userDropdownRef.current;
-        if (dropdown && !dropdown.contains(target)) {
-          // 检查是否点击的是触发按钮（需要向上查找父元素）
-          const button = dropdown.parentElement?.querySelector('button');
-          if (button && !button.contains(target)) {
-            setIsUserDropdownOpen(false);
-          } else if (!button) {
-            // 如果没有找到按钮，直接关闭
-            setIsUserDropdownOpen(false);
-          }
+        const triggerButton = dropdown?.parentElement?.querySelector('button[aria-expanded]') || 
+                              dropdown?.parentElement?.querySelector('button');
+        
+        // 如果点击不在下拉菜单内，也不在触发按钮上，则关闭
+        if (dropdown && !dropdown.contains(target) && 
+            (!triggerButton || !triggerButton.contains(target))) {
+          setIsUserDropdownOpen(false);
         }
       }
       
       // 关闭语言下拉菜单
       if (isLangDropdownOpen) {
         const dropdown = langDropdownRef.current;
-        if (dropdown && !dropdown.contains(target)) {
-          const button = dropdown.parentElement?.querySelector('button');
-          if (button && !button.contains(target)) {
-            setIsLangDropdownOpen(false);
-          } else if (!button) {
-            setIsLangDropdownOpen(false);
-          }
+        const triggerButton = dropdown?.parentElement?.querySelector('button');
+        
+        if (dropdown && !dropdown.contains(target) && 
+            (!triggerButton || !triggerButton.contains(target))) {
+          setIsLangDropdownOpen(false);
         }
       }
     };
 
     if (isUserDropdownOpen || isLangDropdownOpen) {
-      // 使用 setTimeout 确保事件在下一个事件循环中处理
-      setTimeout(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-      }, 0);
+      // 使用捕获阶段，确保在其他事件之前处理
+      document.addEventListener('mousedown', handleClickOutside, true);
       return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('mousedown', handleClickOutside, true);
       };
     }
   }, [isUserDropdownOpen, isLangDropdownOpen]);
@@ -171,14 +164,17 @@ const Header = () => {
                   <div 
                     ref={userDropdownRef}
                     className="absolute right-0 mt-2 w-48 bg-background border rounded-md shadow-lg z-[100]"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <div className="py-1">
                       <button
-                        onClick={() => {
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
                           setIsUserDropdownOpen(false);
                           navigate('/profile');
                         }}
-                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors cursor-pointer"
                       >
                         <UserProfileIcon className="h-4 w-4" />
                         {t('navigation.profile')}
@@ -187,22 +183,26 @@ const Header = () => {
                       {/* 普通用户和发布者显示"我的技能"，管理员显示"管理后台" */}
                       {user.role === 'admin' ? (
                         <button
-                          onClick={() => {
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setIsUserDropdownOpen(false);
                             navigate('/admin');
                           }}
-                          className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
+                          className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors cursor-pointer"
                         >
                           <Settings className="h-4 w-4" />
                           {t('navigation.adminPanel')}
                         </button>
                       ) : (
                         <button
-                          onClick={() => {
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setIsUserDropdownOpen(false);
                             navigate('/profile/skills');
                           }}
-                          className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
+                          className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors cursor-pointer"
                         >
                           <Settings className="h-4 w-4" />
                           {t('navigation.mySkills')}
@@ -210,8 +210,10 @@ const Header = () => {
                       )}
                       
                       <button
-                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent text-red-600"
-                        onClick={() => {
+                        type="button"
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent text-red-600 transition-colors cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
                           logout();
                           setIsUserDropdownOpen(false);
                           navigate('/');
@@ -292,14 +294,17 @@ const Header = () => {
                   <div 
                     ref={userDropdownRef}
                     className="absolute right-0 mt-2 w-48 bg-background border rounded-md shadow-lg z-[100]"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <div className="py-1">
                       <button
-                        onClick={() => {
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
                           setIsUserDropdownOpen(false);
                           navigate('/profile');
                         }}
-                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors cursor-pointer"
                       >
                         <UserProfileIcon className="h-4 w-4" />
                         {t('navigation.profile')}
@@ -308,22 +313,26 @@ const Header = () => {
                       {/* 普通用户和发布者显示"我的技能"，管理员显示"管理后台" */}
                       {user.role === 'admin' ? (
                         <button
-                          onClick={() => {
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setIsUserDropdownOpen(false);
                             navigate('/admin');
                           }}
-                          className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
+                          className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors cursor-pointer"
                         >
                           <Settings className="h-4 w-4" />
                           {t('navigation.adminPanel')}
                         </button>
                       ) : (
                         <button
-                          onClick={() => {
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setIsUserDropdownOpen(false);
                             navigate('/profile/skills');
                           }}
-                          className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
+                          className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors cursor-pointer"
                         >
                           <Settings className="h-4 w-4" />
                           {t('navigation.mySkills')}
@@ -331,8 +340,10 @@ const Header = () => {
                       )}
                       
                       <button
-                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent text-red-600"
-                        onClick={() => {
+                        type="button"
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent text-red-600 transition-colors cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
                           logout();
                           setIsUserDropdownOpen(false);
                           navigate('/');
