@@ -113,13 +113,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const loginWithOAuthToken = React.useCallback(async (accessToken: string, refreshToken?: string) => {
+    // 先保存 token 到 localStorage
     localStorage.setItem('token', accessToken);
     if (refreshToken) {
       localStorage.setItem('refreshToken', refreshToken);
     }
+    // 更新状态
     setToken(accessToken);
-    await fetchCurrentUser();
-  }, [fetchCurrentUser]);
+    
+    // 直接使用 accessToken 获取用户信息，避免状态更新延迟问题
+    // 临时设置 token 到请求头（因为 axios 拦截器会从 localStorage 读取）
+    try {
+      const response = await authAPI.getCurrentUser();
+      let user;
+      if (response.data.success !== undefined) {
+        user = response.data.data?.user;
+      } else {
+        user = response.data.user;
+      }
+      if (user) {
+        setUser(user);
+      } else {
+        throw new Error('User data not found in response');
+      }
+    } catch (error) {
+      console.error('Failed to fetch current user after OAuth login:', error);
+      // 清理 token
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      setToken(null);
+      setUser(null);
+      throw error;
+    }
+  }, []);
 
   const register = async (userData: {
     username: string;

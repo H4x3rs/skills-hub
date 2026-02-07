@@ -140,7 +140,7 @@ const Header = () => {
                         </Link>
                       ) : (
                         <Link 
-                          to="/profile" 
+                          to="/profile?tab=skills" 
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
                           onClick={() => setIsUserDropdownOpen(false)}
                         >
@@ -249,7 +249,7 @@ const Header = () => {
                         </Link>
                       ) : (
                         <Link 
-                          to="/profile" 
+                          to="/profile?tab=skills" 
                           className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-accent"
                           onClick={() => setIsUserDropdownOpen(false)}
                         >

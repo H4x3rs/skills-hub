@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { User, Calendar, Download, Upload, Package, Heart, BarChart3, Loader2, Star, Search, Pencil, ChevronDown, Link2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,8 +13,19 @@ import { AddSkillModal } from '@/components/admin';
 const ProfilePage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user, isAuthenticated, isLoading: authLoading, fetchCurrentUser } = useAuth();
-  const [activeTab, setActiveTab] = useState('profile');
+  
+  // 从 URL 参数获取 tab，如果没有则默认为 'profile'
+  const tabFromUrl = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState(tabFromUrl || 'profile');
+  
+  // 当 URL 参数变化时更新 activeTab
+  useEffect(() => {
+    if (tabFromUrl && ['profile', 'skills', 'analytics', 'favorites'].includes(tabFromUrl)) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [tabFromUrl]);
   const [saving, setSaving] = useState(false);
   const [userData, setUserData] = useState({
     username: '',
@@ -192,7 +203,10 @@ const ProfilePage = () => {
                   className={`flex items-center gap-2 w-full text-left px-3 py-2 rounded-md text-sm ${
                     activeTab === 'profile' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
                   }`}
-                  onClick={() => setActiveTab('profile')}
+                  onClick={() => {
+                    setActiveTab('profile');
+                    setSearchParams({}, { replace: true });
+                  }}
                 >
                   <User className="h-4 w-4" />
                   {t('profile.title')}
@@ -201,7 +215,10 @@ const ProfilePage = () => {
                   className={`flex items-center gap-2 w-full text-left px-3 py-2 rounded-md text-sm ${
                     activeTab === 'skills' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
                   }`}
-                  onClick={() => setActiveTab('skills')}
+                  onClick={() => {
+                    setActiveTab('skills');
+                    setSearchParams({ tab: 'skills' }, { replace: true });
+                  }}
                 >
                   <Package className="h-4 w-4" />
                   {t('profile.mySkills')}
@@ -210,7 +227,10 @@ const ProfilePage = () => {
                   className={`flex items-center gap-2 w-full text-left px-3 py-2 rounded-md text-sm ${
                     activeTab === 'favorites' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
                   }`}
-                  onClick={() => setActiveTab('favorites')}
+                  onClick={() => {
+                    setActiveTab('favorites');
+                    setSearchParams({ tab: 'favorites' }, { replace: true });
+                  }}
                 >
                   <Heart className="h-4 w-4" />
                   {t('profile.favorites')}
@@ -219,7 +239,10 @@ const ProfilePage = () => {
                   className={`flex items-center gap-2 w-full text-left px-3 py-2 rounded-md text-sm ${
                     activeTab === 'analytics' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
                   }`}
-                  onClick={() => setActiveTab('analytics')}
+                  onClick={() => {
+                    setActiveTab('analytics');
+                    setSearchParams({ tab: 'analytics' }, { replace: true });
+                  }}
                 >
                   <BarChart3 className="h-4 w-4" />
                   {t('profile.analytics')}

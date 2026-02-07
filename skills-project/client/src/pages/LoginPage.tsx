@@ -15,6 +15,7 @@ const LoginPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOAuthProcessing, setIsOAuthProcessing] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -33,21 +34,32 @@ const LoginPage = () => {
     }
 
     if (token) {
+      setIsOAuthProcessing(true);
+      setIsLoading(true);
       const redirect = searchParams.get('redirect');
       loginWithOAuthToken(token, refreshToken || undefined)
         .then(() => {
           toast.success(t('auth.login.success') || 'Login successful!');
-          if (redirect) {
-            navigate(redirect);
-          } else {
-            navigate('/');
-          }
+          // 清除 URL 参数
+          setSearchParams({}, { replace: true });
+          // 延迟一下确保状态更新完成
+          setTimeout(() => {
+            if (redirect) {
+              navigate(redirect, { replace: true });
+            } else {
+              navigate('/', { replace: true });
+            }
+          }, 100);
         })
         .catch((err) => {
           console.error('OAuth login error:', err);
           toast.error(t('auth.login.generalError') || 'Login failed');
+          setSearchParams({}, { replace: true });
         })
-        .finally(() => setSearchParams({}, { replace: true }));
+        .finally(() => {
+          setIsLoading(false);
+          setIsOAuthProcessing(false);
+        });
     }
   }, [searchParams, loginWithOAuthToken, navigate, t, setSearchParams]);
 
@@ -92,6 +104,27 @@ const LoginPage = () => {
       setIsLoading(false);
     }
   };
+
+  // 如果正在处理 OAuth 登录，显示加载状态
+  if (isOAuthProcessing) {
+    return (
+      <div className="bg-background">
+        <div className="pt-14 pb-14">
+          <div className="w-full max-w-md mx-auto p-6 space-y-6 bg-card rounded-xl border shadow-sm">
+            <div className="text-center">
+              <div className="mx-auto h-12 w-12 bg-primary rounded-full flex items-center justify-center mb-4 animate-pulse">
+                <User className="h-6 w-6 text-primary-foreground" />
+              </div>
+              <h2 className="text-3xl font-bold font-heading">{t('auth.login.title')}</h2>
+              <p className="text-muted-foreground mt-2">
+                {t('auth.login.loading') || '正在登录...'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-background">
