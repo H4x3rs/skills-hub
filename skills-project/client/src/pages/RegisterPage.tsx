@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import PolicyModal from '@/components/PolicyModal';
+import { Captcha } from '@/components/Captcha';
 
 const RegisterPage = () => {
   const { t } = useTranslation();
@@ -23,7 +24,9 @@ const RegisterPage = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    fullName: ''  // 添加全名字段（可选）
+    fullName: '',  // 添加全名字段（可选）
+    captcha: '',
+    captchaId: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,14 +39,20 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-
+    
     // 验证密码匹配
     if (formData.password !== formData.confirmPassword) {
       toast.error(t('auth.register.passwordMismatch') || 'Passwords do not match');
-      setIsLoading(false);
       return;
     }
+
+    // 验证验证码
+    if (!formData.captcha || !formData.captchaId) {
+      toast.error(t('auth.captchaRequired', '请输入验证码'));
+      return;
+    }
+
+    setIsLoading(true);
 
     // 准备发送到API的数据
     const { confirmPassword, ...registrationData } = formData;
@@ -67,6 +76,9 @@ const RegisterPage = () => {
       }
       
       toast.error(errorMessage);
+      
+      // 注册失败时清空验证码，触发刷新
+      setFormData(prev => ({ ...prev, captcha: '', captchaId: '' }));
     } finally {
       setIsLoading(false);
     }
@@ -197,6 +209,16 @@ const RegisterPage = () => {
                 </button>
               </div>
             </div>
+
+            <Captcha
+              value={formData.captcha}
+              onChange={(value, captchaId) => {
+                setFormData(prev => ({ ...prev, captcha: value, captchaId }));
+              }}
+              onRefresh={() => {
+                setFormData(prev => ({ ...prev, captcha: '', captchaId: '' }));
+              }}
+            />
 
             <div className="flex items-center">
               <input

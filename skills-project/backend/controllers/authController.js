@@ -2,6 +2,7 @@ const User = require('../models/User');
 const RefreshToken = require('../models/RefreshToken');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const { verifyCaptcha } = require('./captchaController');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key';
 const ACCESS_TOKEN_EXPIRES = process.env.ACCESS_TOKEN_EXPIRES || '15m';
@@ -31,7 +32,15 @@ const createRefreshTokenRecord = async (userId, token) => {
 
 const register = async (req, res) => {
   try {
-    const { username, email, password, fullName } = req.body;
+    const { username, email, password, fullName, captchaId, captcha } = req.body;
+
+    // 验证验证码
+    if (!verifyCaptcha(captchaId, captcha)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid or expired captcha'
+      });
+    }
 
     // Check if user already exists
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
@@ -93,8 +102,16 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, captchaId, captcha } = req.body;
     const loginInput = email?.trim();
+
+    // 验证验证码
+    if (!verifyCaptcha(captchaId, captcha)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid or expired captcha'
+      });
+    }
 
     // 支持邮箱或用户名登录：判断是否包含 @
     const user = await User.findOne(

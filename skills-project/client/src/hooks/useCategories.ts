@@ -21,7 +21,7 @@ export interface Pagination {
   hasPrev: boolean;
 }
 
-export const useCategories = (fetchWhenActive: boolean = true, withPagination: boolean = false) => {
+export const useCategories = (fetchWhenActive: boolean = true, withPagination: boolean = false, usePublicAPI: boolean = false) => {
   const { t } = useTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
@@ -32,6 +32,20 @@ export const useCategories = (fetchWhenActive: boolean = true, withPagination: b
   const fetchCategories = useCallback(async (pageNum: number = page) => {
     try {
       setLoading(true);
+      
+      // 如果使用公开 API（用于公开页面如技能库）
+      if (usePublicAPI && !withPagination) {
+        const response = await categoryAPI.getPublic();
+        const categoriesData = response.data.categories || [];
+        // 公开 API 已经只返回激活的分类，直接排序即可
+        const sortedCategories = categoriesData
+          .sort((a: Category, b: Category) => a.order - b.order);
+        setCategories(sortedCategories);
+        setPagination(null);
+        return;
+      }
+      
+      // 管理员 API（需要认证，用于管理页面）
       const params = withPagination ? { page: pageNum, limit } : {};
       const response = await categoryAPI.getAll(params);
       const categoriesData = response.data.success !== undefined
@@ -61,7 +75,7 @@ export const useCategories = (fetchWhenActive: boolean = true, withPagination: b
     } finally {
       setLoading(false);
     }
-  }, [t, withPagination, limit, page]);
+  }, [t, withPagination, limit, page, usePublicAPI]);
 
   useEffect(() => {
     if (fetchWhenActive) {

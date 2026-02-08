@@ -1078,6 +1078,26 @@ const updateSettings = async (req, res) => {
   }
 };
 
+// 公开获取分类（只返回激活的分类，无需认证）
+const getPublicCategories = async (req, res) => {
+  try {
+    const categories = await Category.find({ isActive: true })
+      .sort({ order: 1, createdAt: 1 })
+      .select('name displayName description icon order');
+    
+    res.json({
+      success: true,
+      categories
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Server error while fetching categories',
+      message: error.message
+    });
+  }
+};
+
 // 分类管理
 const getCategories = async (req, res) => {
   try {
@@ -1294,6 +1314,7 @@ module.exports = {
   getSettings,
   updateSettings,
   getPublicSiteSettings,
+  getPublicCategories,
   getCategories,
   createCategory,
   updateCategory,

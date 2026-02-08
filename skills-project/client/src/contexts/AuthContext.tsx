@@ -94,8 +94,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     initializeAuth();
   }, [fetchCurrentUser]);
 
-  const login = async (email: string, password: string) => {
-    const response = await authAPI.login({ email, password });
+  const login = async (email: string, password: string, captchaId?: string, captcha?: string) => {
+    const response = await authAPI.login({ 
+      email, 
+      password,
+      ...(captchaId && captcha ? { captchaId, captcha } : {})
+    });
     
     const data = response.data.data || response.data;
     const accessToken = data.accessToken || data.token;
@@ -148,6 +152,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const register = async (userData: {
+    captchaId?: string;
+    captcha?: string;
     username: string;
     email: string;
     password: string;

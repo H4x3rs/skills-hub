@@ -111,14 +111,36 @@
         "passwordMismatch": "两次输入的密码不一致",
         "passwordMinLength": "密码至少需要8个字符",
         "invalidEmail": "请输入有效的邮箱地址",
-        "generalError": "注册过程中发生错误"
-      }
+        "generalError": "注册过程中发生错误",
+        "loading": "注册中..."
+      },
+      "captchaRequired": "请输入验证码"
+    },
+    "captcha": {
+      "label": "验证码",
+      "placeholder": "请输入验证码",
+      "clickToRefresh": "点击刷新验证码",
+      "refresh": "刷新验证码",
+      "generateError": "生成验证码失败"
     },
     "skills": {
       "title": "技能库",
       "discover": "探索高质量技能，提升开发效率",
       "searchPlaceholder": "搜索技能名称、描述或标签...",
       "filter": "筛选",
+      "filterDesc": "设置筛选条件和排序方式",
+      "sortBy": "排序方式",
+      "sort": {
+        "recent": "最新",
+        "popular": "最热",
+        "rating": "评分最高",
+        "downloads": "下载最多"
+      },
+      "currentFilters": "当前筛选条件",
+      "category": "分类",
+      "search": "搜索",
+      "noFilters": "暂无筛选条件",
+      "resetFilters": "重置",
       "grid": "网格",
       "list": "列表",
       "foundSkills": "找到 {{count}} 个技能",
@@ -148,6 +170,23 @@
       "copyInstall": "复制安装命令",
       "copySuccess": "已复制到剪贴板",
       "copyFailed": "复制失败"
+    },
+    "blog": {
+      "title": "博客",
+      "subtitle": "探索最新的技术文章和教程",
+      "searchPlaceholder": "搜索博客...",
+      "allCategories": "所有分类",
+      "noBlogs": "暂无博客文章",
+      "readMore": "阅读更多",
+      "views": "次浏览",
+      "featured": "精选",
+      "categories": {
+        "general": "通用",
+        "technology": "技术",
+        "tutorial": "教程",
+        "news": "新闻",
+        "announcement": "公告"
+      }
     },
     "profile": {
       "title": "个人资料",
@@ -470,6 +509,7 @@
       "cancel": "取消",
       "close": "关闭",
       "ok": "确定",
+      "confirm": "确定",
       "deleteConfirm": "确定要删除吗？此操作不可撤销。",
       "save": "保存",
       "saving": "保存中...",

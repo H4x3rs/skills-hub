@@ -32,7 +32,11 @@
       "download": "ダウンロード",
       "blog": "ブログ",
       "login": "ログイン",
-      "register": "登録"
+      "register": "登録",
+      "profile": "プロファイル",
+      "mySkills": "マイスキル",
+      "adminPanel": "管理パネル",
+      "logout": "ログアウト"
     },
     "about": {
       "mission": {
@@ -90,6 +94,8 @@
         "title": "アカウントにログイン",
         "subtitle": "メールアドレスとパスワードを入力してアカウントにアクセスしてください",
         "email": "メールアドレス",
+        "emailOrUsername": "メールアドレスまたはユーザー名",
+        "emailPlaceholder": "your@email.com またはユーザー名",
         "password": "パスワード",
         "forgotPassword": "パスワードをお忘れですか？",
         "rememberMe": "ログイン状態を保持",
@@ -98,6 +104,8 @@
         "noAccount": "アカウントをお持ちではありませんか？",
         "signUp": "登録",
         "orContinueWith": "または以下で続行",
+        "continueWithGoogle": "Googleで続行",
+        "continueWithGithub": "GitHubで続行",
         "success": "ログインに成功しました！",
         "generalError": "ログイン中にエラーが発生しました"
       },
@@ -121,13 +129,35 @@
         "passwordMismatch": "パスワードが一致しません",
         "passwordMinLength": "パスワードは8文字以上である必要があります",
         "invalidEmail": "有効なメールアドレスを入力してください",
-        "generalError": "登録中にエラーが発生しました"
-      }
+        "generalError": "登録中にエラーが発生しました",
+        "loading": "登録中..."
+      },
+      "captchaRequired": "認証コードを入力してください"
+    },
+    "captcha": {
+      "label": "認証コード",
+      "placeholder": "認証コードを入力してください",
+      "clickToRefresh": "クリックして認証コードを更新",
+      "refresh": "認証コードを更新",
+      "generateError": "認証コードの生成に失敗しました"
     },
     "skills": {
       "title": "スキルマーケットプレイス",
       "searchPlaceholder": "スキル名、説明、タグを検索...",
       "filter": "フィルター",
+      "filterDesc": "フィルター条件と並び順を設定",
+      "sortBy": "並び順",
+      "sort": {
+        "recent": "最新",
+        "popular": "人気",
+        "rating": "評価が高い",
+        "downloads": "ダウンロード数が多い"
+      },
+      "currentFilters": "現在のフィルター",
+      "category": "カテゴリ",
+      "search": "検索",
+      "noFilters": "フィルターが設定されていません",
+      "resetFilters": "リセット",
       "grid": "グリッド",
       "list": "リスト",
       "foundSkills": "{{count}}個のスキルが見つかりました",
@@ -143,6 +173,23 @@
         "devops": "DevOps",
         "security": "セキュリティ",
         "tools": "開発ツール"
+      }
+    },
+    "blog": {
+      "title": "ブログ",
+      "subtitle": "最新の技術記事とチュートリアルを探索",
+      "searchPlaceholder": "ブログを検索...",
+      "allCategories": "すべてのカテゴリ",
+      "noBlogs": "ブログ記事がありません",
+      "readMore": "続きを読む",
+      "views": "回閲覧",
+      "featured": "おすすめ",
+      "categories": {
+        "general": "一般",
+        "technology": "技術",
+        "tutorial": "チュートリアル",
+        "news": "ニュース",
+        "announcement": "お知らせ"
       }
     },
     "profile": {
@@ -310,6 +357,7 @@
       "cancel": "キャンセル",
       "close": "閉じる",
       "ok": "OK",
+      "confirm": "確定",
       "deleteConfirm": "本当に削除しますか？この操作は元に戻せません。",
       "save": "保存",
       "download": "ダウンロード",

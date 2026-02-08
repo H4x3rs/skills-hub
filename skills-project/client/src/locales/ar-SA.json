@@ -32,7 +32,11 @@
       "download": "تنزيل",
       "blog": "مدونة",
       "login": "تسجيل الدخول",
-      "register": "التسجيل"
+      "register": "التسجيل",
+      "profile": "الملف الشخصي",
+      "mySkills": "مهاراتي",
+      "adminPanel": "لوحة الإدارة",
+      "logout": "تسجيل الخروج"
     },
     "about": {
       "mission": {
@@ -90,6 +94,8 @@
         "title": "سجل الدخول إلى حسابك",
         "subtitle": "أدخل عنوان بريدك الإلكتروني وكلمة المرور للوصول إلى حسابك",
         "email": "عنوان البريد الإلكتروني",
+        "emailOrUsername": "البريد الإلكتروني أو اسم المستخدم",
+        "emailPlaceholder": "your@email.com أو اسم المستخدم",
         "password": "كلمة المرور",
         "forgotPassword": "نسيت كلمة المرور؟",
         "rememberMe": "تذكرني",
@@ -98,6 +104,8 @@
         "noAccount": "ليس لديك حساب؟",
         "signUp": "التسجيل",
         "orContinueWith": "أو متابعة مع",
+        "continueWithGoogle": "المتابعة مع Google",
+        "continueWithGithub": "المتابعة مع GitHub",
         "success": "تم تسجيل الدخول بنجاح!",
         "generalError": "حدث خطأ أثناء تسجيل الدخول"
       },
@@ -121,13 +129,35 @@
         "passwordMismatch": "كلمات المرور غير متطابقة",
         "passwordMinLength": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
         "invalidEmail": "يرجى إدخال عنوان بريد إلكتروني صالح",
-        "generalError": "حدث خطأ أثناء التسجيل"
-      }
+        "generalError": "حدث خطأ أثناء التسجيل",
+        "loading": "جاري التسجيل..."
+      },
+      "captchaRequired": "يرجى إدخال رمز التحقق"
+    },
+    "captcha": {
+      "label": "رمز التحقق",
+      "placeholder": "يرجى إدخال رمز التحقق",
+      "clickToRefresh": "انقر لتحديث رمز التحقق",
+      "refresh": "تحديث رمز التحقق",
+      "generateError": "فشل في إنشاء رمز التحقق"
     },
     "skills": {
       "title": "سوق المهارات",
       "searchPlaceholder": "ابحث عن أسماء المهارات أو الأوصاف أو العلامات...",
       "filter": "تصفية",
+      "filterDesc": "تعيين شروط التصفية وترتيب الفرز",
+      "sortBy": "ترتيب حسب",
+      "sort": {
+        "recent": "الأحدث",
+        "popular": "الأكثر شعبية",
+        "rating": "أعلى تقييم",
+        "downloads": "الأكثر تنزيلاً"
+      },
+      "currentFilters": "الفلاتر الحالية",
+      "category": "الفئة",
+      "search": "بحث",
+      "noFilters": "لا توجد فلاتر مطبقة",
+      "resetFilters": "إعادة تعيين",
       "grid": "شبكة",
       "list": "قائمة",
       "foundSkills": "تم العثور على {{count}} مهارة",
@@ -143,6 +173,23 @@
         "devops": "DevOps",
         "security": "الأمن",
         "tools": "أدوات التطوير"
+      }
+    },
+    "blog": {
+      "title": "المدونة",
+      "subtitle": "استكشف أحدث المقالات التقنية والدروس",
+      "searchPlaceholder": "البحث في المدونات...",
+      "allCategories": "جميع الفئات",
+      "noBlogs": "لا توجد مقالات مدونة بعد",
+      "readMore": "اقرأ المزيد",
+      "views": "مشاهدة",
+      "featured": "مميز",
+      "categories": {
+        "general": "عام",
+        "technology": "التكنولوجيا",
+        "tutorial": "دليل",
+        "news": "الأخبار",
+        "announcement": "إعلان"
       }
     },
     "profile": {
@@ -310,6 +357,7 @@
       "cancel": "إلغاء",
       "close": "إغلاق",
       "ok": "موافق",
+      "confirm": "تأكيد",
       "deleteConfirm": "هل أنت متأكد أنك تريد حذف هذا؟ لا يمكن التراجع عن هذا الإجراء.",
       "save": "حفظ",
       "download": "تنزيل",

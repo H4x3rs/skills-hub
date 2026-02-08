@@ -57,6 +57,22 @@ const clearAuthAndRedirect = () => {
   window.location.href = '/login';
 };
 
+// 公开 API 列表（不需要认证，401 时不应该尝试刷新 token）
+const publicAPIs = [
+  '/skills',
+  '/skills/search',
+  '/skills/popular',
+  '/skills/latest',
+  '/blogs',
+  '/site-settings',
+  '/categories',
+];
+
+// 检查是否为公开 API
+const isPublicAPI = (url: string) => {
+  return publicAPIs.some(publicPath => url.includes(publicPath));
+};
+
 // 响应拦截器 - 401 时尝试 refresh token
 api.interceptors.response.use(
   (response) => response,
@@ -72,6 +88,11 @@ api.interceptors.response.use(
       originalRequest?.url?.includes('/auth/register') ||
       originalRequest?.url?.includes('/auth/refresh');
     if (isAuthRequest) {
+      return Promise.reject(error);
+    }
+
+    // 如果是公开 API，直接返回错误，不尝试刷新 token
+    if (isPublicAPI(originalRequest?.url || '')) {
       return Promise.reject(error);
     }
 
@@ -97,6 +118,11 @@ api.interceptors.response.use(
   }
 );
 
+// 验证码 API
+export const captchaAPI = {
+  generate: () => api.get('/captcha/generate'),
+};
+
 // 认证相关的API方法
 export const authAPI = {
   // 用户注册
@@ -105,6 +131,8 @@ export const authAPI = {
     email: string;
     password: string;
     fullName?: string;
+    captchaId?: string;
+    captcha?: string;
   }) => {
     return api.post('/auth/register', userData);
   },
@@ -319,6 +347,9 @@ export const skillAdminAPI = {
 
 // 分类管理 API
 export const categoryAPI = {
+  // 公开 API：获取激活的分类（无需认证）
+  getPublic: () => api.get('/categories'),
+  // 管理员 API：获取所有分类（需要认证）
   getAll: (params?: { page?: number; limit?: number }) => 
     api.get('/admin/categories', { params: params || {} }),
   create: (data: {
@@ -389,6 +420,13 @@ export const blogAPI = {
   delete: (id: string) => api.delete(`/blogs/${id}`),
   adminGetAll: (params?: { page?: number; limit?: number; status?: string; category?: string; author?: string }) =>
     api.get('/blogs/admin/all', { params }),
+  uploadImage: (file: File) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    return api.post('/blogs/upload-image', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
 };
 
 export default api;

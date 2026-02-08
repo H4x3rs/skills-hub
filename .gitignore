@@ -5,6 +5,9 @@ node_modules
 .env
 .env.local
 
+# 上传的文件
+skills-project/backend/uploads/
+
 
 
 

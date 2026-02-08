@@ -32,7 +32,11 @@
       "download": "Herunterladen",
       "blog": "Blog",
       "login": "Anmelden",
-      "register": "Registrieren"
+      "register": "Registrieren",
+      "profile": "Profil",
+      "mySkills": "Meine Fähigkeiten",
+      "adminPanel": "Admin-Panel",
+      "logout": "Abmelden"
     },
     "about": {
       "mission": {
@@ -90,6 +94,8 @@
         "title": "Melden Sie sich bei Ihrem Konto an",
         "subtitle": "Geben Sie Ihre E-Mail-Adresse und Ihr Passwort ein, um auf Ihr Konto zuzugreifen",
         "email": "E-Mail-Adresse",
+        "emailOrUsername": "E-Mail oder Benutzername",
+        "emailPlaceholder": "ihre@email.com oder Benutzername",
         "password": "Passwort",
         "forgotPassword": "Passwort vergessen?",
         "rememberMe": "Angemeldet bleiben",
@@ -98,6 +104,8 @@
         "noAccount": "Sie haben noch kein Konto?",
         "signUp": "Registrieren",
         "orContinueWith": "Oder fahren Sie fort mit",
+        "continueWithGoogle": "Mit Google fortfahren",
+        "continueWithGithub": "Mit GitHub fortfahren",
         "success": "Anmeldung erfolgreich!",
         "generalError": "Bei der Anmeldung ist ein Fehler aufgetreten"
       },
@@ -121,13 +129,35 @@
         "passwordMismatch": "Die Passwörter stimmen nicht überein",
         "passwordMinLength": "Das Passwort muss mindestens 8 Zeichen lang sein",
         "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
-        "generalError": "Bei der Registrierung ist ein Fehler aufgetreten"
-      }
+        "generalError": "Bei der Registrierung ist ein Fehler aufgetreten",
+        "loading": "Registrierung läuft..."
+      },
+      "captchaRequired": "Bitte geben Sie den Captcha-Code ein"
+    },
+    "captcha": {
+      "label": "Captcha",
+      "placeholder": "Bitte geben Sie den Captcha-Code ein",
+      "clickToRefresh": "Klicken Sie, um das Captcha zu aktualisieren",
+      "refresh": "Captcha aktualisieren",
+      "generateError": "Fehler beim Generieren des Captchas"
     },
     "skills": {
       "title": "Fähigkeiten-Marktplatz",
       "searchPlaceholder": "Suchen Sie nach Fähigkeitsnamen, Beschreibungen oder Tags...",
       "filter": "Filtern",
+      "filterDesc": "Filterbedingungen und Sortierreihenfolge festlegen",
+      "sortBy": "Sortieren nach",
+      "sort": {
+        "recent": "Neueste",
+        "popular": "Beliebteste",
+        "rating": "Höchste Bewertung",
+        "downloads": "Meiste Downloads"
+      },
+      "currentFilters": "Aktuelle Filter",
+      "category": "Kategorie",
+      "search": "Suchen",
+      "noFilters": "Keine Filter angewendet",
+      "resetFilters": "Zurücksetzen",
       "grid": "Raster",
       "list": "Liste",
       "foundSkills": "{{count}} Fähigkeiten gefunden",
@@ -143,6 +173,23 @@
         "devops": "DevOps",
         "security": "Sicherheit",
         "tools": "Entwicklungstools"
+      }
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Erkunden Sie die neuesten Tech-Artikel und Tutorials",
+      "searchPlaceholder": "Blogs durchsuchen...",
+      "allCategories": "Alle Kategorien",
+      "noBlogs": "Noch keine Blog-Beiträge",
+      "readMore": "Weiterlesen",
+      "views": "Aufrufe",
+      "featured": "Empfohlen",
+      "categories": {
+        "general": "Allgemein",
+        "technology": "Technologie",
+        "tutorial": "Tutorial",
+        "news": "Nachrichten",
+        "announcement": "Ankündigung"
       }
     },
     "profile": {
@@ -310,6 +357,7 @@
       "cancel": "Abbrechen",
       "close": "Schließen",
       "ok": "OK",
+      "confirm": "Bestätigen",
       "deleteConfirm": "Sind Sie sicher, dass Sie dies löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
       "save": "Speichern",
       "download": "Herunterladen",

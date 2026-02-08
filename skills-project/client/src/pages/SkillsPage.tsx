@@ -1,20 +1,30 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Download, Star, Filter, Grid, List, Loader2 } from 'lucide-react';
+import { Search, Download, Star, Filter, Grid, List, Loader2, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { useSkills } from '@/hooks/useSkills';
 import { useCategories } from '@/hooks/useCategories';
+import {
+  Drawer,
+  DrawerTrigger,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from '@/components/ui/drawer';
 
 const SkillsPage = () => {
   const { t } = useTranslation();
   const location = useLocation();
-  const { categories, loading: categoriesLoading } = useCategories();
+  const { categories, loading: categoriesLoading } = useCategories(true, false, true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [currentPage, setCurrentPage] = useState(1);
+  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
+  const [sortBy, setSortBy] = useState<'recent' | 'popular' | 'rating' | 'downloads'>('recent');
 
   // 当从其他页面跳转过来时，滚动到顶部
   useEffect(() => {
@@ -45,6 +55,53 @@ const SkillsPage = () => {
 
   const getRating = (skill: { rating?: { average?: number } }) => {
     return skill.rating?.average ?? 0;
+  };
+
+  // 限制描述长度
+  const truncateDescription = (description: string | undefined, maxLength: number = 120) => {
+    if (!description) return '—';
+    if (description.length <= maxLength) return description;
+    return description.slice(0, maxLength).trim() + '...';
+  };
+
+  // 排序技能列表
+  const sortedSkills = useMemo(() => {
+    const skills = [...currentSkills];
+    switch (sortBy) {
+      case 'popular':
+        return skills.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+      case 'rating':
+        return skills.sort((a, b) => {
+          const ratingA = a.rating?.average || 0;
+          const ratingB = b.rating?.average || 0;
+          return ratingB - ratingA;
+        });
+      case 'downloads':
+        return skills.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+      case 'recent':
+      default:
+        return skills.sort((a, b) => {
+          const dateA = new Date(a.lastUpdated || a.createdAt || 0).getTime();
+          const dateB = new Date(b.lastUpdated || b.createdAt || 0).getTime();
+          return dateB - dateA;
+        });
+    }
+  }, [currentSkills, sortBy]);
+
+  // 获取排序选项的显示文本
+  const getSortLabel = (value: string) => {
+    switch (value) {
+      case 'recent':
+        return t('skills.sort.recent', '最新');
+      case 'popular':
+        return t('skills.sort.popular', '最热');
+      case 'rating':
+        return t('skills.sort.rating', '评分最高');
+      case 'downloads':
+        return t('skills.sort.downloads', '下载最多');
+      default:
+        return value;
+    }
   };
 
   return (
@@ -92,10 +149,124 @@ const SkillsPage = () => {
               ))}
             </select>
 
-            <Button variant="outline" size="sm" className="flex-shrink-0">
-              <Filter className="h-4 w-4 mr-1" />
-              <span className="hidden sm:inline">{t('skills.filter')}</span>
-            </Button>
+            <Drawer open={filterDrawerOpen} onOpenChange={setFilterDrawerOpen}>
+              <DrawerTrigger asChild>
+                <Button variant="outline" size="sm" className="flex-shrink-0">
+                  <Filter className="h-4 w-4 mr-1" />
+                  <span className="hidden sm:inline">{t('skills.filter', '筛选')}</span>
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent className="sm:max-w-md">
+                <DrawerHeader className="border-b border-border/40 pb-6 pt-8 px-6">
+                  <DrawerTitle className="text-2xl font-bold tracking-tight">
+                    {t('skills.filter', '筛选')}
+                  </DrawerTitle>
+                  <DrawerDescription className="text-sm text-muted-foreground/80">
+                    {t('skills.filterDesc', '设置筛选条件和排序方式')}
+                  </DrawerDescription>
+                </DrawerHeader>
+                <div className="px-6 pb-6 overflow-y-auto max-h-[calc(100vh-180px)]">
+                  <div className="space-y-6 pt-6">
+                    {/* 排序方式 */}
+                    <div className="space-y-3">
+                      <label className="block text-sm font-semibold text-foreground/90">
+                        {t('skills.sortBy', '排序方式')}
+                      </label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {(['recent', 'popular', 'rating', 'downloads'] as const).map((option) => (
+                          <button
+                            key={option}
+                            type="button"
+                            onClick={() => setSortBy(option)}
+                            className={`px-4 py-2.5 rounded-lg border text-sm font-medium transition-all ${
+                              sortBy === option
+                                ? 'bg-primary text-primary-foreground border-primary shadow-sm'
+                                : 'bg-background border-border/50 hover:border-primary/50 hover:bg-muted/50'
+                            }`}
+                          >
+                            {getSortLabel(option)}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* 当前筛选条件 */}
+                    <div className="space-y-3 border-t border-border/40 pt-6">
+                      <label className="block text-sm font-semibold text-foreground/90">
+                        {t('skills.currentFilters', '当前筛选条件')}
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedCategory !== 'all' && (
+                          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-muted text-sm">
+                            <span className="text-muted-foreground">
+                              {t('skills.category', '分类')}:
+                            </span>
+                            <span className="font-medium">
+                              {categories.find(c => c.name === selectedCategory)?.displayName || selectedCategory}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSelectedCategory('all');
+                                setCurrentPage(1);
+                              }}
+                              className="ml-1 hover:text-destructive transition-colors"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </div>
+                        )}
+                        {searchTerm && (
+                          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-muted text-sm">
+                            <span className="text-muted-foreground">
+                              {t('skills.search', '搜索')}:
+                            </span>
+                            <span className="font-medium">{searchTerm}</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSearchTerm('');
+                                setCurrentPage(1);
+                              }}
+                              className="ml-1 hover:text-destructive transition-colors"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </div>
+                        )}
+                        {selectedCategory === 'all' && !searchTerm && (
+                          <p className="text-sm text-muted-foreground">
+                            {t('skills.noFilters', '暂无筛选条件')}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* 操作按钮 */}
+                    <div className="flex gap-2 pt-4 border-t border-border/40">
+                      <Button
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => {
+                          setSelectedCategory('all');
+                          setSearchTerm('');
+                          setSortBy('recent');
+                          setCurrentPage(1);
+                        }}
+                      >
+                        {t('skills.resetFilters', '重置')}
+                      </Button>
+                      <Button
+                        className="flex-1"
+                        onClick={() => setFilterDrawerOpen(false)}
+                      >
+                        {t('common.confirm', '确定')}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </DrawerContent>
+            </Drawer>
 
             <div className="flex border rounded-md overflow-hidden flex-shrink-0">
               <Button
@@ -154,17 +325,17 @@ const SkillsPage = () => {
             </div>
 
             {/* Empty State */}
-            {currentSkills.length === 0 && (
+            {sortedSkills.length === 0 && (
               <div className="text-center py-16 text-muted-foreground">
                 <p>{t('skills.empty', '暂无技能')}</p>
               </div>
             )}
 
             {/* Skills Display */}
-            {currentSkills.length > 0 &&
+            {sortedSkills.length > 0 &&
               (viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
-                  {currentSkills.map((skill) => (
+                  {sortedSkills.map((skill) => (
                     <div
                       key={skill._id}
                       className="bg-card rounded-xl border overflow-hidden flex flex-col hover:shadow-md hover:border-primary/20 transition-all duration-200"
@@ -190,8 +361,8 @@ const SkillsPage = () => {
                             </span>
                           </div>
                         </div>
-                        <p className="text-sm text-muted-foreground line-clamp-2 mb-3 flex-shrink-0">
-                          {skill.description || '—'}
+                        <p className="text-sm text-muted-foreground line-clamp-2 mb-3 flex-shrink-0" title={skill.description || ''}>
+                          {truncateDescription(skill.description, 100)}
                         </p>
 
                         <div className="flex flex-wrap gap-1.5 mb-4 flex-shrink-0">
@@ -217,7 +388,7 @@ const SkillsPage = () => {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {currentSkills.map((skill) => (
+                  {sortedSkills.map((skill) => (
                     <div
                       key={skill._id}
                       className="bg-card rounded-lg border p-6 flex flex-col sm:flex-row gap-4"
@@ -241,8 +412,8 @@ const SkillsPage = () => {
                             </span>
                           </div>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-2">
-                          {skill.description}
+                        <p className="text-sm text-muted-foreground mb-2 line-clamp-2" title={skill.description || ''}>
+                          {truncateDescription(skill.description, 150)}
                         </p>
 
                         <div className="flex flex-wrap gap-1 mb-2">

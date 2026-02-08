@@ -19,7 +19,8 @@ const userRoutes = require('./routes/users');
 const skillRoutes = require('./routes/skills');
 const blogRoutes = require('./routes/blogs');
 const adminRoutes = require('./routes/admin');
-const { getPublicSiteSettings } = require('./controllers/adminController');
+const captchaRoutes = require('./routes/captcha');
+const { getPublicSiteSettings, getPublicCategories } = require('./controllers/adminController');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -42,6 +43,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/skills', skillRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/captcha', captchaRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -50,6 +52,15 @@ app.get('/api/health', (req, res) => {
 
 // 公开站点设置（无需认证，用于 Header/Footer/页面标题）
 app.get('/api/site-settings', getPublicSiteSettings);
+
+// 公开分类列表（无需认证，只返回激活的分类）
+app.get('/api/categories', getPublicCategories);
+
+// 静态文件服务：上传的图片
+const uploadsDir = path.join(__dirname, 'uploads');
+if (fs.existsSync(uploadsDir)) {
+  app.use('/api/uploads', express.static(uploadsDir));
+}
 
 // 生产环境：托管前端静态文件（Docker 构建时 client/dist 复制到 public）
 const publicDir = path.join(__dirname, 'public');

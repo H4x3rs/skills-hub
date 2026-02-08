@@ -32,7 +32,11 @@
       "download": "다운로드",
       "blog": "블로그",
       "login": "로그인",
-      "register": "회원가입"
+      "register": "회원가입",
+      "profile": "프로필",
+      "mySkills": "내 스킬",
+      "adminPanel": "관리 패널",
+      "logout": "로그아웃"
     },
     "about": {
       "mission": {
@@ -90,6 +94,8 @@
         "title": "계정에 로그인하세요",
         "subtitle": "이메일 주소와 비밀번호를 입력하여 계정에 접근하세요",
         "email": "이메일 주소",
+        "emailOrUsername": "이메일 또는 사용자 이름",
+        "emailPlaceholder": "your@email.com 또는 사용자 이름",
         "password": "비밀번호",
         "forgotPassword": "비밀번호를 잊으셨나요?",
         "rememberMe": "로그인 상태 유지",
@@ -98,6 +104,8 @@
         "noAccount": "계정이 없으신가요?",
         "signUp": "회원가입",
         "orContinueWith": "또는 계속 진행",
+        "continueWithGoogle": "Google로 계속",
+        "continueWithGithub": "GitHub로 계속",
         "success": "로그인 성공!",
         "generalError": "로그인 중 오류가 발생했습니다"
       },
@@ -121,13 +129,35 @@
         "passwordMismatch": "비밀번호가 일치하지 않습니다",
         "passwordMinLength": "비밀번호는 최소 8자 이상이어야 합니다",
         "invalidEmail": "유효한 이메일 주소를 입력하세요",
-        "generalError": "회원가입 중 오류가 발생했습니다"
-      }
+        "generalError": "회원가입 중 오류가 발생했습니다",
+        "loading": "회원가입 중..."
+      },
+      "captchaRequired": "인증 코드를 입력하세요"
+    },
+    "captcha": {
+      "label": "인증 코드",
+      "placeholder": "인증 코드를 입력하세요",
+      "clickToRefresh": "클릭하여 인증 코드 새로고침",
+      "refresh": "인증 코드 새로고침",
+      "generateError": "인증 코드 생성 실패"
     },
     "skills": {
       "title": "스킬 마켓플레이스",
       "searchPlaceholder": "스킬 이름, 설명 또는 태그 검색...",
       "filter": "필터",
+      "filterDesc": "필터 조건 및 정렬 순서 설정",
+      "sortBy": "정렬 기준",
+      "sort": {
+        "recent": "최신",
+        "popular": "인기",
+        "rating": "평점 높은 순",
+        "downloads": "다운로드 많은 순"
+      },
+      "currentFilters": "현재 필터",
+      "category": "카테고리",
+      "search": "검색",
+      "noFilters": "적용된 필터 없음",
+      "resetFilters": "초기화",
       "grid": "그리드",
       "list": "목록",
       "foundSkills": "{{count}}개의 스킬을 찾았습니다",
@@ -143,6 +173,23 @@
         "devops": "DevOps",
         "security": "보안",
         "tools": "개발 도구"
+      }
+    },
+    "blog": {
+      "title": "블로그",
+      "subtitle": "최신 기술 기사와 튜토리얼 탐색",
+      "searchPlaceholder": "블로그 검색...",
+      "allCategories": "모든 카테고리",
+      "noBlogs": "블로그 게시물이 없습니다",
+      "readMore": "더 읽기",
+      "views": "회 조회",
+      "featured": "추천",
+      "categories": {
+        "general": "일반",
+        "technology": "기술",
+        "tutorial": "튜토리얼",
+        "news": "뉴스",
+        "announcement": "공지사항"
       }
     },
     "profile": {
@@ -310,6 +357,7 @@
       "cancel": "취소",
       "close": "닫기",
       "ok": "확인",
+      "confirm": "확인",
       "deleteConfirm": "정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
       "save": "저장",
       "download": "다운로드",

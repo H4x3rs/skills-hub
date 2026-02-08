@@ -20,6 +20,8 @@ import { cn } from '@/lib/utils';
 import { HeadingDropdown } from './components/HeadingDropdown';
 import { ListDropdown } from './components/ListDropdown';
 import { LinkPopover } from './components/LinkPopover';
+import { ImageUploadDialog } from './components/ImageUploadDialog';
+import { useState } from 'react';
 
 interface SimpleEditorProps {
   content?: string;
@@ -34,6 +36,8 @@ export const SimpleEditor = ({
   onUpdate,
   className 
 }: SimpleEditorProps) => {
+  const [imageDialogOpen, setImageDialogOpen] = useState(false);
+  
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -245,12 +249,7 @@ export const SimpleEditor = ({
             type="button"
             variant="ghost"
             size="sm"
-            onClick={() => {
-              const url = window.prompt('输入图片 URL:');
-              if (url) {
-                editor.chain().focus().setImage({ src: url }).run();
-              }
-            }}
+            onClick={() => setImageDialogOpen(true)}
             className="h-8 w-8 p-0"
             title="插入图片"
           >
@@ -289,6 +288,15 @@ export const SimpleEditor = ({
       <div className="flex-1 overflow-y-auto min-h-0">
         <EditorContent editor={editor} />
       </div>
+
+      {/* Image Upload Dialog */}
+      <ImageUploadDialog
+        open={imageDialogOpen}
+        onOpenChange={setImageDialogOpen}
+        onInsert={(url) => {
+          editor.chain().focus().setImage({ src: url }).run();
+        }}
+      />
     </div>
   );
 };

@@ -280,6 +280,36 @@ const adminGetAllBlogs = async (req, res) => {
   }
 };
 
+// 上传博客图片
+const uploadBlogImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: '没有上传文件' });
+    }
+
+    // 构建图片 URL（相对于 API 基础路径）
+    // 例如：/api/uploads/images/blog-image-xxx.jpg
+    const imageUrl = `/api/uploads/images/${req.file.filename}`;
+
+    res.json({
+      success: true,
+      url: imageUrl,
+      data: {
+        url: imageUrl,
+        filename: req.file.filename,
+        size: req.file.size,
+      },
+    });
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    res.status(500).json({
+      success: false,
+      error: '图片上传失败',
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   getAllBlogs,
   getBlogBySlug,
@@ -288,4 +318,5 @@ module.exports = {
   updateBlog,
   deleteBlog,
   adminGetAllBlogs,
+  uploadBlogImage,
 };

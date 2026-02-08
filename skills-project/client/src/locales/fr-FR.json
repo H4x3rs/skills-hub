@@ -30,9 +30,13 @@
       "about": "À propos",
       "docs": "Documentation",
       "download": "Télécharger",
-      "blog": "Blog",
+      "blog": "Blogue",
       "login": "Connexion",
-      "register": "Inscription"
+      "register": "Inscription",
+      "profile": "Profil",
+      "mySkills": "Mes compétences",
+      "adminPanel": "Panneau d'administration",
+      "logout": "Déconnexion"
     },
     "about": {
       "mission": {
@@ -90,6 +94,8 @@
         "title": "Connectez-vous à votre compte",
         "subtitle": "Entrez votre adresse e-mail et votre mot de passe pour accéder à votre compte",
         "email": "Adresse e-mail",
+        "emailOrUsername": "E-mail ou nom d'utilisateur",
+        "emailPlaceholder": "your@email.com ou nom d'utilisateur",
         "password": "Mot de passe",
         "forgotPassword": "Mot de passe oublié ?",
         "rememberMe": "Se souvenir de moi",
@@ -98,6 +104,8 @@
         "noAccount": "Vous n'avez pas de compte ?",
         "signUp": "S'inscrire",
         "orContinueWith": "Ou continuer avec",
+        "continueWithGoogle": "Continuer avec Google",
+        "continueWithGithub": "Continuer avec GitHub",
         "success": "Connexion réussie !",
         "generalError": "Une erreur s'est produite lors de la connexion"
       },
@@ -121,13 +129,35 @@
         "passwordMismatch": "Les mots de passe ne correspondent pas",
         "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
         "invalidEmail": "Veuillez entrer une adresse e-mail valide",
-        "generalError": "Une erreur s'est produite lors de l'inscription"
-      }
+        "generalError": "Une erreur s'est produite lors de l'inscription",
+        "loading": "Inscription en cours..."
+      },
+      "captchaRequired": "Veuillez entrer le code de vérification"
+    },
+    "captcha": {
+      "label": "Code de vérification",
+      "placeholder": "Veuillez entrer le code de vérification",
+      "clickToRefresh": "Cliquez pour actualiser le code",
+      "refresh": "Actualiser le code",
+      "generateError": "Échec de la génération du code de vérification"
     },
     "skills": {
       "title": "Marché des compétences",
       "searchPlaceholder": "Rechercher des noms de compétences, descriptions ou balises...",
       "filter": "Filtrer",
+      "filterDesc": "Définir les conditions de filtre et l'ordre de tri",
+      "sortBy": "Trier par",
+      "sort": {
+        "recent": "Plus récent",
+        "popular": "Plus populaire",
+        "rating": "Mieux noté",
+        "downloads": "Plus téléchargé"
+      },
+      "currentFilters": "Filtres actuels",
+      "category": "Catégorie",
+      "search": "Rechercher",
+      "noFilters": "Aucun filtre appliqué",
+      "resetFilters": "Réinitialiser",
       "grid": "Grille",
       "list": "Liste",
       "foundSkills": "{{count}} compétences trouvées",
@@ -143,6 +173,23 @@
         "devops": "DevOps",
         "security": "Sécurité",
         "tools": "Outils de développement"
+      }
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Explorez les derniers articles techniques et tutoriels",
+      "searchPlaceholder": "Rechercher des blogs...",
+      "allCategories": "Toutes les catégories",
+      "noBlogs": "Aucun article de blog pour le moment",
+      "readMore": "Lire la suite",
+      "views": "vues",
+      "featured": "En vedette",
+      "categories": {
+        "general": "Général",
+        "technology": "Technologie",
+        "tutorial": "Tutoriel",
+        "news": "Actualités",
+        "announcement": "Annonce"
       }
     },
     "profile": {
@@ -310,6 +357,7 @@
       "cancel": "Annuler",
       "close": "Fermer",
       "ok": "OK",
+      "confirm": "Confirmer",
       "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cela ? Cette action ne peut pas être annulée.",
       "save": "Enregistrer",
       "download": "Télécharger",

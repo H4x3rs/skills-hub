@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { getOAuthUrl } from '@/lib/api';
+import { Captcha } from '@/components/Captcha';
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -18,7 +19,9 @@ const LoginPage = () => {
   const [isOAuthProcessing, setIsOAuthProcessing] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
+    captcha: '',
+    captchaId: ''
   });
 
   // 处理 OAuth 回调：URL 中带有 token 表示从第三方登录返回
@@ -73,10 +76,17 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // 验证验证码
+    if (!formData.captcha || !formData.captchaId) {
+      toast.error(t('auth.captchaRequired', '请输入验证码'));
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      await login(formData.email, formData.password);
+      await login(formData.email, formData.password, formData.captchaId, formData.captcha);
       
       // 显示成功消息
       toast.success(t('auth.login.success') || 'Login successful!');
@@ -100,6 +110,9 @@ const LoginPage = () => {
       }
       
       toast.error(errorMessage);
+      
+      // 登录失败时清空验证码，触发刷新
+      setFormData(prev => ({ ...prev, captcha: '', captchaId: '' }));
     } finally {
       setIsLoading(false);
     }
@@ -190,6 +203,16 @@ const LoginPage = () => {
                 </button>
               </div>
             </div>
+
+            <Captcha
+              value={formData.captcha}
+              onChange={(value, captchaId) => {
+                setFormData(prev => ({ ...prev, captcha: value, captchaId }));
+              }}
+              onRefresh={() => {
+                setFormData(prev => ({ ...prev, captcha: '', captchaId: '' }));
+              }}
+            />
 
             <div className="flex items-center">
               <input
