@@ -10,8 +10,7 @@
     "build": "npm run build:client",
     "build:client": "cd client && npm run build",
     "install:all": "npm install && cd client && npm install && cd ../backend && npm install",
-    "start": "cd client && npm run preview",
-    "migrate-skill-index": "cd backend && node scripts/migrate-skill-unique-index.js"
+    "start": "cd client && npm run preview"
   },
   "keywords": ["ai", "skills", "agents", "management"],
   "author": "BotSkill Team",
