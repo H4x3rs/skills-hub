@@ -18,13 +18,15 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, captchaId?: string, captcha?: string) => Promise<void>;
   loginWithOAuthToken: (accessToken: string, refreshToken?: string) => Promise<void>;
   register: (userData: {
     username: string;
     email: string;
     password: string;
     fullName?: string;
+    captchaId?: string;
+    captcha?: string;
   }) => Promise<void>;
   logout: () => void;
   fetchCurrentUser: () => Promise<void>;

@@ -157,9 +157,6 @@ export const AdminBlogs = ({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold font-heading">{t('admin.blogs', '博客管理')}</h2>
-          <p className="text-muted-foreground text-sm mt-1">
-            {t('admin.blogsDesc', '管理和编辑博客文章')}
-          </p>
         </div>
         <Button onClick={handleCreate}>
           <Plus className="h-4 w-4 mr-2" />
@@ -203,7 +200,7 @@ export const AdminBlogs = ({
                     <th className="px-4 py-3 text-left text-sm font-semibold">{t('admin.status', '状态')}</th>
                     <th className="px-4 py-3 text-left text-sm font-semibold">{t('admin.views', '浏览量')}</th>
                     <th className="px-4 py-3 text-left text-sm font-semibold">{t('admin.createdAt', '创建时间')}</th>
-                    <th className="px-4 py-3 text-right text-sm font-semibold">{t('admin.actions', '操作')}</th>
+                    <th className="px-4 py-3 text-center text-sm font-semibold">{t('admin.actions', '操作')}</th>
                   </tr>
                 </thead>
                 <tbody>

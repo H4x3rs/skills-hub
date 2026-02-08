@@ -7,19 +7,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useTranslation } from 'react-i18next';
 
 interface HeadingDropdownProps {
   editor: Editor;
 }
 
 export const HeadingDropdown = ({ editor }: HeadingDropdownProps) => {
+  const { t } = useTranslation();
   const items = [
-    { level: 1, label: '标题 1', icon: Heading1 },
-    { level: 2, label: '标题 2', icon: Heading2 },
-    { level: 3, label: '标题 3', icon: Heading3 },
-    { level: 4, label: '标题 4', icon: Heading4 },
-    { level: 5, label: '标题 5', icon: Heading5 },
-    { level: 6, label: '标题 6', icon: Heading6 },
+    { level: 1, label: t('editor.toolbar.heading1', '标题 1'), icon: Heading1 },
+    { level: 2, label: t('editor.toolbar.heading2', '标题 2'), icon: Heading2 },
+    { level: 3, label: t('editor.toolbar.heading3', '标题 3'), icon: Heading3 },
+    { level: 4, label: t('editor.toolbar.heading4', '标题 4'), icon: Heading4 },
+    { level: 5, label: t('editor.toolbar.heading5', '标题 5'), icon: Heading5 },
+    { level: 6, label: t('editor.toolbar.heading6', '标题 6'), icon: Heading6 },
   ];
 
   const currentLevel = items.find(item => 
@@ -28,7 +30,7 @@ export const HeadingDropdown = ({ editor }: HeadingDropdownProps) => {
 
   const currentLabel = currentLevel 
     ? items.find(item => item.level === currentLevel)?.label 
-    : '段落';
+    : t('editor.toolbar.paragraph', '段落');
 
   return (
     <DropdownMenu>
@@ -46,7 +48,7 @@ export const HeadingDropdown = ({ editor }: HeadingDropdownProps) => {
           onClick={() => editor.chain().focus().setParagraph().run()}
           className={editor.isActive('paragraph') ? 'bg-muted' : ''}
         >
-          段落
+          {t('editor.toolbar.paragraph', '段落')}
         </DropdownMenuItem>
         {items.map((item) => {
           const Icon = item.icon;

@@ -7,22 +7,24 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useTranslation } from 'react-i18next';
 
 interface ListDropdownProps {
   editor: Editor;
 }
 
 export const ListDropdown = ({ editor }: ListDropdownProps) => {
+  const { t } = useTranslation();
   const items = [
     {
       type: 'bulletList',
-      label: '无序列表',
+      label: t('editor.toolbar.bulletList', '无序列表'),
       icon: List,
       action: () => editor.chain().focus().toggleBulletList().run(),
     },
     {
       type: 'orderedList',
-      label: '有序列表',
+      label: t('editor.toolbar.orderedList', '有序列表'),
       icon: ListOrdered,
       action: () => editor.chain().focus().toggleOrderedList().run(),
     },

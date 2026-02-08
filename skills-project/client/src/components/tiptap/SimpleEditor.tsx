@@ -22,6 +22,7 @@ import { ListDropdown } from './components/ListDropdown';
 import { LinkPopover } from './components/LinkPopover';
 import { ImageUploadDialog } from './components/ImageUploadDialog';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface SimpleEditorProps {
   content?: string;
@@ -36,6 +37,7 @@ export const SimpleEditor = ({
   onUpdate,
   className 
 }: SimpleEditorProps) => {
+  const { t } = useTranslation();
   const [imageDialogOpen, setImageDialogOpen] = useState(false);
   
   const editor = useEditor({
@@ -109,7 +111,7 @@ export const SimpleEditor = ({
             size="sm"
             onClick={() => editor.chain().focus().toggleBold().run()}
             className="h-8 w-8 p-0"
-            title="加粗 (Ctrl+B)"
+            title={t('editor.toolbar.bold', '加粗 (Ctrl+B)')}
           >
             <Bold className="h-4 w-4" />
           </Button>
@@ -119,7 +121,7 @@ export const SimpleEditor = ({
             size="sm"
             onClick={() => editor.chain().focus().toggleItalic().run()}
             className="h-8 w-8 p-0"
-            title="斜体 (Ctrl+I)"
+            title={t('editor.toolbar.italic', '斜体 (Ctrl+I)')}
           >
             <Italic className="h-4 w-4" />
           </Button>
@@ -129,7 +131,7 @@ export const SimpleEditor = ({
             size="sm"
             onClick={() => editor.chain().focus().toggleUnderline().run()}
             className="h-8 w-8 p-0"
-            title="下划线 (Ctrl+U)"
+            title={t('editor.toolbar.underline', '下划线 (Ctrl+U)')}
           >
             <UnderlineIcon className="h-4 w-4" />
           </Button>
@@ -139,7 +141,7 @@ export const SimpleEditor = ({
             size="sm"
             onClick={() => editor.chain().focus().toggleStrike().run()}
             className="h-8 w-8 p-0"
-            title="删除线"
+            title={t('editor.toolbar.strikethrough', '删除线')}
           >
             <Strikethrough className="h-4 w-4" />
           </Button>
@@ -149,7 +151,7 @@ export const SimpleEditor = ({
             size="sm"
             onClick={() => editor.chain().focus().toggleHighlight().run()}
             className="h-8 w-8 p-0"
-            title="高亮"
+            title={t('editor.toolbar.highlight', '高亮')}
           >
             <Highlighter className="h-4 w-4" />
           </Button>
@@ -159,7 +161,7 @@ export const SimpleEditor = ({
               type="color"
               onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
               className="h-8 w-8 cursor-pointer border rounded"
-              title="文本颜色"
+              title={t('editor.toolbar.textColor', '文本颜色')}
             />
           </div>
         </div>
@@ -182,7 +184,7 @@ export const SimpleEditor = ({
             size="sm"
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
             className="h-8 w-8 p-0"
-            title="引用"
+            title={t('editor.toolbar.blockquote', '引用')}
           >
             <Quote className="h-4 w-4" />
           </Button>
@@ -192,7 +194,7 @@ export const SimpleEditor = ({
             size="sm"
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
             className="h-8 w-8 p-0"
-            title="代码块"
+            title={t('editor.toolbar.codeBlock', '代码块')}
           >
             <Code className="h-4 w-4" />
           </Button>
@@ -206,7 +208,7 @@ export const SimpleEditor = ({
             size="sm"
             onClick={() => editor.chain().focus().setTextAlign('left').run()}
             className="h-8 w-8 p-0"
-            title="左对齐"
+            title={t('editor.toolbar.alignLeft', '左对齐')}
           >
             <AlignLeft className="h-4 w-4" />
           </Button>
@@ -216,7 +218,7 @@ export const SimpleEditor = ({
             size="sm"
             onClick={() => editor.chain().focus().setTextAlign('center').run()}
             className="h-8 w-8 p-0"
-            title="居中"
+            title={t('editor.toolbar.alignCenter', '居中')}
           >
             <AlignCenter className="h-4 w-4" />
           </Button>
@@ -226,7 +228,7 @@ export const SimpleEditor = ({
             size="sm"
             onClick={() => editor.chain().focus().setTextAlign('right').run()}
             className="h-8 w-8 p-0"
-            title="右对齐"
+            title={t('editor.toolbar.alignRight', '右对齐')}
           >
             <AlignRight className="h-4 w-4" />
           </Button>
@@ -236,7 +238,7 @@ export const SimpleEditor = ({
             size="sm"
             onClick={() => editor.chain().focus().setTextAlign('justify').run()}
             className="h-8 w-8 p-0"
-            title="两端对齐"
+            title={t('editor.toolbar.alignJustify', '两端对齐')}
           >
             <AlignJustify className="h-4 w-4" />
           </Button>
@@ -251,7 +253,7 @@ export const SimpleEditor = ({
             size="sm"
             onClick={() => setImageDialogOpen(true)}
             className="h-8 w-8 p-0"
-            title="插入图片"
+            title={t('editor.toolbar.insertImage', '插入图片')}
           >
             <ImageIcon className="h-4 w-4" />
           </Button>
@@ -266,7 +268,7 @@ export const SimpleEditor = ({
             onClick={() => editor.chain().focus().undo().run()}
             disabled={!editor.can().undo()}
             className="h-8 w-8 p-0"
-            title="撤销 (Ctrl+Z)"
+            title={t('editor.toolbar.undo', '撤销 (Ctrl+Z)')}
           >
             <Undo className="h-4 w-4" />
           </Button>
@@ -277,7 +279,7 @@ export const SimpleEditor = ({
             onClick={() => editor.chain().focus().redo().run()}
             disabled={!editor.can().redo()}
             className="h-8 w-8 p-0"
-            title="重做 (Ctrl+Shift+Z)"
+            title={t('editor.toolbar.redo', '重做 (Ctrl+Shift+Z)')}
           >
             <Redo className="h-4 w-4" />
           </Button>
@@ -285,7 +287,15 @@ export const SimpleEditor = ({
       </div>
 
       {/* Editor Content */}
-      <div className="flex-1 overflow-y-auto min-h-0">
+      <div 
+        className="flex-1 overflow-y-auto min-h-0 cursor-text"
+        onMouseDown={(e) => {
+          // 如果点击的是容器本身（空白区域），则聚焦编辑器
+          if (e.target === e.currentTarget) {
+            editor.commands.focus('end');
+          }
+        }}
+      >
         <EditorContent editor={editor} />
       </div>
 

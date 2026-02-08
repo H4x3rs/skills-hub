@@ -16,7 +16,6 @@ interface CaptchaProps {
 export const Captcha = ({ value, onChange, onRefresh, className }: CaptchaProps) => {
   const { t } = useTranslation();
   const [captchaId, setCaptchaId] = useState<string>('');
-  const [captchaText, setCaptchaText] = useState<string>('');
   const [inputValue, setInputValue] = useState(value || '');
   const [loading, setLoading] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -36,7 +35,6 @@ export const Captcha = ({ value, onChange, onRefresh, className }: CaptchaProps)
       const data = response.data.data || response.data;
       
       setCaptchaId(data.captchaId);
-      setCaptchaText(data.text);
       setInputValue('');
       if (onChange) {
         onChange('', data.captchaId);

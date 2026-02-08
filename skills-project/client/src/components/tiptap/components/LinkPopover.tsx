@@ -8,12 +8,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { useTranslation } from 'react-i18next';
 
 interface LinkPopoverProps {
   editor: Editor;
 }
 
 export const LinkPopover = ({ editor }: LinkPopoverProps) => {
+  const { t } = useTranslation();
   const [url, setUrl] = useState('');
   const [open, setOpen] = useState(false);
 
@@ -53,7 +55,7 @@ export const LinkPopover = ({ editor }: LinkPopoverProps) => {
       <PopoverContent className="w-80">
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium">链接 URL</label>
+            <label className="text-sm font-medium">{t('editor.toolbar.linkUrl', '链接 URL')}</label>
             {editor.isActive('link') && (
               <Button
                 variant="ghost"
@@ -76,7 +78,7 @@ export const LinkPopover = ({ editor }: LinkPopoverProps) => {
             }}
           />
           <Button onClick={handleSetLink} size="sm" className="w-full">
-            设置链接
+            {t('editor.toolbar.setLink', '设置链接')}
           </Button>
         </div>
       </PopoverContent>
