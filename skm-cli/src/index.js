@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import { initCommand } from './commands/init.js';
 import { loginCommand } from './commands/login.js';
 import { logoutCommand } from './commands/logout.js';
@@ -13,12 +16,19 @@ import { searchCommand } from './commands/search.js';
 import { infoCommand } from './commands/info.js';
 import { helpCommand } from './commands/help.js';
 
+// 读取 package.json 中的版本号
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const packageJsonPath = join(__dirname, '../package.json');
+const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
+const version = packageJson.version || '0.0.0';
+
 const program = new Command();
 
 program
   .name('skm')
   .description('CLI tool for managing BotSkill - a platform for AI agent skills')
-  .version('1.0.0');
+  .version(version);
 
 program.addCommand(initCommand);
 program.addCommand(loginCommand);

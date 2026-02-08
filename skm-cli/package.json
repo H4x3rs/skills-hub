@@ -1,10 +1,10 @@
 {
   "name": "@botskill/cli",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "CLI tool for BotSkill - AI agent skills platform",
   "main": "src/index.js",
   "bin": {
-    "skm": "./src/index.js"
+    "skm": "src/index.js"
   },
   "type": "module",
   "scripts": {
@@ -14,6 +14,10 @@
     "build:restore": "node scripts/build.js --restore",
     "prepublishOnly": "npm run build",
     "postpublish": "npm run build:restore",
+    "release": "node scripts/release.js patch",
+    "release:patch": "node scripts/release.js patch",
+    "release:minor": "node scripts/release.js minor",
+    "release:major": "node scripts/release.js major",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "node scripts/postinstall.js"
   },
