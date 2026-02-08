@@ -103,7 +103,7 @@
 ## 📁 项目结构
 
 ```
-skills-project/
+botskill/
 ├── client/                 # React前端应用
 │   ├── public/            # 静态资源
 │   ├── src/
@@ -190,8 +190,8 @@ skills-project/
 
 1. **克隆项目**
 ```bash
-git clone <repository-url>
-cd skills-project
+git clone https://github.com/botskill-ai/botskill.git
+cd botskill
 ```
 
 2. **安装依赖**
