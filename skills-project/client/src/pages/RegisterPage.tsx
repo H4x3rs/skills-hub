@@ -28,6 +28,7 @@ const RegisterPage = () => {
     captcha: '',
     captchaId: ''
   });
+  const [captchaRefreshKey, setCaptchaRefreshKey] = useState(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -77,7 +78,8 @@ const RegisterPage = () => {
       
       toast.error(errorMessage);
       
-      // 注册失败时清空验证码，触发刷新
+      // 注册失败时刷新验证码
+      setCaptchaRefreshKey(k => k + 1);
       setFormData(prev => ({ ...prev, captcha: '', captchaId: '' }));
     } finally {
       setIsLoading(false);
@@ -211,6 +213,7 @@ const RegisterPage = () => {
             </div>
 
             <Captcha
+              key={captchaRefreshKey}
               value={formData.captcha}
               onChange={(value, captchaId) => {
                 setFormData(prev => ({ ...prev, captcha: value, captchaId }));

@@ -23,6 +23,7 @@ const LoginPage = () => {
     captcha: '',
     captchaId: ''
   });
+  const [captchaRefreshKey, setCaptchaRefreshKey] = useState(0);
 
   // 处理 OAuth 回调：URL 中带有 token 表示从第三方登录返回
   useEffect(() => {
@@ -111,7 +112,8 @@ const LoginPage = () => {
       
       toast.error(errorMessage);
       
-      // 登录失败时清空验证码，触发刷新
+      // 登录失败时刷新验证码
+      setCaptchaRefreshKey(k => k + 1);
       setFormData(prev => ({ ...prev, captcha: '', captchaId: '' }));
     } finally {
       setIsLoading(false);
@@ -205,6 +207,7 @@ const LoginPage = () => {
             </div>
 
             <Captcha
+              key={captchaRefreshKey}
               value={formData.captcha}
               onChange={(value, captchaId) => {
                 setFormData(prev => ({ ...prev, captcha: value, captchaId }));

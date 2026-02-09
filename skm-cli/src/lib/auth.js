@@ -13,9 +13,16 @@ const config = new Configstore('botskill-cli', { apiUrl: defaultUrl }, {
 
 export const getConfigPath = () => config.path;
 
+/** 规范化 API 地址：若未以 /api 结尾则自动追加，用户无需手动加 /api */
+export const normalizeApiUrl = (url) => {
+  if (!url || typeof url !== 'string') return url;
+  const u = url.replace(/\/+$/, '');
+  return u.endsWith('/api') ? u : `${u}/api`;
+};
+
 /** 优先级: 环境变量 BOTSKILL_API_URL > 配置文件 > 构建时默认值 */
 export const getApiUrl = () =>
-  process.env.BOTSKILL_API_URL || config.get('apiUrl') || getDefaultApiUrl();
+  normalizeApiUrl(process.env.BOTSKILL_API_URL || config.get('apiUrl') || getDefaultApiUrl());
 
 export const setApiUrl = (url) => config.set('apiUrl', url);
 
@@ -45,8 +52,24 @@ export const clearAuth = () => {
 
 export const isLoggedIn = () => !!config.get('token');
 
-export const createApiClient = () => {
-  const baseURL = getApiUrl();
+/** 从 axios 错误中提取请求 URL，用于错误输出 */
+export const getErrorUrl = (err) => {
+  const cfg = err?.config;
+  if (!cfg) return getApiUrl();
+  if (cfg.url && (cfg.url.startsWith('http://') || cfg.url.startsWith('https://'))) return cfg.url;
+  if (cfg.baseURL) {
+    const p = cfg.url || '';
+    return cfg.baseURL.replace(/\/$/, '') + (p.startsWith('/') ? p : '/' + p);
+  }
+  return getApiUrl();
+};
+
+/**
+ * 创建 API 客户端
+ * @param {string} [overrideUrl] - 可选，覆盖本次请求的 API 地址（来自 --api-url）
+ */
+export const createApiClient = (overrideUrl) => {
+  const baseURL = normalizeApiUrl(overrideUrl || getApiUrl());
   const client = axios.create({
     baseURL,
     timeout: 15000,

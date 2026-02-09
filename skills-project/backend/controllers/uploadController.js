@@ -61,6 +61,7 @@ const uploadSkill = async (req, res) => {
     }
 
     let parsed;
+    let extractResult = null;
     const isMd = ext === '.md' || originalName.toLowerCase().endsWith('.md');
 
     if (isMd) {
@@ -70,11 +71,11 @@ const uploadSkill = async (req, res) => {
       const extractDir = path.join(tempDir, `extract-${Date.now()}-${Math.random().toString(36).slice(2)}`);
       await fs.mkdir(extractDir, { recursive: true });
 
-      const result = await extractAndFindSkillMd(filePath, extractDir, originalName);
-      if (!result) {
+      extractResult = await extractAndFindSkillMd(filePath, extractDir, originalName);
+      if (!extractResult) {
         return res.status(400).json({ error: 'No SKILL.md found in archive. Please include SKILL.md in the root or a subfolder.' });
       }
-      parsed = await readAndParseSkillMd(result.skillMdPath);
+      parsed = await readAndParseSkillMd(extractResult.skillMdPath);
     } else {
       return res.status(400).json({ error: 'Unsupported format. Use .zip, .tar.gz, or .md' });
     }
@@ -85,18 +86,36 @@ const uploadSkill = async (req, res) => {
 
     const { data, content } = parsed;
     const name = (data.name || '').trim().toLowerCase();
-    const {
-      description,
-      version,
-      category,
-      tags,
-      license,
-      compatibility,
-      allowedTools,
-      repositoryUrl,
-      documentationUrl,
-      demoUrl,
-    } = data;
+
+    // skill.config.json from zip (when packed with skm pack)
+    let zipConfig = {};
+    if (extractResult) {
+      const skillDir = path.dirname(extractResult.skillMdPath);
+      const configPath = path.join(skillDir, 'skill.config.json');
+      try {
+        zipConfig = await fs.readFile(configPath, 'utf-8').then(JSON.parse).catch(() => ({}));
+      } catch (_) {}
+    }
+
+    // Merge: form fields (CLI) > zip skill.config.json > parsed SKILL.md
+    const body = req.body || {};
+    let tags = data.tags;
+    if (body.tags !== undefined) {
+      try {
+        tags = typeof body.tags === 'string' ? JSON.parse(body.tags) : body.tags;
+      } catch (_) {}
+    } else if (zipConfig.tags && Array.isArray(zipConfig.tags)) {
+      tags = zipConfig.tags;
+    }
+    const version = body.version ?? zipConfig.version ?? data.version ?? '1.0.0';
+    const category = (body.category ?? zipConfig.category ?? data.category ?? 'tools').toLowerCase();
+    const license = body.license ?? zipConfig.license ?? data.license ?? 'MIT';
+    const repositoryUrl = body.repositoryUrl ?? zipConfig.repositoryUrl ?? data.repositoryUrl ?? '';
+    const documentationUrl = body.documentationUrl ?? zipConfig.documentationUrl ?? data.documentationUrl ?? '';
+    const demoUrl = body.demoUrl ?? zipConfig.demoUrl ?? data.demoUrl ?? '';
+    const description = data.description ?? '';
+    const compatibility = data.compatibility;
+    const allowedTools = data.allowedTools;
 
     const existing = await Skill.findOne({
       name: { $regex: new RegExp(`^${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') },
@@ -112,11 +131,21 @@ const uploadSkill = async (req, res) => {
       }
     }
 
+    let storedFilePath = undefined;
+    if (!isMd && filePath) {
+      const skillsUploadDir = path.join(__dirname, '..', 'uploads', 'skills');
+      await fs.mkdir(skillsUploadDir, { recursive: true });
+      const ext = path.extname(filePath) || '.zip';
+      const storedName = `skill-${Date.now()}-${Math.random().toString(36).slice(2)}${ext}`;
+      storedFilePath = path.join(skillsUploadDir, storedName);
+      await fs.copyFile(filePath, storedFilePath);
+    }
+
     const versionDoc = {
       version,
       description,
       content,
-      filePath: !isMd ? filePath : undefined,
+      filePath: storedFilePath,
       createdAt: new Date(),
     };
 

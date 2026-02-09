@@ -106,10 +106,30 @@ function buildSkillMdContent(skill, version) {
 }
 
 /**
+ * Compare semver: returns 1 if a > b, -1 if a < b, 0 if equal
+ */
+function compareVersions(a, b) {
+  if (!a || !b) return 0;
+  const pa = String(a).split('.').map(Number);
+  const pb = String(b).split('.').map(Number);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const va = pa[i] || 0;
+    const vb = pb[i] || 0;
+    if (va > vb) return 1;
+    if (va < vb) return -1;
+  }
+  return 0;
+}
+
+/**
  * Download skill as zip (skill directory with SKILL.md)
  * GET /skills/:id/download?version=x.y.z
+ * When no version: returns latest by semver
+ * When version has filePath (uploaded zip): returns that file; else builds from content
  */
 const downloadSkill = async (req, res) => {
+  const fs = require('fs').promises;
+
   try {
     const skill = await Skill.findById(req.params.id)
       .populate('author', 'username fullName avatar');
@@ -123,9 +143,14 @@ const downloadSkill = async (req, res) => {
 
     const versions = skill.versions || [];
     const versionParam = req.query.version;
-    let ver = versionParam
-      ? versions.find(v => v.version === versionParam)
-      : versions[0];
+    let ver;
+    if (versionParam) {
+      ver = versions.find(v => v.version === versionParam);
+    } else {
+      ver = versions.length > 0
+        ? versions.reduce((a, b) => compareVersions(a.version, b.version) >= 0 ? a : b)
+        : null;
+    }
     if (!ver && skill.version) {
       ver = {
         version: skill.version,
@@ -138,15 +163,28 @@ const downloadSkill = async (req, res) => {
       return res.status(404).json({ error: 'No version available' });
     }
 
-    const skillMdContent = buildSkillMdContent(skill, ver);
-    const dirName = skill.name;
-    const zip = new AdmZip();
-    zip.addFile(`${dirName}/SKILL.md`, Buffer.from(skillMdContent, 'utf-8'));
-
     await Skill.findByIdAndUpdate(req.params.id, { $inc: { downloads: 1 } });
 
-    const zipBuffer = zip.toBuffer();
+    const dirName = skill.name;
     const filename = `${dirName}-${ver.version}.zip`;
+
+    if (ver.filePath) {
+      try {
+        const stat = await fs.stat(ver.filePath);
+        if (stat.isFile()) {
+          const buffer = await fs.readFile(ver.filePath);
+          res.setHeader('Content-Type', 'application/zip');
+          res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(filename)}"`);
+          res.setHeader('Content-Length', buffer.length);
+          return res.send(buffer);
+        }
+      } catch (_) {}
+    }
+
+    const skillMdContent = buildSkillMdContent(skill, ver);
+    const zip = new AdmZip();
+    zip.addFile(`${dirName}/SKILL.md`, Buffer.from(skillMdContent, 'utf-8'));
+    const zipBuffer = zip.toBuffer();
     res.setHeader('Content-Type', 'application/zip');
     res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(filename)}"`);
     res.setHeader('Content-Length', zipBuffer.length);

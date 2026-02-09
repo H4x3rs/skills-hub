@@ -1,7 +1,8 @@
 import { Command } from 'commander';
 import inquirer from 'inquirer';
 import axios from 'axios';
-import { getApiUrl, setAuth, setApiUrl } from '../lib/auth.js';
+import { getApiUrl, setAuth, normalizeApiUrl } from '../lib/auth.js';
+import { printApiError } from '../lib/formatError.js';
 
 const loginCommand = new Command('login');
 loginCommand
@@ -10,12 +11,9 @@ loginCommand
   .option('-e, --email <email>', 'Email address')
   .option('-p, --password <password>', 'Password')
   .option('-t, --token <token>', 'Use access token directly (from web)')
-  .option('--api-url <url>', 'API base URL')
-  .action(async (options) => {
-    const apiUrl = options.apiUrl || getApiUrl();
-    if (options.apiUrl) {
-      setApiUrl(options.apiUrl);
-    }
+  .option('--api-url <url>', 'API base URL (overrides config for this command)')
+  .action(async (options, command) => {
+    const apiUrl = normalizeApiUrl(command.optsWithGlobals().apiUrl || getApiUrl());
 
     if (options.token) {
       setAuth({ token: options.token });
@@ -66,9 +64,9 @@ loginCommand
       setAuth({ token: accessToken, refreshToken, user });
       console.log(`Logged in as ${user?.username || user?.email || 'user'}`);
     } catch (err) {
-      const msg = err.response?.data?.error || err.message || 'Login failed';
-      console.error('Login failed:', msg);
-      process.exit(1);
+      const msg = err.response?.data?.error || err.message;
+      if (msg) err._overrideMsg = msg;
+      printApiError(err, { prefix: 'Login failed' });
     }
   });
 

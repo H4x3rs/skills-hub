@@ -1,6 +1,6 @@
 import { Command } from 'commander';
-import { createApiClient } from '../lib/auth.js';
-import { isLoggedIn } from '../lib/auth.js';
+import { createApiClient, isLoggedIn } from '../lib/auth.js';
+import { printApiError } from '../lib/formatError.js';
 
 function formatSkillDisplay(skill) {
   const name = skill.name || '?';
@@ -8,7 +8,9 @@ function formatSkillDisplay(skill) {
   const downloads = skill.downloads ?? 0;
   const category = skill.category || '—';
   const status = skill.status || '—';
-  return { name, version, downloads, category, status };
+  const desc = (skill.description || '').trim();
+  const description = desc.length > 80 ? desc.slice(0, 77) + '...' : desc || '—';
+  return { name, version, downloads, category, status, description };
 }
 
 const listCommand = new Command('list');
@@ -20,8 +22,10 @@ listCommand
   .option('-m, --mine', 'Show only your skills (requires login)')
   .option('-l, --limit <number>', 'Maximum number of results (default: 20)', '20')
   .option('-p, --page <number>', 'Page number for pagination (default: 1)', '1')
-  .action(async (options) => {
-    const api = createApiClient();
+  .option('--api-url <url>', 'API base URL (overrides config for this command)')
+  .action(async (options, command) => {
+    const apiUrl = command.optsWithGlobals().apiUrl;
+    const api = createApiClient(apiUrl);
     const limit = parseInt(options.limit, 10) || 20;
     const page = parseInt(options.page, 10) || 1;
 
@@ -58,9 +62,10 @@ listCommand
       console.log(`\nFound ${pagination.totalSkills ?? skills.length} skill(s):`);
       console.log('─'.repeat(60));
       skills.forEach((skill) => {
-        const { name, version, downloads, category, status } = formatSkillDisplay(skill);
+        const { name, version, downloads, category, status, description } = formatSkillDisplay(skill);
         const statusStr = options.mine ? ` | ${status}` : '';
         console.log(`  ${name}`);
+        console.log(`    ${description}`);
         console.log(`    Version: ${version} | Downloads: ${downloads} | Category: ${category}${statusStr}`);
       });
       if (pagination.totalPages > 1) {
@@ -68,16 +73,10 @@ listCommand
       }
       console.log('\nUse "skm get name" or "skm get name@version" to download.');
     } catch (err) {
-      let msg = err.message;
-      if (err.response?.data) {
-        const d = err.response.data;
-        msg = d.error || d.message || msg;
-      }
       if (err.response?.status === 401 && options.mine) {
-        msg = 'Login required. Run "skm login" first.';
+        err._overrideMsg = 'Login required. Run "skm login" first.';
       }
-      console.error('Error:', msg);
-      process.exit(1);
+      printApiError(err, { prefix: 'List failed' });
     }
   });
 

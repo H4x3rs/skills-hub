@@ -1,0 +1,11 @@
+{
+  "name": "learn-skills",
+  "description": "当用户或 Agent 需要某项能力时，搜索技能市场或网站，找到后询问是否安装，确认后执行安装，使新技能立即可用",
+  "version": "1.0.3",
+  "category": "tools",
+  "license": "MIT",
+  "tags": ["learn", "install", "skill", "搜索", "安装"],
+  "repositoryUrl": "",
+  "documentationUrl": "",
+  "demoUrl": ""
+}

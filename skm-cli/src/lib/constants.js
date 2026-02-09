@@ -4,7 +4,10 @@
  * 开发/本地: 保持 __DEFAULT_API_URL__ 时使用 localhost
  */
 export const DEFAULT_API_URL = '__DEFAULT_API_URL__';
-export const FALLBACK_API_URL = 'http://localhost:3001/api';
+export const FALLBACK_API_URL = 'http://localhost:3000/api';
 
 export const getDefaultApiUrl = () =>
   DEFAULT_API_URL === '__DEFAULT_API_URL__' ? FALLBACK_API_URL : DEFAULT_API_URL;
+
+/** Default skills directory for upgrade (Cursor) */
+export const DEFAULT_SKILLS_DIR = '~/.cursor/skills';

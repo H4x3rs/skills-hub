@@ -105,8 +105,9 @@ const login = async (req, res) => {
     const { email, password, captchaId, captcha } = req.body;
     const loginInput = email?.trim();
 
-    // 验证验证码
-    if (!verifyCaptcha(captchaId, captcha)) {
+    // 验证验证码（skm CLI 等不传 captcha 时跳过验证）
+    const hasCaptcha = captchaId && captcha;
+    if (hasCaptcha && !verifyCaptcha(captchaId, captcha)) {
       return res.status(400).json({
         success: false,
         error: 'Invalid or expired captcha'

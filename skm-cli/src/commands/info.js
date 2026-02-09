@@ -1,5 +1,6 @@
 import { Command } from 'commander';
 import { createApiClient } from '../lib/auth.js';
+import { printApiError } from '../lib/formatError.js';
 
 function parseSpecifier(spec) {
   const s = spec.trim();
@@ -15,7 +16,8 @@ const infoCommand = new Command('info');
 infoCommand
   .description('Show skill details from BotSkill')
   .argument('<specifier>', 'Skill name or name@version')
-  .action(async (specifier) => {
+  .option('--api-url <url>', 'API base URL (overrides config for this command)')
+  .action(async (specifier, options, command) => {
     const { name, version } = parseSpecifier(specifier);
 
     if (!name) {
@@ -23,8 +25,9 @@ infoCommand
       process.exit(1);
     }
 
+    const apiUrl = command.optsWithGlobals().apiUrl;
     try {
-      const api = createApiClient();
+      const api = createApiClient(apiUrl);
       const fullSpec = version ? `${name}@${version}` : name;
 
       const resolveRes = await api.get(`/skills/by-name/${encodeURIComponent(fullSpec)}`);
@@ -66,13 +69,7 @@ infoCommand
       console.log('\n  Use "skm get name" or "skm get name@version" to download.');
       console.log('');
     } catch (err) {
-      let msg = err.message;
-      if (err.response?.data) {
-        const d = err.response.data;
-        msg = d.error || d.message || msg;
-      }
-      console.error('Error:', msg);
-      process.exit(1);
+      printApiError(err, { prefix: 'Info failed' });
     }
   });
 

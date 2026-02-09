@@ -2,15 +2,19 @@ import { Command } from 'commander';
 import path from 'path';
 import fs from 'fs-extra';
 import { getToken } from '../lib/auth.js';
-import { uploadSkillFile, findUploadFile, validCategories } from '../lib/uploadSkill.js';
+import { printApiError, printSimpleError } from '../lib/formatError.js';
+import { uploadSkillFile, findUploadFile } from '../lib/uploadSkill.js';
+import { packDirectory } from '../lib/packSkill.js';
 
 const pushCommand = new Command('push');
 pushCommand
   .description('Upload/push a skill to BotSkill (SKILL.md, .zip, or .tar.gz)')
   .option('-f, --file <path>', 'Path to SKILL.md, .zip, or .tar.gz')
+  .option('--config-dir <path>', 'Directory containing skill.config.json (default: same as file)')
   .option('--dry-run', 'Validate without uploading')
   .option('--api-url <url>', 'API base URL')
-  .action(async (options) => {
+  .action(async (options, command) => {
+    const apiUrl = command.optsWithGlobals().apiUrl;
     if (!getToken()) {
       console.error('Not logged in. Run: skm login');
       process.exit(1);
@@ -30,32 +34,59 @@ pushCommand
       }
     }
 
-    if (options.dryRun) {
+    const configDir = options.configDir ? path.resolve(options.configDir) : path.dirname(path.resolve(filePath));
+    let tempPackPath = null;
+    let uploadPath = filePath;
+
+    // 当源是 SKILL.md 时，打包到临时目录并加上版本号
+    const isSkillMd = filePath.toLowerCase().endsWith('.md') || path.basename(filePath) === 'SKILL.md';
+    if (isSkillMd) {
+      const dirPath = path.dirname(path.resolve(filePath));
+      if (options.dryRun) {
+        console.log('[DRY RUN] Would pack directory to temp (skill-{version}.zip) and upload');
+        console.log('[DRY RUN] Source:', path.resolve(filePath));
+        return;
+      }
+      try {
+        tempPackPath = await packDirectory(dirPath, { useTempDir: true });
+        uploadPath = tempPackPath;
+      } catch (err) {
+        if (err.message === 'NO_SKILL_MD') {
+          printSimpleError('SKILL.md not found', 'Create SKILL.md in the directory first');
+        } else {
+          printSimpleError(err.message || 'Pack failed');
+        }
+        process.exit(1);
+      }
+    } else if (options.dryRun) {
       console.log('[DRY RUN] Would upload:', path.resolve(filePath));
       return;
     }
 
-    console.log(`Pushing skill from ${path.basename(filePath)}...`);
+    console.log(`Pushing skill from ${path.basename(uploadPath)}...`);
     try {
-      const skill = await uploadSkillFile(filePath);
+      const skill = await uploadSkillFile(uploadPath, { apiUrl, configDir });
       console.log('Skill uploaded successfully!');
       console.log(`Name: ${skill?.name}`);
       console.log(`Version: ${skill?.version || (skill?.versions?.[0]?.version)}`);
       console.log(`Status: ${skill?.status || 'pending_review'}`);
     } catch (err) {
       if (err.message === 'NOT_LOGGED_IN') {
-        console.error('Not logged in. Run: skm login');
+        printSimpleError('Not logged in', 'Run "skm login" first');
       } else if (err.message === 'FILE_NOT_FOUND') {
-        console.error('File not found');
+        printSimpleError('File not found', uploadPath);
       } else {
-        const msg = err.response?.data?.error || err.response?.data?.details?.[0] || err.message || 'Upload failed';
-        if (err.response?.status === 401) {
-          console.error('Token expired or invalid. Run: skm login');
-        } else {
-          console.error('Upload failed:', msg);
-        }
+        const msg = err.response?.data?.error || err.response?.data?.details?.[0];
+        if (msg) err._overrideMsg = msg;
+        if (err.response?.status === 401) err._overrideMsg = 'Token expired or invalid. Run "skm login" first.';
+        printApiError(err, { prefix: 'Push failed' });
       }
-      process.exit(1);
+    } finally {
+      if (tempPackPath) {
+        try {
+          await fs.remove(path.dirname(tempPackPath));
+        } catch (_) {}
+      }
     }
   });
 

@@ -1,5 +1,6 @@
 import { Command } from 'commander';
 import { createApiClient } from '../lib/auth.js';
+import { printApiError } from '../lib/formatError.js';
 
 function formatSkillDisplay(skill) {
   const author = skill.author?.username || skill.author?.fullName || '?';
@@ -8,7 +9,9 @@ function formatSkillDisplay(skill) {
   const version = skill.version || (skill.versions?.[0]?.version) || '—';
   const downloads = skill.downloads ?? 0;
   const category = skill.category || '—';
-  return { displayName, version, downloads, category };
+  const desc = (skill.description || '').trim();
+  const description = desc.length > 80 ? desc.slice(0, 77) + '...' : desc || '—';
+  return { displayName, version, downloads, category, description };
 }
 
 const searchCommand = new Command('search');
@@ -18,8 +21,10 @@ searchCommand
   .option('-c, --category <category>', 'Filter by category (ai, data, web, devops, security, tools)')
   .option('-l, --limit <number>', 'Maximum number of results (default: 20)', '20')
   .option('-p, --page <number>', 'Page number for pagination (default: 1)', '1')
-  .action(async (query, options) => {
-    const api = createApiClient();
+  .option('--api-url <url>', 'API base URL (overrides config for this command)')
+  .action(async (query, options, command) => {
+    const apiUrl = command.optsWithGlobals().apiUrl;
+    const api = createApiClient(apiUrl);
     const limit = parseInt(options.limit, 10) || 20;
     const page = parseInt(options.page, 10) || 1;
 
@@ -39,8 +44,9 @@ searchCommand
       console.log(`\nFound ${pagination.totalSkills ?? skills.length} skill(s) for "${query}":`);
       console.log('─'.repeat(60));
       skills.forEach((skill) => {
-        const { displayName, version, downloads, category } = formatSkillDisplay(skill);
+        const { displayName, version, downloads, category, description } = formatSkillDisplay(skill);
         console.log(`  ${displayName}`);
+        console.log(`    ${description}`);
         console.log(`    Version: ${version} | Downloads: ${downloads} | Category: ${category}`);
       });
       if (pagination.totalPages > 1) {
@@ -48,13 +54,7 @@ searchCommand
       }
       console.log('\nUse "skm get @author/name" or "skm get @author/name@version" to download.');
     } catch (err) {
-      let msg = err.message;
-      if (err.response?.data) {
-        const d = err.response.data;
-        msg = d.error || d.message || msg;
-      }
-      console.error('Error:', msg);
-      process.exit(1);
+      printApiError(err, { prefix: 'Search failed' });
     }
   });
 

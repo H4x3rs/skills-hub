@@ -1,7 +1,15 @@
 import { Command } from 'commander';
 import path from 'path';
+import os from 'os';
+import fs from 'fs-extra';
 import AdmZip from 'adm-zip';
 import { createApiClient } from '../lib/auth.js';
+import { printApiError } from '../lib/formatError.js';
+
+/** 从技能名提取目录名（@author/name -> name） */
+function toDirName(name) {
+  return String(name || 'skill').replace(/^@[^/]+\//, '').trim() || 'skill';
+}
 
 /**
  * Parse specifier: name@version or name
@@ -23,8 +31,13 @@ getCommand
   .argument('<specifier>', 'Skill name or name@version (e.g. pdf-parser or pdf-parser@1.0.0)')
   .option('-o, --output <dir>', 'Output directory (default: current directory)')
   .option('--dry-run', 'Show what would be downloaded without actually downloading')
-  .action(async (specifier, options) => {
-    const { name, version } = parseSpecifier(specifier);
+  .option('--api-url <url>', 'API base URL (overrides config for this command)')
+  .action(async (specifier, options, command) => {
+    const apiUrl = command.optsWithGlobals().apiUrl;
+    const spec = (specifier || '').trim();
+    const parsed = parseSpecifier(spec);
+    const name = spec.startsWith('@') ? spec : parsed.name;
+    const version = spec.startsWith('@') ? undefined : parsed.version;
     const outputDir = path.resolve(options.output || process.cwd());
 
     if (!name) {
@@ -40,7 +53,7 @@ getCommand
     }
 
     try {
-      const api = createApiClient();
+      const api = createApiClient(apiUrl);
 
       const fullSpec = version ? `${name}@${version}` : name;
       console.log(`Downloading skill: ${fullSpec}`);
@@ -60,28 +73,31 @@ getCommand
       const buffer = Buffer.from(res.data);
 
       const zip = new AdmZip(buffer);
-      zip.extractAllTo(outputDir, true);
-
       const entries = zip.getEntries();
-      const skillDir = entries.find(e => e.isDirectory)?.entryName || entries[0]?.entryName?.split('/')[0] || 'skill';
-      const targetPath = path.join(outputDir, skillDir);
+      const rootDir = entries.find((e) => e.isDirectory)?.entryName?.replace(/\/$/, '') || (entries[0]?.entryName?.includes('/') ? entries[0].entryName.split('/')[0] : null);
+      const hasParentDir = rootDir != null;
 
+      const skillDirName = toDirName(skill.name);
+      const targetPath = path.join(outputDir, skillDirName);
+
+      if (hasParentDir) {
+        zip.extractAllTo(outputDir, true);
+        const extractedPath = path.join(outputDir, rootDir);
+        if (rootDir !== skillDirName) {
+          await fs.move(extractedPath, targetPath, { overwrite: true });
+        }
+      } else {
+        await fs.ensureDir(targetPath);
+        zip.extractAllTo(targetPath, true);
+      }
       console.log(`\nSkill downloaded successfully!`);
       console.log(`Location: ${targetPath}`);
     } catch (err) {
-      let msg = err.message;
-      if (err.response?.data) {
-        const raw = err.response.data;
-        const str = Buffer.isBuffer(raw) ? raw.toString() : (typeof raw === 'string' ? raw : JSON.stringify(raw));
-        try {
-          const obj = JSON.parse(str);
-          msg = obj.error || obj.message || msg;
-        } catch (_) {
-          msg = str || msg;
-        }
+      if (err.response?.data && !Buffer.isBuffer(err.response.data)) {
+        const d = err.response.data;
+        err._overrideMsg = d.error || d.message;
       }
-      console.error('Download failed:', msg);
-      process.exit(1);
+      printApiError(err, { prefix: 'Download failed' });
     }
   });
 

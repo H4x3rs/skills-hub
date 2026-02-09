@@ -1,6 +1,6 @@
 {
   "name": "@botskill/cli",
-  "version": "1.0.3",
+  "version": "1.0.10",
   "description": "CLI tool for BotSkill - AI agent skills platform",
   "main": "src/index.js",
   "bin": {

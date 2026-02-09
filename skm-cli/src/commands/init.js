@@ -3,22 +3,25 @@ import path from 'path';
 import fs from 'fs-extra';
 import inquirer from 'inquirer';
 
+function toSkillName(raw) {
+  const s = String(raw || 'my-skill').trim();
+  return s.toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '') || 'my-skill';
+}
+
 const initCommand = new Command('init');
 initCommand
   .description('Initialize a new skill project')
+  .argument('[path]', 'Target directory: "." or path for current/specified dir; omit to create skill-named directory')
   .option('-n, --name <name>', 'Project/skill name')
   .option('-d, --description <description>', 'Skill description')
   .option('-c, --category <category>', 'Category: ai, data, web, devops, security, tools')
   .option('-y, --yes', 'Use defaults without prompting')
-  .action(async (options) => {
+  .action(async (pathArg, options) => {
     const cwd = process.cwd();
-    const configPath = path.join(cwd, 'skill.config.json');
-
-    if (await fs.pathExists(configPath)) {
-      console.error('skill.config.json already exists in this directory.');
-      process.exit(1);
-    }
-
     const validCategories = ['ai', 'data', 'web', 'devops', 'security', 'tools'];
     let answers = {};
 
@@ -68,6 +71,25 @@ initCommand
       ]);
     }
 
+    const skillName = toSkillName(answers.name);
+    let targetDir;
+
+    if (pathArg && pathArg !== '.') {
+      targetDir = path.resolve(cwd, pathArg);
+      await fs.ensureDir(targetDir);
+    } else if (pathArg === '.') {
+      targetDir = cwd;
+    } else {
+      targetDir = path.join(cwd, skillName);
+      await fs.ensureDir(targetDir);
+    }
+
+    const configPath = path.join(targetDir, 'skill.config.json');
+    if (await fs.pathExists(configPath)) {
+      console.error(`skill.config.json already exists in ${targetDir}`);
+      process.exit(1);
+    }
+
     const config = {
       name: answers.name,
       description: answers.description,
@@ -82,12 +104,6 @@ initCommand
 
     await fs.writeJson(configPath, config, { spaces: 2 });
 
-    // Agent Skills spec: https://agentskills.io/specification
-    // name: required, 1-64 chars, lowercase + hyphens
-    // description: required, max 1024 chars
-    // metadata.version, metadata.author: optional
-    const rawName = String(answers.name || 'my-skill').trim();
-    const skillName = rawName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'my-skill';
     const skillMd = `---
 name: ${skillName}
 description: ${answers.description}
@@ -115,10 +131,13 @@ Add your usage documentation here. The Markdown body contains skill instructions
 \`\`\`
 `;
 
-    const skillMdPath = path.join(cwd, 'SKILL.md');
+    const skillMdPath = path.join(targetDir, 'SKILL.md');
     await fs.writeFile(skillMdPath, skillMd, 'utf-8');
 
     console.log('Created skill.config.json and SKILL.md');
+    if (targetDir !== cwd) {
+      console.log(`Location: ${targetDir}`);
+    }
     console.log('\nNext steps:');
     console.log('1. Edit SKILL.md to add documentation (the content below the frontmatter)');
     console.log('2. Run "skm login" to authenticate');
