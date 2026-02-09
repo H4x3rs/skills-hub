@@ -3,6 +3,7 @@ import * as Tooltip from '@radix-ui/react-tooltip';
 import { Toaster } from 'sonner';
 import { AuthProvider } from './contexts/AuthContext';
 import { SiteSettingsProvider } from './contexts/SiteSettingsContext';
+import { SeoProvider } from './contexts/SeoContext';
 import { useTheme } from './contexts/ThemeContext';
 import HomePage from './pages/HomePage';
 import SkillsPage from './pages/SkillsPage';
@@ -34,6 +35,7 @@ function App() {
   return (
     <Tooltip.Provider delayDuration={300}>
     <SiteSettingsProvider>
+    <SeoProvider>
     <AuthProvider>
       <Toaster 
         position="top-right" 
@@ -114,6 +116,7 @@ function App() {
         </Routes>
       </Router>
     </AuthProvider>
+    </SeoProvider>
     </SiteSettingsProvider>
     </Tooltip.Provider>
   );

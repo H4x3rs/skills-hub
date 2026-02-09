@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Calendar, User, Tag, ArrowLeft, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { blogAPI } from '@/lib/api';
+import { useSeo } from '@/contexts/SeoContext';
 import { toast } from 'sonner';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -34,6 +35,7 @@ interface Blog {
 const BlogDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { t } = useTranslation();
+  const { setSeo, clearSeo } = useSeo();
   const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -42,6 +44,24 @@ const BlogDetailPage = () => {
       fetchBlog();
     }
   }, [slug]);
+
+  useEffect(() => {
+    if (blog) {
+      const title = blog.seoTitle || blog.title;
+      const desc = blog.seoDescription || blog.excerpt || blog.content?.slice(0, 160) || '';
+      const image = blog.coverImage?.startsWith('http') ? blog.coverImage : (blog.coverImage ? `${window.location.origin}${blog.coverImage}` : undefined);
+      setSeo({
+        title,
+        description: desc,
+        image,
+        canonical: `${window.location.origin}/blog/${blog.slug}`,
+        type: 'article',
+        publishedTime: blog.publishedAt,
+        modifiedTime: (blog as { updatedAt?: string }).updatedAt,
+      });
+    }
+    return () => clearSeo();
+  }, [blog, setSeo, clearSeo]);
 
   const fetchBlog = async () => {
     try {

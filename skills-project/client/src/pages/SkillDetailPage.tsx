@@ -9,6 +9,7 @@ import rehypeHighlight from 'rehype-highlight';
 import { useTranslation } from 'react-i18next';
 import { skillAPI, userAPI } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSeo } from '@/contexts/SeoContext';
 
 interface SkillVersion {
   version: string;
@@ -46,6 +47,7 @@ const SkillDetailPage = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
   const { isAuthenticated } = useAuth();
+  const { setSeo, clearSeo } = useSeo();
 
   const versionParam = searchParams.get('version');
 
@@ -99,6 +101,18 @@ const SkillDetailPage = () => {
 
     fetchSkill();
   }, [id, versionParam]);
+
+  useEffect(() => {
+    if (skill) {
+      const desc = skill.description?.slice(0, 160) || '';
+      setSeo({
+        title: `${skill.name} - ${skill.category || 'Skill'}`,
+        description: desc,
+        canonical: `${window.location.origin}/skills/${skill._id}`,
+      });
+    }
+    return () => clearSeo();
+  }, [skill, setSeo, clearSeo]);
 
   useEffect(() => {
     if (isAuthenticated && skill?._id) {

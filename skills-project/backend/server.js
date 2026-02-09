@@ -20,6 +20,7 @@ const skillRoutes = require('./routes/skills');
 const blogRoutes = require('./routes/blogs');
 const adminRoutes = require('./routes/admin');
 const captchaRoutes = require('./routes/captcha');
+const seoRoutes = require('./routes/seo');
 const { getPublicSiteSettings, getPublicCategories } = require('./controllers/adminController');
 
 const app = express();
@@ -55,6 +56,9 @@ app.get('/api/site-settings', getPublicSiteSettings);
 
 // 公开分类列表（无需认证，只返回激活的分类）
 app.get('/api/categories', getPublicCategories);
+
+// SEO：sitemap.xml、robots.txt（必须在静态文件之前，否则会被 SPA 吞掉）
+app.use(seoRoutes);
 
 // 静态文件服务：上传的图片
 const uploadsDir = path.join(__dirname, 'uploads');
