@@ -94,6 +94,30 @@ html.dark .docs-prose thead th {
   @apply border-t border-border;
 }
 
+/* 暗黑模式下文档页正文字体与颜色 - 修复 prose-invert 与设计系统不一致 */
+html.dark .docs-prose {
+  color: hsl(var(--foreground));
+  font-family: inherit;
+}
+html.dark .docs-prose h1,
+html.dark .docs-prose h2,
+html.dark .docs-prose h3,
+html.dark .docs-prose h4 {
+  color: hsl(var(--foreground));
+}
+html.dark .docs-prose p,
+html.dark .docs-prose li,
+html.dark .docs-prose td,
+html.dark .docs-prose blockquote {
+  color: hsl(var(--foreground));
+}
+html.dark .docs-prose a {
+  color: hsl(var(--primary));
+}
+html.dark .docs-prose strong {
+  color: hsl(var(--foreground));
+}
+
 @layer base {
   :root {
     /* 主色调 */
